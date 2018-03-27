@@ -68,6 +68,6 @@ dependencies {
 }
 
 jar {
-    baseName = "spring-music"
+    baseName = "calpoly-gehackathon"
     version = "" // omit the version from the war file name
 }

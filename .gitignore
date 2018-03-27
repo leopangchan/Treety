@@ -72,7 +72,7 @@ cmake-build-release/
 
 # IntelliJ
 out/
-.idea/
+.idea/git
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

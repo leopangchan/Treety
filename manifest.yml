@@ -1,7 +1,7 @@
 ---
 applications:
-- name: spring-music
+- name: calpoly-gehackathon
   memory: 1G
   random-route: true
-  path: build/libs/spring-music.jar
+  path: build/libs/calpoly-gehackathon.jar
 
