@@ -28,7 +28,7 @@
     <orderEntry type="library" name="Gradle: org.springframework.cloud:spring-cloud-cloudfoundry-connector:1.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.cloud:spring-cloud-core:1.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: commons-dbcp:commons-dbcp:1.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.webjars:angular-ui-bootstrap:0.10.0-1" level="project" />
+    <orderEntry type="library" name="Gradle: org.webjars:angular-ui-bootstrap:0.12.0" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:bootstrap:3.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:angular-ui:0.4.0-2" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:angularjs:1.2.16" level="project" />
@@ -67,8 +67,8 @@
     <orderEntry type="library" name="Gradle: org.springframework:spring-jdbc:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.data:spring-data-commons:1.13.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-tx:4.3.9.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-oxm:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.microsoft.azure:azure-keyvault:0.9.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-oxm:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-beans:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-core:4.3.9.RELEASE" level="project" />

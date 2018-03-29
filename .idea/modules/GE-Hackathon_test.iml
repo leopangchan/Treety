@@ -30,7 +30,7 @@
     <orderEntry type="library" name="Gradle: org.springframework.cloud:spring-cloud-cloudfoundry-connector:1.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.cloud:spring-cloud-core:1.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: commons-dbcp:commons-dbcp:1.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.webjars:angular-ui-bootstrap:0.10.0-1" level="project" />
+    <orderEntry type="library" name="Gradle: org.webjars:angular-ui-bootstrap:0.12.0" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:bootstrap:3.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:angular-ui:0.4.0-2" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:angularjs:1.2.16" level="project" />
@@ -110,8 +110,8 @@
     <orderEntry type="library" name="Gradle: org.mongodb:mongodb-driver-core:3.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.mongodb:bson:3.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-pool2:2.4.2" level="project" />
-    <orderEntry type="library" name="Gradle: net.minidev:json-smart:2.2.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.microsoft.azure:adal4j:1.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: net.minidev:json-smart:2.2.1" level="project" />
     <orderEntry type="library" name="Gradle: org.objenesis:objenesis:2.1" level="project" />
     <orderEntry type="library" name="Gradle: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat:tomcat-juli:8.5.15" level="project" />
