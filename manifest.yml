@@ -3,7 +3,7 @@ applications:
 - name: TreeMap
   memory: 1G
   random-route: true
-  buildpack: java_buildpack
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
   path: build/libs/treemap-SNAPSHOT.jar
   services:
     - ge-hackathon-db
