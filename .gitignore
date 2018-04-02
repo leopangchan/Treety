@@ -74,6 +74,7 @@ cmake-build-release/
 out/
 .idea/git
 .idea/
+*.iml
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
