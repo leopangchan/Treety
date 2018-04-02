@@ -1,7 +1,13 @@
 ---
 applications:
-- name: spring-music
+- name: TreeMap
   memory: 1G
   random-route: true
-  path: build/libs/spring-music.jar
+  buildpack: java_buildpack
+  path: build/libs/treemap-SNAPSHOT.jar
+  services:
+    - ge-hackathon-db
+env:
+  db_service_name: ge-hackathon-db
+
 
