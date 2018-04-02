@@ -1,3 +1,21 @@
-<div>
-    <img ng-src="http://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12231410/Labrador-Retriever-On-White-01.jpg" width="100%" height="100%">
+<div ng-controller="TreeMapController as vm" class="container" >
+    <ng-map default-style="true" zoom="8">
+
+        <!-- Window presented when the marker is clicked -->
+        <info-window id="myInfoWindow">
+            <div ng-non-bindable>
+                <h6>{{vm.selectedCity.name}}</h6>
+                <h6>Latitude: + {{vm.selectedCity.latitude}}</h6>
+                <h6>Longitude: + {{vm.selectedCity.longitude}}</h6>
+            </div>
+        </info-window>
+
+        <!-- Setting the directions -->
+        <directions draggable="true" panel="directions-panel" travel-mode="DRIVING"
+                    origin="{{vm.origin}}" destination="{{vm.destination}}"></directions>
+
+        <!-- Creating the markers from an Ajax Response -->
+        <marker ng-repeat="city in vm.cities" position="{{city.latitude}}, {{city.longitude}}" id="{{city.idCity}}" title="{{city.name}}" on-click="vm.showCityInfo(event, city)"></marker>
+    </ng-map>
+    <p></p>
 </div>

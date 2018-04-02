@@ -1,4 +1,4 @@
-angular.module('TreeMap', ['ngRoute', 'ui.directives']).
+var app = angular.module('TreeMap', ['ngRoute', 'ui.directives', 'ngMap']).
     config(function ($locationProvider, $routeProvider) {
         $routeProvider.otherwise({
             controller: 'TreeMapController',
