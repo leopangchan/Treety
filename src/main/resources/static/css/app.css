@@ -49,5 +49,6 @@ html, body {
     bottom: 0;
     width: 100%;
     color: white;
-    text-align: center;
+    align: center;
+    float: left;
 }
