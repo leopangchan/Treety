@@ -17,7 +17,12 @@
     background-image: -o-linear-gradient(top, #008a00, #006b00);
     background-image: linear-gradient(top, #008a00, #006b00);
 }
-
+    div.relative1 {
+    position: relative;
+    left: 30px;
+    bottom: 0px;
+    border: 3px solid #73AD21;
+    }
 .navbar .navbar-brand {
     color: white;
 }
