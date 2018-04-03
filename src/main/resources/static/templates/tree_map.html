@@ -1,7 +1,7 @@
 <div ng-controller="TreeMapController as vm" class="container" >
-    <ng-map default-style="true" zoom="8">
+   <!-- <ng-map default-style="true" zoom="8">
 
-        <!-- Window presented when the marker is clicked -->
+        &lt;!&ndash; Window presented when the marker is clicked &ndash;&gt;
         <info-window id="myInfoWindow">
             <div ng-non-bindable>
                 <h6>{{vm.selectedCity.name}}</h6>
@@ -10,12 +10,15 @@
             </div>
         </info-window>
 
-        <!-- Setting the directions -->
+        &lt;!&ndash; Setting the directions &ndash;&gt;
         <directions draggable="true" panel="directions-panel" travel-mode="DRIVING"
-                    origin="{{vm.origin}}" destination="{{vm.destination}}"></directions>
+            origin="{{vm.origin}}" destination="{{vm.destination}}"></directions>
 
-        <!-- Creating the markers from an Ajax Response -->
+        &lt;!&ndash; Creating the markers from an Ajax Response &ndash;&gt;
         <marker ng-repeat="city in vm.cities" position="{{city.latitude}}, {{city.longitude}}" id="{{city.idCity}}" title="{{city.name}}" on-click="vm.showCityInfo(event, city)"></marker>
-    </ng-map>
-    <p></p>
+    </ng-map>-->
+
+    <div map-lazy-load="https://maps.google.com/maps/api/js">
+        <ng-map center="32.7157, -117.1611" zoom="5"></ng-map>
+    </div>
 </div>
