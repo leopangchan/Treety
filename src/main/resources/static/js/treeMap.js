@@ -1,4 +1,3 @@
-
 app.controller("TreeMapController", function($compile, $scope, $http, NgMap, callAjaxFactory){
 	
 	var vm = this;
@@ -14,7 +13,6 @@ app.controller("TreeMapController", function($compile, $scope, $http, NgMap, cal
 			console.log(vm.cities);
 		}
 	);
-	
 	
 	// Event which shows information about the marked clicked, also performs a zoom in the city
 	vm.showCityInfo = function(event, city){
@@ -41,9 +39,6 @@ app.controller("TreeMapController", function($compile, $scope, $http, NgMap, cal
 	
 
 });
-
-
-
 
 app.factory('callAjaxFactory', function($http){
 	return{
