@@ -1,5 +1,6 @@
-<div id="footer" class="col">
-    <button class="btn success">Carbon Emission</button>
+<div id="footer" class="col" ng-controller = "TreeMapController as vm">
+
+    <button class="btn success" ng-click = "vm.loadChart()">Carbon Emission</button>
     <button class="btn info">Crime Decrease</button>
     <button class="btn warning">Water Retention</button>
     <button class="btn danger">Traffic Reduction</button>
