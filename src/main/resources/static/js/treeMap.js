@@ -36,73 +36,91 @@ app.controller("TreeMapController", function($compile, $scope, $http, NgMap, cal
         console.log("I was clicked!")
     }
 
-    vm.loadLineChart = function() {
+    vm.loadPedestrianChart = function(data) {
         console.log('Loading line chart')
         google.charts.load('current', {packages: ['corechart', 'line']});
-        google.charts.setOnLoadCallback(vm.drawLineChart);
+        google.charts.setOnLoadCallback(vm.drawPedestrianChart);
     }
 
-    vm.drawLineChart = function() {
-        var data = new google.visualization.DataTable();
+    vm.drawPedestrianChart = function() {
+        var eventurl = "https://ic-event-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2"
+        var locationId = '9bbdcec9'
+        var zoneId = "SD-IE-PEDESTRIAN"
+        var res = []
 
-        data.addColumn('number', 'X');
-        data.addColumn('number', 'Pedestrians');
+        today = new Date()
+        endts = today.setDate(today.getDate() - 5)
+        startts = (new Date(endts)).setDate((new Date(endts)).getDate() - 1)
 
-        data.addRows([
-        [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
-        [6, 11],  [7, 27]
-        ]);
+        console.log('start ' + new Date(startts))
+        console.log('end ' + new Date(endts))
 
-        var options = {
-        hAxis: {
-          title: 'Date'
-        },
-        vAxis: {
-          title: 'Number of Pedestrians'
-        },
-        title: 'Number of Pedestrians This Week'
-        };
+        // query url
+        var requestURL = eventurl + '/locations/' + locationId +
+         '/events?eventType=PEDEVT&startTime=' +
+         startts + '&' + 'endTime=' + endts
 
-        var chart = new google.visualization.LineChart(document.getElementById('chart'));
-
-        chart.draw(data, options);
-    }
-
-    // adds number of pedestrians to res
-    vm.getNumberOfPedestrians = function(method, requestURL, zoneId, res) {
         var req = {
-         method: method,
-         url: requestURL,
-         headers: {
-           "Authorization": "Bearer " + vm.token,
-           "Predix-Zone-Id": zoneId,
-           "Access-Control-Allow-Origin": "https://localhost:8090",
-           "Access-Control-Allow-Credentials": "true",
-           "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-           "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
-            "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
-         }
+            method: 'GET',
+            url: requestURL,
+            headers: {
+                "Authorization": "Bearer " + vm.token,
+                "Predix-Zone-Id": zoneId,
+                "Access-Control-Allow-Origin": "https://localhost:8090",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+                "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
+                "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+            }
         }
 
         $http(req)
          .then(function(data) {
             var pedestrians = data.data
             var sum = 0
+            var index = 0
+            var count = 0
 
             if (pedestrians.hasOwnProperty('content')) {
                 pedestrians['content'].forEach(function(element) {
+
                     if (element.hasOwnProperty('measures') &&
                      element['measures'].hasOwnProperty('pedestrianCount')) {
-                        sum += element['measures']['pedestrianCount']
+
+                        count = element["measures"]["counter_direction_pedestrianCount"] +
+                         element['measures']['pedestrianCount']
+
+                        sum += count
+                        res.push([index, count])
+
+                        index += 1
                     }
                 });
 
                 console.log('Total number of pedestrians: ' + sum)
-                res.push(sum)
-                return sum
-            }
-         })
+                console.log('Total number of data points ' + res.length)
 
+                var data = new google.visualization.DataTable();
+                console.log(res)
+
+                data.addColumn('number', 'X');
+                data.addColumn('number', 'Number of Pedestrians');
+                data.addRows(res);
+
+                var options = {
+                hAxis: {title: 'Time', minValue: 0, maxValue: 1000},
+                vAxis: {
+                  title: 'Number of Pedestrians',
+                  minValue: 0, maxValue: 5
+                },
+                title: 'Number of Pedestrians from ' + new Date(startts) + ' to ' + new Date(endts)
+                };
+
+                var chart = new google.visualization.ScatterChart(document.getElementById('chart'));
+
+                chart.draw(data, options);
+            }
+        })
     }
 
     // get a week's worth of pedestrian data
@@ -113,15 +131,12 @@ app.controller("TreeMapController", function($compile, $scope, $http, NgMap, cal
         var sum = []
         var res = []
 
-        for (i = days_in_week; i >= 1; i--) {
+        //for (i = days_in_week; i >= 1; i--) {
             today = new Date()
-            endDate = today.setDate(today.getDate() - i)
+            endDate = today.setDate(today.getDate() - 1)
             startDate = (new Date(endDate)).setDate((new Date(endDate)).getDate() - 1)
             vm.getDailyPedestrians(startDate, endDate, res)
-        }
-
-        console.log(res)
-        vm.loadLineChart()
+        //}
 
         return res
     }
@@ -140,8 +155,44 @@ app.controller("TreeMapController", function($compile, $scope, $http, NgMap, cal
          '/events?eventType=PEDEVT&startTime=' +
          startts + '&' + 'endTime=' + endts
 
-        var sum = vm.getNumberOfPedestrians('GET', requestURL, zoneId, res)
-        return sum
+        vm.getNumberOfPedestrians('GET', requestURL, zoneId, res)
+    }
+
+    vm.getNumberOfPedestrians = function(method, requestURL, zoneId, res) {
+        var req = {
+            method: method,
+            url: requestURL,
+            headers: {
+                "Authorization": "Bearer " + vm.token,
+                "Predix-Zone-Id": zoneId,
+                "Access-Control-Allow-Origin": "https://localhost:8090",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+                "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
+                "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+            }
+        }
+
+        $http(req)
+         .then(function(data) {
+            var pedestrians = data.data
+            var sum = 0
+            var index = 0
+
+            if (pedestrians.hasOwnProperty('content')) {
+                pedestrians['content'].forEach(function(element) {
+
+                    if (element.hasOwnProperty('measures') &&
+                     element['measures'].hasOwnProperty('pedestrianCount')) {
+                        sum += element['measures']['pedestrianCount']
+                        res.push([index, element['measures']['pedestrianCount']])
+                    }
+                });
+
+                console.log('Total number of pedestrians: ' + sum)
+                console.log('Total number of data points ' + res.length)
+            }
+        })
     }
 
 	// Ajax Factory request which loads the list of cities.
