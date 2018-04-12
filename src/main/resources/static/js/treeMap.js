@@ -14,6 +14,7 @@ app.controller("TreeMapController", function($scope, $http, $timeout, NgMap){
       }
     });
 
+    /* zoom to center when user clicked on a marker */
     vm.centerChanged = function(event) {
       $timeout(function() {
         if (vm.marker) {
@@ -22,6 +23,7 @@ app.controller("TreeMapController", function($scope, $http, $timeout, NgMap){
       }, 3000);
     }
 
+    /* change center when user clicks on marker */
     vm.markerClicked = function(event, pos) {
         var marker = vm.map.markers[vm.locationPos.indexOf(pos)]
 
@@ -75,7 +77,7 @@ app.controller("TreeMapController", function($scope, $http, $timeout, NgMap){
         var res = []
 
         today = new Date()
-        endts = today.setDate(today.getDate())
+        endts = today.setDate(today.getDate()-1)
         startts = (new Date(endts)).setDate((new Date(endts)).getDate() - 1)
 
         console.log('start ' + new Date(startts))
@@ -142,8 +144,8 @@ app.controller("TreeMapController", function($scope, $http, $timeout, NgMap){
                 var options = {
                 hAxis: {
                     viewWindow: {
-                        min: new Date(min),
-                        max: new Date(max)
+                        min: new Date(startts),
+                        max: new Date(endts)
                     },
                     gridlines: {
                         count: -1,
@@ -172,6 +174,37 @@ app.controller("TreeMapController", function($scope, $http, $timeout, NgMap){
                 chart.draw(data, options);
             }
         })
+    }
+
+    /* load a google pie chart */
+    vm.loadTable = function() {
+        console.log("Load Chart");
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('current', { 'packages': ['table'] });
+        google.charts.setOnLoadCallback(this.drawTable);
+    }
+
+    vm.drawTable = function() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Energy Conserved (kw/h)');
+        data.addColumn('number', 'Stormwater Filtered (gal/year)');
+        data.addColumn('number', 'Air Quality Improved (gal/year)');
+        data.addColumn('number', 'Carbon Dioxide Removed (lbs/year)');
+        data.addRows([
+          [{v: 10000, f: '$10,000'},  {v: 10000, f: '$10,000'}, {v: 10000, f: '$10,000'}, {v: 10000, f: '$10,000'}]
+        ]);
+
+        var table = new google.visualization.Table(document.getElementById('chart'));
+
+        var options = {
+            allowHtml: true,
+            cssClassNames: {
+              tableCell: 'small-font'
+            }
+          };
+
+
+        table.draw(data, options);
     }
 
     // get a week's worth of pedestrian data
@@ -250,7 +283,8 @@ app.controller("TreeMapController", function($scope, $http, $timeout, NgMap){
     vm.getLocations = function() {
         // query url
         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
-        var requestURL = metadataurl + '/locations/search?page=0&size=50'
+        var requestURL = metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE&page=0&size=50"
+        //metadataurl + '/locations/search?page=0&size=50'
         var zoneId = 'SD-IE-TRAFFIC'
         res = []
 

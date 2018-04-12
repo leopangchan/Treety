@@ -1,6 +1,6 @@
 <div ng-controller="TreeMapController as vm" ng-init="vm.init()" class="container" >
-    <div map-lazy-load="https://maps.google.com/maps/api/js" style ="align:center">
-        <ng-map center="32.7157, -117.1611" zoom = "14" on-center-changed="vm.centerChanged()">
+    <div map-lazy-load="https://maps.google.com/maps/api/js"> <!--style ="align:center"-->
+        <ng-map center="32.7157, -117.1611" zoom = "13" on-center-changed="vm.centerChanged()">
             <marker ng-repeat="pos in vm.locationPos" position="{{pos}}"
                     on-click="vm.markerClicked(event, pos)"></marker>
         </ng-map>
