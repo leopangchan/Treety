@@ -78,6 +78,8 @@ app.controller("TreeMapController", function($scope, $http){
             var sum = 0
             var index = 0
             var count = 0
+            var min = endts
+            var max = startts
 
             if (pedestrians.hasOwnProperty('content')) {
                 pedestrians['content'].forEach(function(element) {
@@ -88,8 +90,12 @@ app.controller("TreeMapController", function($scope, $http){
                         count = element["measures"]["counter_direction_pedestrianCount"] +
                          element['measures']['pedestrianCount']
 
+                        time = element['timestamp']
+                        min = time < min ? time : min
+                        max = time > max ? time : max
+
                         sum += count
-                        res.push([index, count])
+                        res.push([new Date(time), count])
 
                         index += 1
                     }
@@ -101,17 +107,36 @@ app.controller("TreeMapController", function($scope, $http){
                 var data = new google.visualization.DataTable();
                 console.log(res)
 
-                data.addColumn('number', 'X');
+                data.addColumn('date', 'Time');
                 data.addColumn('number', 'Number of Pedestrians');
                 data.addRows(res);
 
                 var options = {
-                hAxis: {title: 'Time', minValue: 0, maxValue: 1000},
+                hAxis: {
+                    viewWindow: {
+                        min: new Date(min),
+                        max: new Date(max)
+                    },
+                    gridlines: {
+                        count: -1,
+                        units: {
+                            days: {format: ['MMM dd']},
+                            hours: {format: ['HH:mm', 'ha']},
+                        }
+                    },
+                    minorGridlines: {
+                        units: {
+                            hours: {format: ['hh:mm:ss a', 'ha']},
+                            minutes: {format: ['HH:mm a Z', ':mm']}
+                        }
+                    },
+                    title: 'Time of Day (hours)'
+                },
                 vAxis: {
                   title: 'Number of Pedestrians',
                   minValue: 0, maxValue: 5
                 },
-                title: 'Number of Pedestrians from ' + new Date(startts) + ' to ' + new Date(endts)
+                title: 'Number of Pedestrians from ' + (new Date(startts)).toDateString() + ' to ' + (new Date(endts)).toDateString()
                 };
 
                 var chart = new google.visualization.ScatterChart(document.getElementById('chart'));
