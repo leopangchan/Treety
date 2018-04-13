@@ -421,7 +421,7 @@ app.controller("TreeMapController",
     }
 
     vm.init = function() {
-        vm.getLocations(TRAFFIC_LANE)
+        vm.getLocations('TRAFFIC_LANE')
     }
 
 });
