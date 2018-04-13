@@ -82,3 +82,14 @@ html, body {
     align: center;
     float: left;
 }
+
+.background_image {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+}
+
