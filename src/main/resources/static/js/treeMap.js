@@ -8,30 +8,16 @@ app.controller("TreeMapController",
 
     /* open dialog for planting a new tree */
     vm.newTree = function($event) {
-       console.log('Plant tree')
-       $mdDialog.show({
-         clickOutsideToClose: true,
+        console.log('Plant tree')
 
-         scope: $scope,        // use parent scope in template
-         preserveScope: true,  // do not forget this if use parent scope
-
-         // Since GreetingController is instantiated with ControllerAs syntax
-         // AND we are passing the parent '$scope' to the dialog, we MUST
-         // use 'vm.<xxx>' in the template markup
-
-         template: '<md-dialog>' +
-                   '  <md-dialog-content>' +
-                   '     Hi There {{vm.employee}}' +
-                   '  </md-dialog-content>' +
-                   '</md-dialog>',
-
-         controller: function DialogController($scope, $mdDialog) {
-           $scope.closeDialog = function() {
-             $mdDialog.hide();
-           }
-         }
-      });
-      };
+        $mdDialog.show({
+            template: '<p>Hello There</p>',
+            //parent: $rootElement,
+            scope: $scope,
+            preserveScope: true,
+            clickOutsideToClose: true
+        });
+    }
 
     /* map functions */
     NgMap.getMap().then(function(map) {
@@ -39,13 +25,7 @@ app.controller("TreeMapController",
       if (map.markers) {
         vm.marker = map.markers[0].getPosition()
       }
-    });
-
-    vm.CrimeloadChart = function() {
-      console.log("Load Chart");
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(this.drawCrimeChart);
-    }
+    })
 
     /* zoom to center when user clicked on a marker */
     vm.centerChanged = function(event) {
@@ -70,6 +50,12 @@ app.controller("TreeMapController",
     /* CHART FUNCTIONS */
 
     /* load a google pie chart */
+    vm.CrimeloadChart = function() {
+        console.log("Load Chart");
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(this.drawCrimeChart);
+    }
+
     vm.loadPieChart = function() {
         console.log("Load Chart");
         google.charts.load('current', {'packages':['corechart']});
@@ -394,10 +380,10 @@ app.controller("TreeMapController",
     }
 
     // get coordinates for all city sensors
-    vm.getLocations = function() {
+    vm.getLocations = function(type) {
         // query url
         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
-        var requestURL = metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE&page=0&size=50"
+        var requestURL = metadataurl + "/locations/search?q=locationType:" + type + "&page=0&size=50"
         var zoneId = 'SD-IE-TRAFFIC'
         res = []
 
@@ -426,8 +412,16 @@ app.controller("TreeMapController",
          })
     }
 
+    // TODO:
+    // write a function that takes in a coordinate (lat, long)
+    // calls the get locations function with a sensor type ex: TRAFFIC_LANE
+    // returns the location id of the closest sensor
+
+    vm.getClosestSensor = function(type, coord) {
+    }
+
     vm.init = function() {
-        vm.getLocations()
+        vm.getLocations(TRAFFIC_LANE)
     }
 
 });
