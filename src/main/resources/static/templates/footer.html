@@ -1,7 +1,10 @@
-<div id="footer" class="col">
-        <img src="../img/button_crime-decreased.png" alt="decrease in crime level" width = "224" height = "59">
-        <img src="../img/button_pedestrian-level.png" alt="pedestrian level" width = "224" height = "59">
-        <img src="../img/button_traffic.png" alt="traffic level" width = "224" height = "59">
-        <img src="../img/button_carbon-emission.png" alt="carbon emission level" width = "224" height = "59">
-        <img src="../img/button_water-retained.png" alt="water retention level" width = "224" height = "59">
+<div id="footer" class="col" ng-controller = "TreeMapController as vm">
+
+    <button class="btn success" ng-click = "vm.loadTable()">Environmental Benefits</button>
+    <button class="btn default" ng-click="vm.loadPedestrianChart()">Pedestrian Level</button>
+    <button class="btn success" ng-click = "vm.CarbonloadChart()">Carbon Emission</button>
+    <button class="btn info"  ng-click = "vm.CrimeloadChart()">Crime Decrease</button>
+    <button class="btn warning"  ng-click = "vm.WaterloadChart()">Water Retention</button>
+    <button class="btn danger" ng-click = "vm.TrafficloadChart()">Traffic Reduction</button>
+
 </div>
