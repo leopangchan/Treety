@@ -103,3 +103,16 @@ html, body {
     display: inline-block;
 }
 
+.on-top {
+    z-index:1000;
+    opacity: 0.3;
+}
+
+.overlay {
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+}
+

@@ -30,8 +30,8 @@
 
 </head>
 
-<body class="background_image">
-    <div class="row row-bottom-margin">
+<body class="background_image" ng-controller="TreeMapController as vm" ng-init="vm.init()">
+    <div class="row row-bottom-margin on-top">
         <div ng-include="'templates/header.html'"></div>
     </div>
 
@@ -41,12 +41,12 @@
     </div>
 
     <!-- tabs -->
-    <div class="row row-bottom-margin">
+    <div class="row row-bottom-margin container on-top">
         <div ng-include="'templates/footer.html'"></div>
     </div>
 
     <!-- charts -->
-    <div class="row row-bottom-margin">
+    <div class="row row-bottom-margin container on-top">
         <div ng-include="'templates/form.html'"></div>
     </div>
 
