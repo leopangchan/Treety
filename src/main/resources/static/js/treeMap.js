@@ -385,7 +385,7 @@ app.controller("TreeMapController",
         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
         var requestURL = metadataurl + "/locations/search?q=locationType:" + type + "&page=0&size=50"
         var zoneId = 'SD-IE-TRAFFIC'
-        res = []
+
 
         var req = {
             method: 'GET',
@@ -396,29 +396,71 @@ app.controller("TreeMapController",
             }
         }
 
-        $http(req)
+        return $http(req)
          .then(function(data) {
             var locations = data.data['content']
-
+            var res = []
             locations.forEach(function(element) {
                 if (element.hasOwnProperty('coordinates')) {
                     var coord = element['coordinates'].split(":")
-                    res.push([parseFloat(coord[0]), parseFloat(coord[1])])
+                    vm.locationPos.push([parseFloat(coord[0]), parseFloat(coord[1])])
+                    res.push([parseFloat(coord[0]), parseFloat(coord[1]), element["locationUid"]])
                 }
             })
+           return res
          })
-         .then(function() {
-            vm.locationPos = res
+         .then(function(locations) {
+           vm.locationPos = vm.getClosestSensor(locations)// 'TRAFFIC_LANE', [32.708757321722075, -117.16414366466401]
          })
     }
 
-    // TODO:
-    // write a function that takes in a coordinate (lat, long)
-    // calls the get locations function with a sensor type ex: TRAFFIC_LANE
-    // returns the location id of the closest sensor
-
+   /**
+    *  write a function that takes in a coordinate [lat, long], calls the get locations function.
+    *
+    *  Note:
+    *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
+    *
+    *  @param type - a sensor type ex: TRAFFIC_LANE
+    *  @param coord - [32.708757321722075, -117.16414366466401]
+    *  @return the location id of the closest sensor
+    *
+    *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
+    */
     vm.getClosestSensor = function(type, coord) {
-    }
+      var closestPos = undefined;
+      //console.log(r)
+      vm.locationPos.forEach(function (pos) {
+        //console.log(pos)
+        let xDis = Math.abs(Math.pow(pos[0], 2) - Math.pow(coord[0], 2))
+        let yDis = Math.abs(Math.pow(pos[1], 2) - Math.pow(coord[1], 2))
+        closestPos = closestPos === undefined || closestPos > Math.sqrt(Math.abs(xDis - yDis)) ? pos : closestPos
+      });
+
+      return closestPos[2]
+    };
+   vm.locationPos = [
+     [32.958021381562205, -117.20810659895403],
+     [32.70590806508731, -117.15909611180291],
+     [32.957273048806, -117.20786144635471],
+     [32.95573160508286, -117.19313276203972],
+     [32.95573348844073, -117.20851860005021],
+     [32.9566364985883, -117.20798211109123],
+     [32.7156057202534, -117.16359559220167],
+     [32.71580921147459, -117.16677448037868],
+     [32.72904234548309, -117.19530227687932],
+     [32.708757321722075, -117.16414366466401]
+   ]
+    //var r = vm.getClosestSensor("", [32.95773160508286, -117.29313276203972]);
+    //expected: [32.95573348844073, -117.20851860005021]
+    /**
+     * Test 1:
+     * input1 = [32.708757321722075, -117.16414366466401]
+     * output = [32.708757321722075, -117.16414366466401]
+     *
+     * Test 2:
+     * input1 = [32.95573160508286, -117.17313276203972]
+     * output = [32.95573160508286, -117.19313276203972]
+     * */
 
     vm.init = function() {
         vm.getLocations('TRAFFIC_LANE')

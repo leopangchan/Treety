@@ -30,27 +30,24 @@
 
 </head>
 
-<body background = "../img/tree_background.jpg" class="background_image">
-    <div class="container">
-        <div class="row">
-            <div ng-include="'templates/header.html'"></div>
-        </div>
+<body class="background_image">
+    <div class="row row-bottom-margin">
+        <div ng-include="'templates/header.html'"></div>
+    </div>
 
-        <!-- map -->
-        <div id="body" class="row">
-            <ng-view></ng-view>
-        </div>
+    <!-- map -->
+    <div id="body" class="row row-bottom-margin">
+        <ng-view></ng-view>
+    </div>
 
-        <!-- tabs -->
-        <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
-            <div ng-include="'templates/footer.html'"></div>
-        </div>
+    <!-- tabs -->
+    <div class="row row-bottom-margin">
+        <div ng-include="'templates/footer.html'"></div>
+    </div>
 
-        <!-- charts -->
-        <div class="row" style="margin-bottom: 30px;">
-            <div ng-include="'templates/form.html'"></div>
-        </div>
-
+    <!-- charts -->
+    <div class="row row-bottom-margin">
+        <div ng-include="'templates/form.html'"></div>
     </div>
 
     <script type="text/javascript" src="webjars/jquery/2.1.0/jquery.min.js"></script>

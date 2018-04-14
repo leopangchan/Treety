@@ -95,3 +95,11 @@ html, body {
     height: auto;
 }
 
+.row-bottom-margin {
+    margin-bottom: 0 !important;
+}
+
+.spanning {
+    display: inline-block;
+}
+
