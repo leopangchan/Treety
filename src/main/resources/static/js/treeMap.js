@@ -3,8 +3,18 @@ app.controller("TreeMapController",
 	
 	var vm = this;
 	vm.token = token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxlZ2FjeS10b2tlbi1rZXkiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiI1MDhjMjE2YzU3ZmY0MGFhODAxYWI0YzFlNDU5ZGQ3OCIsInN1YiI6InNkLmhhY2thdGhvbiIsInNjb3BlIjpbImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQuREVWRUxPUCIsInVhYS5yZXNvdXJjZSIsImllLWN1cnJlbnQuUFNELUlFLVBFREVTVFJJQU4uSUUtUEVERVNUUklBTi5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1FTlZJUk9OTUVOVEFMLklFLUVOVklST05NRU5UQUwuTElNSVRFRC5ERVZFTE9QIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRC5ERVZFTE9QIl0sImNsaWVudF9pZCI6InNkLmhhY2thdGhvbiIsImNpZCI6InNkLmhhY2thdGhvbiIsImF6cCI6InNkLmhhY2thdGhvbiIsImdyYW50X3R5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJyZXZfc2lnIjoiNWE0YzhlYyIsImlhdCI6MTUyMzQwMjAyNiwiZXhwIjoxNTI0MDA2ODI2LCJpc3MiOiJodHRwczovLzYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOC5wcmVkaXgtdWFhLnJ1bi5hd3MtdXN3MDItcHIuaWNlLnByZWRpeC5pby9vYXV0aC90b2tlbiIsInppZCI6IjYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOCIsImF1ZCI6WyJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtVFJBRkZJQy5JRS1UUkFGRklDLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtRU5WSVJPTk1FTlRBTC5JRS1FTlZJUk9OTUVOVEFMLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1UUkFGRklDLklFLVRSQUZGSUMuTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJ1YWEiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsInNkLmhhY2thdGhvbiJdfQ.BumE9iuNyePgtUcJrsVuN-fVVCoO7NVV_fedWN8M4zvoN3EbxIVwq_01Y01IEmQdD6NpWue6N7ER2qvzYBvDISFhJ4XMD9GisQU-xnDRGOT-SxwtUCPiy2UnR0Gqa_jejHBUS11csD-6WUN1ItT3U3i-uasDW4S2KjgRZD5GWXMcx5mvUwqn2R4RF9hereJn_wxd3cNohp8NBlTLSXOw_vAkzl6ha049-U4OjNSYZAfKIWbdtE01oRhic6M_y_4jJkyyJzi9DDFKnuJTFg2IJ09OyGWqlZ6Cqmu95Q7XifjXxWP7_EUhqix2gE-M73bbohwOdDVZ36JjTFoXcUsh9g"
+    vm.markerPos = []
 
-    vm.locationPos = []
+    // measurements are in meters
+    // radius refers to canopy radius
+    vm.trees = {
+     "oak" : {"height": 18.288, "radius": 7.9248},
+     "pear" : {"height": 13.716, "radius": 6.096},
+     "mulberry" : {"height": 9.144, "radius": 7.62}
+    }
+
+    // default tree type
+    vm.selected_tree = "oak"
 
     /* open dialog for planting a new tree */
     vm.newTree = function($event) {
@@ -164,9 +174,6 @@ app.controller("TreeMapController",
         endts = today.setDate(today.getDate()-1)
         startts = (new Date(endts)).setDate((new Date(endts)).getDate() - 1)
 
-        console.log('start ' + new Date(startts))
-        console.log('end ' + new Date(endts))
-
         // query url
         var requestURL = eventurl + '/locations/' + locationId +
          '/events?eventType=PEDEVT&startTime=' +
@@ -303,61 +310,13 @@ app.controller("TreeMapController",
             today = new Date()
             endDate = today.setDate(today.getDate() - 1)
             startDate = (new Date(endDate)).setDate((new Date(endDate)).getDate() - 1)
-            vm.getDailyPedestrians(startDate, endDate, res)
+
+            console.log(startDate)
+            console.log(endDate)
         }
 
         return res
     }
-
-    // get number of pedestrians from startts to endts
-    vm.getDailyPedestrians = function(startts, endts, res) {
-        var eventurl = "https://ic-event-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2"
-        var locationId = '9bbdcec9'
-        var zoneId = "SD-IE-PEDESTRIAN"
-
-        // query url
-        var requestURL = eventurl + '/locations/' + locationId +
-         '/events?eventType=PEDEVT&startTime=' +
-         startts + '&' + 'endTime=' + endts
-
-        vm.getNumberOfPedestrians('GET', requestURL, zoneId, res)
-    }
-
-    vm.getNumberOfPedestrians = function(method, requestURL, zoneId, res) {
-        var req = {
-            method: method,
-            url: requestURL,
-            headers: {
-                "Authorization": "Bearer " + vm.token,
-                "Predix-Zone-Id": zoneId,
-                "Access-Control-Allow-Origin": "https://localhost:8090",
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-                "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
-                "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
-            }
-        }
-
-        $http(req)
-         .then(function(data) {
-            var pedestrians = data.data
-            var sum = 0
-            var index = 0
-
-            if (pedestrians.hasOwnProperty('content')) {
-                pedestrians['content'].forEach(function(element) {
-
-                    if (element.hasOwnProperty('measures') &&
-                     element['measures'].hasOwnProperty('pedestrianCount')) {
-                        sum += element['measures']['pedestrianCount']
-                        res.push([index, element['measures']['pedestrianCount']])
-                    }
-                })
-                console.log('Total number of pedestrians: ' + sum)
-                console.log('Total number of data points ' + res.length)
-            }
-        })
-      }
 
     vm.drawTrafficChart = function() {
         var data = google.visualization.arrayToDataTable([
@@ -379,13 +338,81 @@ app.controller("TreeMapController",
         console.log("Crime: I was clicked!")
     }
 
-    // get coordinates for all city sensors
-    vm.getLocations = function(type) {
+    // functions for calculating benefits
+
+    // counts total number of pedestrians from a pedestrian json
+    vm.sumPedestrians = function(pedestrians) {
+        sum = 0
+
+        if (pedestrians.hasOwnProperty('content')) {
+            pedestrians['content'].forEach(function(element) {
+
+                if (element.hasOwnProperty('measures') &&
+                 element['measures'].hasOwnProperty('pedestrianCount')) {
+                    sum += element['measures']['pedestrianCount']
+                }
+            })
+        }
+
+        return sum
+    }
+
+    // helper functions to calculate tree water retention
+    vm.calc_e_delta = function(radius, height, temperature) {
+        var tmp = (7.5 * temperature) / (237.3 + temperature)
+        var S =  610.7 * Math.pow(10, tmp)
+        return (((100 - radius*height) * S) / 100.0) * S
+    }
+
+    vm.calc_delta = function(temperature) {
+        var power = (17.27*temperature) / (temperature + 273.3)
+        var numerator = 4098 * (0.6108 * Math.pow(e, power))
+        var denominator = Math.pow(temperature + 237.3, 2)
+        return numerator / denominator
+    }
+
+    // calculate evapotranspirtation in mm / day
+    vm.calc_evapotranspiration = function(radius, height, temperature) {
+        var e_delta = vm.calc_e_delta(radius, height, temperature)
+        var delta = vm.calc_delta(temperature)
+        var gamma = 0.675
+        var U = 11.3 // wind speed (KPM)
+        var numerator = (0.408 * delta) + (gamma * (900/(T+273)) * U * e_delta)
+        var denominator = delta + (gamma * (1 + 0.34 * U))
+
+        return numerator / denominator
+    }
+
+    // calculate % of water retained by the tree
+    vm.calc_water_retention = function(radius, height, temperature) {
+        var evapotranspiration = vm.calc_evapotranspiration(radius, height, temperature)
+        var avg_rainfall = 300 // mm
+        return (1 - evapotranspiration) / avg_rainfall
+    }
+
+    // calculate the average temperature from a list of environment jsons
+    vm.average_temperature = function(environment) {
+        var sum = 0
+        var length = environment.length
+
+        environment.forEach(function(element) {
+            if (element.hasOwnProperty('measures') && element.hasOwnProperty('properties')) {
+                var power = element['properties']['powerOf10']
+
+                // convert to Celcius
+                sum += (element['measures']['median'] * Math.pow(10, power)) - 273
+            }
+        })
+
+        return sum / length
+    }
+
+    // initialize the coordinate for the controller's markers
+    vm.initMarkers = function(type) {
         // query url
         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
         var requestURL = metadataurl + "/locations/search?q=locationType:" + type + "&page=0&size=50"
         var zoneId = 'SD-IE-TRAFFIC'
-        res = []
 
         var req = {
             method: 'GET',
@@ -403,25 +430,22 @@ app.controller("TreeMapController",
             locations.forEach(function(element) {
                 if (element.hasOwnProperty('coordinates')) {
                     var coord = element['coordinates'].split(":")
-                    res.push([parseFloat(coord[0]), parseFloat(coord[1])])
+                    vm.markerPos.push([parseFloat(coord[0]), parseFloat(coord[1])])
                 }
             })
-         })
-         .then(function() {
-            vm.locationPos = res
          })
     }
 
     // TODO:
-    // write a function that takes in a coordinate (lat, long)
-    // calls the get locations function with a sensor type ex: TRAFFIC_LANE
+    // write a function that takes in a coordinate [lat, long]
+    // calls the get locations function with a sensor type ex: 'TRAFFIC_LANE'
     // returns the location id of the closest sensor
 
     vm.getClosestSensor = function(type, coord) {
     }
 
     vm.init = function() {
-        vm.getLocations('TRAFFIC_LANE')
+        vm.initMarkers('TRAFFIC_LANE')
     }
 
 });

@@ -4,7 +4,7 @@
 
         <ng-map center="32.7157, -117.1611" zoom = "13" on-center-changed="vm.centerChanged()">
 
-            <marker ng-repeat="pos in vm.locationPos" position="{{pos}}"
+            <marker ng-repeat="pos in vm.markerPos" position="{{pos}}"
              on-click="vm.markerClicked(event, pos)" icon="../img/small_tree.png">
             </marker>
 
