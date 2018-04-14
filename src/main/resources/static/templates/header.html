@@ -1,10 +1,14 @@
-<div id="header">
-    <div>
-        <img src="../img/TreeLogo.png" alt="Tree Logo" class="spanning on-top" width="75" height="75">
-        <h2 class="spanning on-top"><b> Treety! </b></h2>
-        <button class="btn success spanning on-top" ng-click="vm.newTree($event)" >Plant A Tree</button>
-    </div>
-    <div class="form-group">
-        <input type="text" style="height: 50%" placeholder="Location: e.g. city/zip" class="form-control on-top">
+<div class="container-fluid">
+    <div id="header" class="on-top row max-width justify-content-between">
+        <div class="col-4">
+            <img src="../img/TreeLogo.png" alt="Tree Logo">
+            <div style="padding-left: 5px">
+                <h2 style="margin-top: 5px"><b>Treety!</b></h2>
+                <button class="btn-md success" ng-click="vm.newTree($event)" >Plant A Tree</button>
+            </div>
+        </div>
+        <div class="form-group col-4">
+            <input type="text" placeholder="Location: e.g. city/zip" class="form-control">
+        </div>
     </div>
 </div>

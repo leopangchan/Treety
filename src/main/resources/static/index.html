@@ -8,7 +8,7 @@
     <meta name="title" content="TreeMap">
     <title>Tree Benefit Calculator</title>
 
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.1.1/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.0.0/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
     <link rel="stylesheet" type="text/css" href="css/multi-columns-row.css">
     <style>
@@ -31,22 +31,19 @@
 </head>
 
 <body class="background_image" ng-controller="TreeMapController as vm" ng-init="vm.init()">
-    <div class="row container row-bottom-margin on-top">
-        <div ng-include="'templates/header.html'"></div>
-    </div>
-
     <!-- map -->
     <div id="body" class="row row-bottom-margin">
+        <div class="max-width" ng-include="'templates/header.html'"></div>
         <ng-view></ng-view>
     </div>
 
     <!-- tabs -->
-    <div class="row row-bottom-margin container on-top">
+    <div class="row row-bottom-margin on-top">
         <div ng-include="'templates/footer.html'"></div>
     </div>
 
     <!-- charts -->
-    <div class="row row-bottom-margin container on-top">
+    <div class="row row-bottom-margin on-top">
         <div ng-include="'templates/form.html'"></div>
     </div>
 
@@ -58,7 +55,7 @@
     <script type="text/javascript" src="webjars/angular-ui-bootstrap/0.12.1/ui-bootstrap.js"></script>
     <script type="text/javascript" src="webjars/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
 
-    <script type="text/javascript" src="webjars/bootstrap/3.1.1/js/bootstrap.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.0.0/js/bootstrap.js"></script>
 
     <!-- Angular Material requires Angular.js Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-animate.min.js"></script>
