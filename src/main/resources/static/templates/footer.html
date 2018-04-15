@@ -1,12 +1,12 @@
 <div id="footer">
     <div class="btn-group btn-group-justified" style="width: 100%" role="group">
-        <button uib-popover="{{dynamicPopover.content}}" popover-placement="top" aria-hidden="true" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-warning">Dynamic Popover</button>
-        <button uib-popover-template="dynamicPopover.templateUrl" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-warning">Popover With Template</button>
-        <a class="btn success" ng-click = "vm.loadTable()">Environmental Benefits</a>
-        <a class="btn default" ng-click="vm.loadPedestrianChart()">Pedestrian Level</a>
-        <a class="btn success" ng-click = "vm.CarbonloadChart()">Carbon Emission</a>
-        <a class="btn info"  ng-click = "vm.CrimeloadChart()">Crime Decrease</a>
-        <a class="btn warning"  ng-click = "vm.WaterloadChart()">Water Retention</a>
-        <a class="btn danger" ng-click = "vm.TrafficloadChart()">Traffic Reduction</a>
+        <button type="button" class="btn btn-danger" uib-popover="{{dynamicPopover.content}}" popover-placement="top" aria-hidden="true" popover-title="{{dynamicPopover.title}}">Toggle Heatmap</button>
+        <button type="button" class="btn btn-warning" uib-popover-template="dynamicPopover.templateUrl" popover-title="{{dynamicPopover.title}}">Toggle markers</button>
+        <a class="btn success" ng-click = "vm.loadChart('environmental')">Environmental Benefits</a>
+        <a class="btn default" ng-click="vm.loadChart('pesdestrain')">Pedestrian Level</a>
+        <a class="btn success" ng-click = "vm.loadChart('carbon')">Carbon Emission</a>
+        <a class="btn info"  ng-click = "vm.loadChart('crime')">Crime Decrease</a>
+        <a class="btn warning"  ng-click = "vm.loadChart('water')">Water Retention</a>
+        <a class="btn danger" ng-click = "vm.loadChart('traffic')">Traffic Reduction</a>
     </div>
 </div>

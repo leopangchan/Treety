@@ -120,12 +120,6 @@ html, body {
     opacity: 1 !important;
 }
 
-/*
-#chart {
-    width: 900px;
-    height: 500px;
-}*/
-
 #header {
     padding-top: 50px;
     position: relative;
@@ -157,4 +151,6 @@ html, body {
     display: inline-block;
     text-align: left;
     vertical-align: middle;
+    width: 900px;
+    height: 500px;
 }
