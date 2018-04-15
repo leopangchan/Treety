@@ -4,19 +4,31 @@ app.controller("TreeMapController",
 	var vm = this;
 	vm.token = token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxlZ2FjeS10b2tlbi1rZXkiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiI1MDhjMjE2YzU3ZmY0MGFhODAxYWI0YzFlNDU5ZGQ3OCIsInN1YiI6InNkLmhhY2thdGhvbiIsInNjb3BlIjpbImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQuREVWRUxPUCIsInVhYS5yZXNvdXJjZSIsImllLWN1cnJlbnQuUFNELUlFLVBFREVTVFJJQU4uSUUtUEVERVNUUklBTi5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1FTlZJUk9OTUVOVEFMLklFLUVOVklST05NRU5UQUwuTElNSVRFRC5ERVZFTE9QIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRC5ERVZFTE9QIl0sImNsaWVudF9pZCI6InNkLmhhY2thdGhvbiIsImNpZCI6InNkLmhhY2thdGhvbiIsImF6cCI6InNkLmhhY2thdGhvbiIsImdyYW50X3R5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJyZXZfc2lnIjoiNWE0YzhlYyIsImlhdCI6MTUyMzQwMjAyNiwiZXhwIjoxNTI0MDA2ODI2LCJpc3MiOiJodHRwczovLzYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOC5wcmVkaXgtdWFhLnJ1bi5hd3MtdXN3MDItcHIuaWNlLnByZWRpeC5pby9vYXV0aC90b2tlbiIsInppZCI6IjYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOCIsImF1ZCI6WyJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtVFJBRkZJQy5JRS1UUkFGRklDLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtRU5WSVJPTk1FTlRBTC5JRS1FTlZJUk9OTUVOVEFMLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1UUkFGRklDLklFLVRSQUZGSUMuTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJ1YWEiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsInNkLmhhY2thdGhvbiJdfQ.BumE9iuNyePgtUcJrsVuN-fVVCoO7NVV_fedWN8M4zvoN3EbxIVwq_01Y01IEmQdD6NpWue6N7ER2qvzYBvDISFhJ4XMD9GisQU-xnDRGOT-SxwtUCPiy2UnR0Gqa_jejHBUS11csD-6WUN1ItT3U3i-uasDW4S2KjgRZD5GWXMcx5mvUwqn2R4RF9hereJn_wxd3cNohp8NBlTLSXOw_vAkzl6ha049-U4OjNSYZAfKIWbdtE01oRhic6M_y_4jJkyyJzi9DDFKnuJTFg2IJ09OyGWqlZ6Cqmu95Q7XifjXxWP7_EUhqix2gE-M73bbohwOdDVZ36JjTFoXcUsh9g"
 
-    vm.locationPos = []
+    vm.locationPos = [];
 
     /* open dialog for planting a new tree */
     vm.newTree = function($event) {
-        console.log('Plant tree')
+      var modalInstance = $uibModal.open({
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: '../templates/charts.dialog.html',
+        backdrop: false,
+        controller: "plantTreeController",
+        controllerAs: '$ctrl',
+        size: 'md',
+        resolve: {
+          items: function () {
+            return undefined
+          }
+        }
+      });
 
-        $mdDialog.show({
-            template: '<p>Hello There</p>',
-            //parent: $rootElement,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
+      modalInstance.result.then(function (selectedItem) {
+        //$ctrl.selected = selectedItem;
+      }, function (error) {
+        $log.info('Modal dismissed at: ' + new Date());
+        $log.info(error);
+      });
     }
 
     /* map functions */
@@ -438,111 +450,14 @@ app.controller("TreeMapController",
 
       return closestPos[2]
     };
-   vm.locationPos = [
-     [32.958021381562205, -117.20810659895403],
-     [32.70590806508731, -117.15909611180291],
-     [32.957273048806, -117.20786144635471],
-     [32.95573160508286, -117.19313276203972],
-     [32.95573348844073, -117.20851860005021],
-     [32.9566364985883, -117.20798211109123],
-     [32.7156057202534, -117.16359559220167],
-     [32.71580921147459, -117.16677448037868],
-     [32.72904234548309, -117.19530227687932],
-     [32.708757321722075, -117.16414366466401]
-   ]
-    //var r = vm.getClosestSensor("", [32.95773160508286, -117.29313276203972]);
-    //expected: [32.95573348844073, -117.20851860005021]
-    /**
-     * Test 1:
-     * input1 = [32.708757321722075, -117.16414366466401]
-     * output = [32.708757321722075, -117.16414366466401]
-     *
-     * Test 2:
-     * input1 = [32.95573160508286, -117.17313276203972]
-     * output = [32.95573160508286, -117.19313276203972]
-     * */
+
+    $scope.dynamicPopover = {
+      content: 'Hello, World!',
+      templateUrl: '../templates/charts.dialog.html',
+      title: 'Title'
+    };
 
     vm.init = function() {
         vm.getLocations('TRAFFIC_LANE')
     }
-   $scope.open = function (size) {
-     //var parentElem = $document.find('body').eq(0)
-     var modalInstance = $uibModal.open({
-       ariaLabelledBy: 'modal-title',
-       ariaDescribedBy: 'modal-body',
-       templateUrl: '../templates/charts.dialog.html',
-       controller: function() {
-
-       },
-       //controllerAs: '$ctrl',
-       size: 'sm',
-       appendTo: $document.find("#tree-map"),
-       resolve: {
-         items: function () {
-           return undefined
-         }
-       }
-     });
-
-     modalInstance.result.then(function (selectedItem) {
-       //$ctrl.selected = selectedItem;
-     }, function (error) {
-       $log.info('Modal dismissed at: ' + new Date());
-       $log.info(error);
-     });
-   };
-
-   $scope.showPrompt = function(ev) {
-     // Appending dialog to document.body to cover sidenav in docs app
-     var confirm = $mdDialog.prompt()
-         .title('What would you name your dog?')
-         .textContent('Bowser is a common name.')
-         .placeholder('Dog name')
-         .ariaLabel('Dog name')
-         .initialValue('Buddy')
-         .targetEvent(ev)
-         .required(true)
-         .ok('Okay!')
-         .cancel('I\'m a cat person');
-
-     $mdDialog.show(confirm).then(function(result) {
-       $scope.status = 'You decided to name your dog ' + result + '.';
-     }, function() {
-       $scope.status = 'You didn\'t name your dog.';
-     });
-   };
-
-  $scope.showDialog = showDialog
-   function showDialog($event) {
-     var parentEl = angular.element();
-     $mdDialog.show({
-       parent: parentEl,
-       targetEvent: $event,
-       template:
-       '<md-dialog aria-label="List dialog">' +
-       '  <md-dialog-content>'+
-       '    <md-list>'+
-       '      <md-list-item ng-repeat="item in items">'+
-       '       <p>Number {{item}}</p>' +
-       '      '+
-       '    </md-list-item></md-list>'+
-       '  </md-dialog-content>' +
-       '  <md-dialog-actions>' +
-       '    <md-button ng-click="closeDialog()" class="md-primary">' +
-       '      Close Dialog' +
-       '    </md-button>' +
-       '  </md-dialog-actions>' +
-       '</md-dialog>',
-       locals: {
-         //items: $scope.items
-       },
-       controller: DialogController
-     });
-     function DialogController($scope, $mdDialog, items) {
-       $scope.items = items;
-       $scope.closeDialog = function() {
-         $mdDialog.hide();
-       }
-     }
-   }
 });

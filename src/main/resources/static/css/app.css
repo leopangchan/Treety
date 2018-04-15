@@ -96,10 +96,6 @@ html, body {
     height: auto;
 }
 
-.row-bottom-margin {
-    margin-bottom: 0 !important;
-}
-
 .spanning {
     display: inline-block;
 }
@@ -109,7 +105,7 @@ html, body {
 }
 
 .on-top {
-    z-index:1000 !important;
+    z-index:1000;
 }
 
 .overlay {
@@ -118,6 +114,10 @@ html, body {
     height:100%;
     top:0px;
     left:0px;
+}
+
+.fade {
+    opacity: 1 !important;
 }
 
 /*
@@ -138,4 +138,23 @@ html, body {
     position: absolute;
     right: 0;
     opacity: 0.8;
+}
+
+.modal {
+    text-align: center;
+    padding: 0!important;
+}
+
+.modal::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
 }

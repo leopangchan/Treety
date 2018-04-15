@@ -1,5 +1,7 @@
 <div id="footer">
     <div class="btn-group btn-group-justified" style="width: 100%" role="group">
+        <button uib-popover="{{dynamicPopover.content}}" popover-placement="top" aria-hidden="true" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-warning">Dynamic Popover</button>
+        <button uib-popover-template="dynamicPopover.templateUrl" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-warning">Popover With Template</button>
         <a class="btn success" ng-click = "vm.loadTable()">Environmental Benefits</a>
         <a class="btn default" ng-click="vm.loadPedestrianChart()">Pedestrian Level</a>
         <a class="btn success" ng-click = "vm.CarbonloadChart()">Carbon Emission</a>
