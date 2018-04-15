@@ -10,9 +10,9 @@ app.controller("TreeMapController",
       var modalInstance = $uibModal.open({
         ariaLabelledBy: 'modal-title',
         ariaDescribedBy: 'modal-body',
-        templateUrl: '../templates/charts.dialog.html',
+        templateUrl: '../templates/plant.tree.dialog.html',
         backdrop: false,
-        controller: "plantTreeController",
+        controller: "PlantTreeController",
         controllerAs: '$ctrl',
         size: 'md',
         resolve: {
@@ -99,7 +99,7 @@ app.controller("TreeMapController",
         ariaDescribedBy: 'modal-body',
         templateUrl: '../templates/chart.dialog.html',
         backdrop: false,
-        controller: "chartController",
+        controller: "ChartController",
         controllerAs: '$ctrl',
         size: 'lg',
         resolve: {
@@ -115,7 +115,8 @@ app.controller("TreeMapController",
         $log.info(error);
       });
     };
-   /**
+
+    /**
     *  write a function that takes in a coordinate [lat, long], calls the get locations function.
     *
     *  Note:
@@ -129,9 +130,7 @@ app.controller("TreeMapController",
     */
     vm.getClosestSensor = function(type, coord) {
       var closestPos = undefined;
-      //console.log(r)
       vm.locationPos.forEach(function (pos) {
-        //console.log(pos)
         let xDis = Math.abs(Math.pow(pos[0], 2) - Math.pow(coord[0], 2))
         let yDis = Math.abs(Math.pow(pos[1], 2) - Math.pow(coord[1], 2))
         closestPos = closestPos === undefined || closestPos > Math.sqrt(Math.abs(xDis - yDis)) ? pos : closestPos
@@ -142,7 +141,7 @@ app.controller("TreeMapController",
 
     $scope.dynamicPopover = {
       content: 'Hello, World!',
-      templateUrl: '../templates/charts.dialog.html',
+      templateUrl: '../templates/plant.tree.dialog.html',
       title: 'Title'
     };
 

@@ -1,4 +1,4 @@
-app.controller("chartController", function ($chartType, $uibModalInstance, $http) {
+app.controller("ChartController", function ($chartType, $uibModalInstance, $http) {
 
   var $ctrl = this;
 

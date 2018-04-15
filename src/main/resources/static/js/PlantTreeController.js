@@ -1,4 +1,4 @@
-app.controller("plantTreeController", function($uibModalInstance) {
+app.controller("PlantTreeController", function($uibModalInstance) {
   var $ctrl = this;
   $ctrl.ok = function () {
     $uibModalInstance.close("");
