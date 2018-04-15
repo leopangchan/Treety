@@ -139,12 +139,6 @@ app.controller("TreeMapController",
       return closestPos[2]
     };
 
-    $scope.dynamicPopover = {
-      content: 'Hello, World!',
-      templateUrl: '../templates/plant.tree.dialog.html',
-      title: 'Title'
-    };
-
     vm.init = function() {
         vm.getLocations('TRAFFIC_LANE')
     }
