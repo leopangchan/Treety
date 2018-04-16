@@ -1,9 +1,11 @@
 app.controller("TreeMapController",
  function($scope, $http, $timeout, NgMap, $mdDialog, $uibModal, $log, $document){
 	
-	  var vm = this;
-	  vm.token = config.token;
-	  vm.locationPos = [];
+        var vm = this;
+        var heatmap = null
+        vm.token = config.token;
+        vm.locationPos = [];
+        vm.showMarkers = true
 
     /* open dialog for planting a new tree */
     vm.newTree = function($event) {
@@ -33,10 +35,23 @@ app.controller("TreeMapController",
     /* map functions */
     NgMap.getMap().then(function(map) {
       vm.map = map
+      heatmap = map.heatmapLayers.foo
+      heatmap.setMap(null)
+
       if (map.markers) {
         vm.marker = map.markers[0].getPosition()
       }
     })
+
+    vm.toggleHeatmap= function(event) {
+        console.log('Toggle heatmap')
+        heatmap.setMap(heatmap.getMap() ? null : vm.map);
+    };
+
+    vm.toggleMarkers = function() {
+        console.log('Toggle markers')
+        vm.showMarkers = !vm.showMarkers
+    }
 
     /* zoom to center when user clicked on a marker */
     vm.centerChanged = function(event) {
