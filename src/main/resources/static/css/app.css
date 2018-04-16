@@ -1,5 +1,5 @@
 #body {
-    padding-top: 10px;
+    padding-bottom: 100px;
 }
 
 .navbar {
@@ -39,9 +39,10 @@ div.relative1 {
 
 html, body {
     height: 100%;
+    top: 0px !important;
 }
 
-.footer {
+/*.footer {
     position: fixed;
     left: 0;
     bottom: 0;
@@ -49,7 +50,7 @@ html, body {
     color: white;
     align: center;
     float: left;
-}
+}*/
 
 .btn {
     border: none;
@@ -97,11 +98,62 @@ html, body {
 }
 */
 
-/*.row-bottom-margin {
-    margin-bottom: 0 !important;
-}*/
 
 .spanning {
     display: inline-block;
 }
 
+.max-width {
+    width: 100%;
+}
+
+.on-top {
+    z-index:1000;
+}
+
+.overlay {
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+}
+
+.fade {
+    opacity: 1 !important;
+}
+
+#header {
+    padding-top: 50px;
+    position: relative;
+}
+
+#footer{
+    bottom: 0;
+    height: 100px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    opacity: 0.8;
+}
+
+.modal {
+    text-align: center;
+    padding: 0!important;
+}
+
+.modal::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    width: 900px;
+    height: 500px;
+}

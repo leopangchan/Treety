@@ -52,10 +52,11 @@ dependencies {
     runtime "com.microsoft.sqlserver:mssql-jdbc"
 
     // Webjars
-    compile "org.webjars:bootstrap:3.1.1"
+    compile 'org.webjars.bower:angular-tooltips:1.1.7'
+    compile "org.webjars:bootstrap:4.0.0"
     compile "org.webjars:angularjs:1.6.9"
     compile "org.webjars:angular-ui:0.4.0-2"
-    compile "org.webjars:angular-ui-bootstrap:0.12.1"
+    compile "org.webjars:angular-ui-bootstrap:0.14.3"
     //compile "org.webjars:angular-material:0.7.1"
     compile "org.webjars:jquery:2.1.0-2"
 
