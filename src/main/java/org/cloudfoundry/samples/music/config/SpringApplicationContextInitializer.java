@@ -6,12 +6,7 @@ import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.CloudFactory;
 import org.springframework.cloud.service.ServiceInfo;
-import org.springframework.cloud.service.common.MongoServiceInfo;
-import org.springframework.cloud.service.common.MysqlServiceInfo;
-import org.springframework.cloud.service.common.OracleServiceInfo;
 import org.springframework.cloud.service.common.PostgresqlServiceInfo;
-import org.springframework.cloud.service.common.RedisServiceInfo;
-import org.springframework.cloud.service.common.SqlServerServiceInfo;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -25,17 +20,12 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     private static final Log logger = LogFactory.getLog(SpringApplicationContextInitializer.class);
 
     private static final Map<Class<? extends ServiceInfo>, String> serviceTypeToProfileName = new HashMap<>();
-    private static final List<String> validLocalProfiles = Arrays.asList("mysql", "postgres", "mongodb", "redis");
+    private static final List<String> validLocalProfiles = Arrays.asList("postgres");
 
     public static final String IN_MEMORY_PROFILE = "in-memory";
 
     static {
-        serviceTypeToProfileName.put(MongoServiceInfo.class, "mongodb");
-        serviceTypeToProfileName.put(PostgresqlServiceInfo.class, "postgres");
-        serviceTypeToProfileName.put(MysqlServiceInfo.class, "mysql");
-        serviceTypeToProfileName.put(RedisServiceInfo.class, "redis");
-        serviceTypeToProfileName.put(OracleServiceInfo.class, "oracle");
-        serviceTypeToProfileName.put(SqlServerServiceInfo.class, "sqlserver");
+        serviceTypeToProfileName.put(PostgresqlServiceInfo.class, "postgres");;
     }
 
     @Override

@@ -36,7 +36,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.boot:spring-boot-starter-data-mongodb"
     compile "org.springframework.boot:spring-boot-starter-data-redis"
 
     // Spring Cloud Connectors
@@ -47,9 +46,7 @@ dependencies {
     // JPA Persistence
     compile "commons-dbcp:commons-dbcp"
     runtime "com.h2database:h2"
-    runtime "mysql:mysql-connector-java"
     runtime "org.postgresql:postgresql"
-    runtime "com.microsoft.sqlserver:mssql-jdbc"
 
     // Webjars
     compile 'org.webjars.bower:angular-tooltips:1.1.7'
@@ -65,7 +62,6 @@ dependencies {
     // compile files('libs/ojdbc7.jar')
 
     // Testing
-    testCompile "junit:junit"
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 

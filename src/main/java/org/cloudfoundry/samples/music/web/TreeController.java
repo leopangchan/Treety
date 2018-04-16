@@ -1,44 +1,42 @@
 package org.cloudfoundry.samples.music.web;
 
-import org.cloudfoundry.samples.music.domain.Album;
-import org.cloudfoundry.samples.music.repositories.jpa.JpaAlbumRepository;
+import org.cloudfoundry.samples.music.domain.Tree;
+import org.cloudfoundry.samples.music.repositories.jpa.JpaTreeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
-@RequestMapping(value = "/albums")
-public class AlbumController {
-    private static final Logger logger = LoggerFactory.getLogger(AlbumController.class);
-    private JpaAlbumRepository repository;
+@RequestMapping(value = "/tree")
+public class TreeController {
+    private static final Logger logger = LoggerFactory.getLogger(TreeController.class);
+    private JpaTreeRepository repository;
 
     @Autowired
-    public AlbumController(JpaAlbumRepository repository) {
+    public TreeController(JpaTreeRepository repository) {
         this.repository = repository;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Album> albums() {
+    public Iterable<Tree> trees() {
         return repository.findAll();
     }
-
+/*
     @RequestMapping(method = RequestMethod.PUT)
-    public Album add(@RequestBody @Valid Album album) {
+    public Tree add(@RequestBody @Valid Tree album) {
         logger.info("Adding album " + album.getId());
         return repository.save(album);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Album update(@RequestBody @Valid Album album) {
+    public Tree update(@RequestBody @Valid Tree album) {
         logger.info("Updating album " + album.getId());
         return repository.save(album);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Album getById(@PathVariable String id) {
+    public Tree getById(@PathVariable String id) {
         logger.info("Getting album " + id);
         return repository.findOne(id);
     }
@@ -47,5 +45,5 @@ public class AlbumController {
     public void deleteById(@PathVariable String id) {
         logger.info("Deleting album " + id);
         repository.delete(id);
-    }
+    }*/
 }
