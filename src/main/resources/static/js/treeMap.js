@@ -2,7 +2,29 @@ app.controller("TreeMapController",
  function($scope, $http, $timeout, NgMap, $mdDialog){
 	
 	var vm = this;
-	vm.token = token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxlZ2FjeS10b2tlbi1rZXkiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiI1MDhjMjE2YzU3ZmY0MGFhODAxYWI0YzFlNDU5ZGQ3OCIsInN1YiI6InNkLmhhY2thdGhvbiIsInNjb3BlIjpbImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQuREVWRUxPUCIsInVhYS5yZXNvdXJjZSIsImllLWN1cnJlbnQuUFNELUlFLVBFREVTVFJJQU4uSUUtUEVERVNUUklBTi5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1FTlZJUk9OTUVOVEFMLklFLUVOVklST05NRU5UQUwuTElNSVRFRC5ERVZFTE9QIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRC5ERVZFTE9QIl0sImNsaWVudF9pZCI6InNkLmhhY2thdGhvbiIsImNpZCI6InNkLmhhY2thdGhvbiIsImF6cCI6InNkLmhhY2thdGhvbiIsImdyYW50X3R5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJyZXZfc2lnIjoiNWE0YzhlYyIsImlhdCI6MTUyMzQwMjAyNiwiZXhwIjoxNTI0MDA2ODI2LCJpc3MiOiJodHRwczovLzYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOC5wcmVkaXgtdWFhLnJ1bi5hd3MtdXN3MDItcHIuaWNlLnByZWRpeC5pby9vYXV0aC90b2tlbiIsInppZCI6IjYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOCIsImF1ZCI6WyJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtVFJBRkZJQy5JRS1UUkFGRklDLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtRU5WSVJPTk1FTlRBTC5JRS1FTlZJUk9OTUVOVEFMLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1UUkFGRklDLklFLVRSQUZGSUMuTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJ1YWEiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsInNkLmhhY2thdGhvbiJdfQ.BumE9iuNyePgtUcJrsVuN-fVVCoO7NVV_fedWN8M4zvoN3EbxIVwq_01Y01IEmQdD6NpWue6N7ER2qvzYBvDISFhJ4XMD9GisQU-xnDRGOT-SxwtUCPiy2UnR0Gqa_jejHBUS11csD-6WUN1ItT3U3i-uasDW4S2KjgRZD5GWXMcx5mvUwqn2R4RF9hereJn_wxd3cNohp8NBlTLSXOw_vAkzl6ha049-U4OjNSYZAfKIWbdtE01oRhic6M_y_4jJkyyJzi9DDFKnuJTFg2IJ09OyGWqlZ6Cqmu95Q7XifjXxWP7_EUhqix2gE-M73bbohwOdDVZ36JjTFoXcUsh9g"
+    vm.token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxlZ2FjeS10b2tlbi1rZXkiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiI0NWRhZDAxZjM5NDA0ZDEwOTQ3ZGRkMDdiMTU3YTdkOCIsInN1YiI6InNkLmhhY2thdGhvbiIsInNjb3BlIjpbImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQuREVWRUxPUCIsInVhYS5yZXNvdXJjZSIsImllLWN1cnJlbnQuUFNELUlFLVBFREVTVFJJQU4uSUUtUEVERVNUUklBTi5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1FTlZJUk9OTUVOVEFMLklFLUVOVklST05NRU5UQUwuTElNSVRFRC5ERVZFTE9QIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRC5ERVZFTE9QIl0sImNsaWVudF9pZCI6InNkLmhhY2thdGhvbiIsImNpZCI6InNkLmhhY2thdGhvbiIsImF6cCI6InNkLmhhY2thdGhvbiIsImdyYW50X3R5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJyZXZfc2lnIjoiNWE0YzhlYyIsImlhdCI6MTUyMzczNjc5MCwiZXhwIjoxNTI0MzQxNTkwLCJpc3MiOiJodHRwczovLzYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOC5wcmVkaXgtdWFhLnJ1bi5hd3MtdXN3MDItcHIuaWNlLnByZWRpeC5pby9vYXV0aC90b2tlbiIsInppZCI6IjYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOCIsImF1ZCI6WyJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtVFJBRkZJQy5JRS1UUkFGRklDLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtRU5WSVJPTk1FTlRBTC5JRS1FTlZJUk9OTUVOVEFMLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1UUkFGRklDLklFLVRSQUZGSUMuTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJ1YWEiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsInNkLmhhY2thdGhvbiJdfQ.MLQncxbZmu1v9oW1-5l1E4HuP0HZvgIxtkPwYX1BpRglyCjgfTrVsM0FlAjWseKi00WpOy6kT7GCXQdKv1bM2FiW0Ql7RRnq_BA4sFTT2cOdiCUR7Tjmem5RSa6DhAOGhl6bihbsjva8saaeAZM1OvGIGYnlJRQwMxipA63nKo7NE6baHUPIIWQmOjh8kkorlimxUrSSvdrLWfAIUmZ2Sy0rdITkTfjV9lqX9f2_c6WOOjm-fCUkyk8gDGEODpW5P8CB2zSt6S8TBh0_nqCjg3nEzZzA8vTjFyewmoxCKBjmJcitWRKq_41QndgJ788R5TLB5X5Uo1xCDS5uEyKJsw"
+
+    var heatMapData = [
+      {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
+      new google.maps.LatLng(37.782, -122.445),
+      {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
+      {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
+      {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
+      new google.maps.LatLng(37.782, -122.437),
+      {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
+
+      {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
+      {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
+      new google.maps.LatLng(37.785, -122.443),
+      {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
+      new google.maps.LatLng(37.785, -122.439),
+      {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
+      {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
+    ];
+
+    var heatmap = undefined
+
+    // map marker coordinates
     vm.markerPos = []
 
     // measurements are in meters
@@ -16,26 +38,27 @@ app.controller("TreeMapController",
     // default tree type
     vm.selected_tree = "oak"
 
-    /* open dialog for planting a new tree */
-    vm.newTree = function($event) {
-        console.log('Plant tree')
-
-        $mdDialog.show({
-            template: '<p>Hello There</p>',
-            //parent: $rootElement,
-            scope: $scope,
-            preserveScope: true,
-            clickOutsideToClose: true
-        });
-    }
+    // user coordinates
+    vm.user_coords = []
 
     /* map functions */
     NgMap.getMap().then(function(map) {
+      var heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatMapData
+      });
+      heatmap.setMap(map);
+
       vm.map = map
       if (map.markers) {
         vm.marker = map.markers[0].getPosition()
       }
     })
+
+    function toggleHeatmap() {
+        if (heatmap) {
+            heatmap.setMap(heatmap.getMap() ? null : map);
+        }
+    }
 
     /* zoom to center when user clicked on a marker */
     vm.centerChanged = function(event) {
@@ -48,14 +71,29 @@ app.controller("TreeMapController",
 
     /* change center when user clicks on marker */
     vm.markerClicked = function(event, pos) {
-        var marker = vm.map.markers[vm.locationPos.indexOf(pos)]
+        var marker = vm.map.markers[vm.markerPos.indexOf(pos)]
 
         if (pos) {
-            vm.map.setCenter(marker.getPosition());
+            vm.map.setCenter(marker.getPosition())
             vm.marker = marker.getPosition()
             vm.map.setZoom(16);
         }
     }
+
+    /* zoom into user coordinates */
+    vm.getpos = function(event) {
+        console.log('USER LOCATION ' + event.latLng)
+        // update user location
+        vm.user_coords = event.latLng
+
+        // zoom to their location
+        vm.map.setCenter(event.latLng)
+        vm.marker = event.latLng
+        vm.map.setZoom(16);
+
+        // calculate tree benefit score
+        vm.calculate_score(vm.user_coords)
+    };
 
     /* CHART FUNCTIONS */
 
@@ -164,9 +202,15 @@ app.controller("TreeMapController",
         google.charts.setOnLoadCallback(vm.drawPedestrianChart);
     }
 
-    vm.drawPedestrianChart = function() {
+    // draw histogram of number of pedestrians at sensor locationId
+    // for the last 24 hours
+    vm.drawPedestrianChart = function(locationId) {
+        // set a default location
+        if (!locationId) {
+            locationId = '9bbdcec9'
+        }
+
         var eventurl = "https://ic-event-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2"
-        var locationId = '9bbdcec9'
         var zoneId = "SD-IE-PEDESTRIAN"
         var res = []
 
@@ -196,8 +240,6 @@ app.controller("TreeMapController",
         $http(req)
          .then(function(data) {
             var pedestrians = data.data
-            var sum = 0
-            var index = 0
             var count = 0
             var min = endts
             var max = startts
@@ -215,18 +257,11 @@ app.controller("TreeMapController",
                         min = time < min ? time : min
                         max = time > max ? time : max
 
-                        sum += count
                         res.push([new Date(time), count])
-
-                        index += 1
                     }
                 });
 
-                console.log('Total number of pedestrians: ' + sum)
-                console.log('Total number of data points ' + res.length)
-
                 var data = new google.visualization.DataTable();
-                console.log(res)
 
                 data.addColumn('date', 'Time');
                 data.addColumn('number', 'Number of Pedestrians');
@@ -298,26 +333,6 @@ app.controller("TreeMapController",
         table.draw(data, options);
     }
 
-    // get a week's worth of pedestrian data
-    vm.getWeeklyPedestrians = function() {
-        var days_in_week = 7
-        var i, sum
-        var today, startDate, endDate
-        var sum = []
-        var res = []
-
-        for (i = days_in_week; i >= 1; i--) {
-            today = new Date()
-            endDate = today.setDate(today.getDate() - 1)
-            startDate = (new Date(endDate)).setDate((new Date(endDate)).getDate() - 1)
-
-            console.log(startDate)
-            console.log(endDate)
-        }
-
-        return res
-    }
-
     vm.drawTrafficChart = function() {
         var data = google.visualization.arrayToDataTable([
             ['Crime', 'Recent (Past Week)'],
@@ -346,7 +361,6 @@ app.controller("TreeMapController",
 
         if (pedestrians.hasOwnProperty('content')) {
             pedestrians['content'].forEach(function(element) {
-
                 if (element.hasOwnProperty('measures') &&
                  element['measures'].hasOwnProperty('pedestrianCount')) {
                     sum += element['measures']['pedestrianCount']
@@ -407,6 +421,121 @@ app.controller("TreeMapController",
         return sum / length
     }
 
+    /**
+    *  write a function that takes in a coordinate [lat, long], calls the get locations function.
+    *
+    *  Note:
+    *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
+    *
+    *  @param type - a sensor type ex: TRAFFIC_LANE
+    *  @param coord - [32.708757321722075, -117.16414366466401]
+    *  @return the location id of the closest sensor
+    *
+    *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
+    */
+    vm.getClosestSensor = function(locations, coord) {
+      var closestPos = undefined
+      var minDis = undefined
+
+      locations.forEach(function (pos) {
+        let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2))
+        let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2))
+        let dis = Math.sqrt(Math.abs(xDis - yDis))
+
+        if ((minDis === undefined) || (minDis > dis)) {
+            minDis = dis
+            closestPos = pos
+        }
+      })
+
+      return closestPos[2]
+    }
+
+    // calculate a tree benefit score
+    // score = num_pedestrians - num_vehicles + water_retention
+    // coord = coordinate of where the user clicked on the map = [lat, lon]
+    vm.calculate_score = function(latlng) {
+        coord = [latlng.lat(), latlng.lng()]
+        console.log('user coordinates ' + coord[0] + ',' + coord[1])
+        /* location types:
+         * PARKING_ZONE
+         * TRAFFIC_LANE
+         * WALKWAY
+         */
+
+        var closest_sensor
+        var num_pedestrians = 0
+
+        // get number of pedestrians
+        // find the closest pedestrian sensor
+        var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
+        var requestURL = metadataurl + "/locations/search?q=locationType:WALKWAY&page=0&size=200"
+        var zoneId = 'SD-IE-TRAFFIC'
+
+        var req = {
+            method: 'GET',
+            url: requestURL,
+            headers: {
+                "Authorization": "Bearer " + vm.token,
+                "Predix-Zone-Id": zoneId
+            }
+        }
+
+        $http(req)
+         // get all pedestrian sensor coordinates
+         .then(function(data) {
+            var locations = data.data['content']
+
+            var res = []
+            locations.forEach(function(element) {
+                if (element.hasOwnProperty('coordinates')) {
+                    var coord = element['coordinates'].split(":")
+                    var locationUid = element['locationUid']
+                    res.push([parseFloat(coord[0]), parseFloat(coord[1]), locationUid])
+                }
+            })
+
+            return res
+         })
+         // find the closes sensor to the user's coordinates
+         .then(function(locations) {
+            closest_sensor = vm.getClosestSensor(locations, coord)
+            vm.drawPedestrianChart(closest_sensor)
+            console.log('Closest pedestrian sensor: ' + closest_sensor)
+            return closest_sensor
+         })
+         // get this sensor's data
+         .then(function(sensor) {
+            var eventurl = "https://ic-event-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2"
+            var zoneId = "SD-IE-PEDESTRIAN"
+            var sum = 0
+
+            today = new Date()
+            endts = today.setDate(today.getDate()-1)
+            startts = (new Date(endts)).setDate((new Date(endts)).getDate() - 1)
+
+            // query url
+            var requestURL = eventurl + '/locations/' + sensor +
+             '/events?eventType=PEDEVT&startTime=' +
+             startts + '&' + 'endTime=' + endts
+
+            var req = {
+                method: 'GET',
+                url: requestURL,
+                headers: {
+                    "Authorization": "Bearer " + vm.token,
+                    "Predix-Zone-Id": zoneId
+                }
+            }
+
+            $http(req)
+             .then(function(data) {
+                sum = vm.sumPedestrians(data.data)
+                console.log('Number of pedestrians ' + sum)
+             })
+         })
+    }
+
     // initialize the coordinate for the controller's markers
     vm.initMarkers = function(type) {
         // query url
@@ -423,7 +552,7 @@ app.controller("TreeMapController",
             }
         }
 
-        $http(req)
+        return $http(req)
          .then(function(data) {
             var locations = data.data['content']
 
@@ -436,16 +565,8 @@ app.controller("TreeMapController",
          })
     }
 
-    // TODO:
-    // write a function that takes in a coordinate [lat, long]
-    // calls the get locations function with a sensor type ex: 'TRAFFIC_LANE'
-    // returns the location id of the closest sensor
-
-    vm.getClosestSensor = function(type, coord) {
-    }
-
     vm.init = function() {
-        vm.initMarkers('TRAFFIC_LANE')
+        vm.initMarkers('WALKWAY')
     }
 
 });
