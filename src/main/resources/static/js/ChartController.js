@@ -1,6 +1,7 @@
 app.controller("ChartController", function ($chartType, $uibModalInstance, $http) {
 
   var $ctrl = this;
+  var chartId = "chart";
 
   $ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
@@ -31,7 +32,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   };
 
   $ctrl.loadPedestrianChart = function(data) {
-    console.log('Loading line chart')
+    console.log('Loading line chart');
     google.charts.load('current', {packages: ['corechart', 'line']});
     google.charts.setOnLoadCallback($ctrl.drawPedestrianChart);
   };
@@ -64,7 +65,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
       curveType: 'function',
       legend: { position: 'bottom' }
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart'));
+    var chart = new google.visualization.LineChart(document.getElementById(chartId));
     chart.draw(data, options);
   };
 
@@ -93,7 +94,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
       legend: { position: "none" },
     };
 
-    var chart = new google.visualization.BarChart(document.getElementById("chart"));
+    var chart = new google.visualization.BarChart(document.getElementById(chartId));
     chart.draw(view, options);
     console.log("I was clicked!")
   };
@@ -112,7 +113,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
       title: 'Crime'
     };
 
-    var chart = new google.visualization.PieChart(document.getElementById('chart'));
+    var chart = new google.visualization.PieChart(document.getElementById(chartId));
 
     chart.draw(data, options);
     console.log("Crime: I was clicked!")
@@ -120,15 +121,16 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
 
   $ctrl.drawEnvTable = function() {
     var data = new google.visualization.DataTable();
-    data.addColumn('number', 'Energy Conserved (kw/h)');
-    data.addColumn('number', 'Stormwater Filtered (gal/year)');
-    data.addColumn('number', 'Air Quality Improved (gal/year)');
-    data.addColumn('number', 'Carbon Dioxide Removed (lbs/year)');
+    data.addColumn("string", "Types");
+    data.addColumn('number', "Benefit");
     data.addRows([
-      [{v: 10000, f: '$10,000'},  {v: 10000, f: '$10,000'}, {v: 10000, f: '$10,000'}, {v: 10000, f: '$10,000'}]
+      ['Energy Conserved (kw/h)', {v: 10000, f: '$10,000'}],
+      ['Stormwater Filtered (gal/year)', {v: 10000, f: '$10,000'}],
+      ['Air Quality Improved (gal/year)', {v: 10000, f: '$10,000'}],
+      ['Carbon Dioxide Removed (lbs/year)', {v: 10000, f: '$10,000'}]
     ]);
 
-    var table = new google.visualization.Table(document.getElementById('chart'));
+    var table = new google.visualization.Table(document.getElementById(chartId));
 
     var options = {
       allowHtml: true,
@@ -154,7 +156,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
       title: 'Traffic'
     };
 
-    var chart = new google.visualization.PieChart(document.getElementById('chart'));
+    var chart = new google.visualization.PieChart(document.getElementById(chartId));
 
     chart.draw(data, options);
     console.log("Crime: I was clicked!")
@@ -259,7 +261,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
               title: 'Number of Pedestrians from ' + (new Date(startts)).toDateString() + ' to ' + (new Date(endts)).toDateString()
             };
 
-            var chart = new google.visualization.LineChart(document.getElementById('chart'));
+            var chart = new google.visualization.LineChart(document.getElementById(chartId));
 
             chart.draw(data, options);
           }
