@@ -363,6 +363,35 @@ def read_lat_long_points(filename):
 
     return coords
 
+# var heatMapData = [
+# {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
+# ];
+def format_scores(scores_file, formatted, coords):
+    scores = pickle.load(open(scores_file, 'rb'))
+
+    assert len(coords) == len(scores)
+
+    print ('Number of scores {0}'.format(len(scores)))
+    print ('Average of scores {0}'.format(sum(scores)/len(scores)))
+    total = sum(scores)
+    scores_norm = [i/total for i in scores]
+    print ('Average of scores {0}'.format(sum(scores_norm)/len(scores_norm)))
+    
+    with open(formatted, 'w') as f:
+        f.write("var treeBenefitHeatmap = [")
+
+        for score, point in zip(scores_norm[:-1], coords[:-1]):
+            f.write("{{location : new google.maps.LatLng({0},{1}),weight: {2}}},\n"\
+             .format(point[0],point[1],score*1000))
+
+        score = scores_norm[len(scores_norm)-1]
+        point = coords[len(coords)-1]
+
+        f.write("{{location : new google.maps.LatLng({0},{1}),weight: {2}}}\n"\
+             .format(point[0],point[1],score*1000))
+
+        f.write("];\n")
+
 def main():
     print ('Reading coordinates')
     coords = read_lat_long_points('random_points_sd.csv')
@@ -377,8 +406,8 @@ def main():
     #calculate_sample_score(startts, endts)
     #calculate_tree_benefit_grid(startts, endts, coords, '100_scores.p')
 
-    scores = pickle.load(open('100_scores.p', 'rb'))
-    print (len(scores))
+    format_scores('100_scores.p','treeBenefitHeatmap.js',coords)
+    
 
 if __name__ == "__main__":
     main()

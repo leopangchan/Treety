@@ -3,6 +3,13 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   var $ctrl = this;
   var chartId = "chart";
 
+  $ctrl.showMarkers = true
+
+  $ctrl.toggleMarkers = function() {
+    console.log('Toggle markers')
+    $ctrl.showMarkers = false
+  }
+
   $ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };

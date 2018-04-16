@@ -1,7 +1,7 @@
 <div id="footer">
     <div class="btn-group btn-group-justified" style="width: 100%" role="group">
-        <a class="btn danger">Toggle Heatmap</a>
-        <a class="btn warning">Toggle markers</a>
+        <a class="btn danger" ng-click="vm.toggleHeatmap()">Toggle Heatmap</a>
+        <a class="btn warning" ng-click = "vm.toggleMarkers()">Toggle markers</a>
         <a class="btn success" ng-click = "vm.loadChart('environmental')">Environmental Benefits</a>
         <a class="btn default" ng-click="vm.loadChart('pesdestrain')">Pedestrian Level</a>
         <a class="btn success" ng-click = "vm.loadChart('carbon')">Carbon Emission</a>

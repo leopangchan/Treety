@@ -1,31 +1,12 @@
 app.controller("TreeMapController",
  function($scope, $http, $timeout, NgMap, $mdDialog){
 	
-	var vm = this;
+	var vm, heatmap = this;
     vm.token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxlZ2FjeS10b2tlbi1rZXkiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiI0NWRhZDAxZjM5NDA0ZDEwOTQ3ZGRkMDdiMTU3YTdkOCIsInN1YiI6InNkLmhhY2thdGhvbiIsInNjb3BlIjpbImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQuREVWRUxPUCIsInVhYS5yZXNvdXJjZSIsImllLWN1cnJlbnQuUFNELUlFLVBFREVTVFJJQU4uSUUtUEVERVNUUklBTi5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQuREVWRUxPUCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLVRSQUZGSUMuSUUtVFJBRkZJQy5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVELkRFVkVMT1AiLCJpZS1jdXJyZW50LlBTRC1JRS1FTlZJUk9OTUVOVEFMLklFLUVOVklST05NRU5UQUwuTElNSVRFRC5ERVZFTE9QIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRC5ERVZFTE9QIl0sImNsaWVudF9pZCI6InNkLmhhY2thdGhvbiIsImNpZCI6InNkLmhhY2thdGhvbiIsImF6cCI6InNkLmhhY2thdGhvbiIsImdyYW50X3R5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJyZXZfc2lnIjoiNWE0YzhlYyIsImlhdCI6MTUyMzczNjc5MCwiZXhwIjoxNTI0MzQxNTkwLCJpc3MiOiJodHRwczovLzYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOC5wcmVkaXgtdWFhLnJ1bi5hd3MtdXN3MDItcHIuaWNlLnByZWRpeC5pby9vYXV0aC90b2tlbiIsInppZCI6IjYyNGVmZjAyLWRiYjEtNGM2Yy05MGJjLWZhODVhMjllNWZhOCIsImF1ZCI6WyJpZS1jdXJyZW50LlNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1WSURFTy5JRS1WSURFTy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtVFJBRkZJQy5JRS1UUkFGRklDLkxJTUlURUQiLCJpZS1jdXJyZW50LlBTRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5QU0QtSUUtRU5WSVJPTk1FTlRBTC5JRS1FTlZJUk9OTUVOVEFMLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVZJREVPLklFLVZJREVPLkxJTUlURUQiLCJpZS1jdXJyZW50LlNELUlFLVBBUktJTkcuSUUtUEFSS0lORy5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1UUkFGRklDLklFLVRSQUZGSUMuTElNSVRFRCIsImllLWN1cnJlbnQuUFNELUlFLUlNQUdFLklFLUlNQUdFLkxJTUlURUQiLCJ1YWEiLCJpZS1jdXJyZW50LlNELUlFLUVOVklST05NRU5UQUwuSUUtRU5WSVJPTk1FTlRBTC5MSU1JVEVEIiwiaWUtY3VycmVudC5TRC1JRS1QRURFU1RSSUFOLklFLVBFREVTVFJJQU4uTElNSVRFRCIsInNkLmhhY2thdGhvbiJdfQ.MLQncxbZmu1v9oW1-5l1E4HuP0HZvgIxtkPwYX1BpRglyCjgfTrVsM0FlAjWseKi00WpOy6kT7GCXQdKv1bM2FiW0Ql7RRnq_BA4sFTT2cOdiCUR7Tjmem5RSa6DhAOGhl6bihbsjva8saaeAZM1OvGIGYnlJRQwMxipA63nKo7NE6baHUPIIWQmOjh8kkorlimxUrSSvdrLWfAIUmZ2Sy0rdITkTfjV9lqX9f2_c6WOOjm-fCUkyk8gDGEODpW5P8CB2zSt6S8TBh0_nqCjg3nEzZzA8vTjFyewmoxCKBjmJcitWRKq_41QndgJ788R5TLB5X5Uo1xCDS5uEyKJsw"
-
-    var heatMapData = [
-      {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-      new google.maps.LatLng(37.782, -122.445),
-      {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-      {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-      {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-      new google.maps.LatLng(37.782, -122.437),
-      {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
-
-      {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-      {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-      new google.maps.LatLng(37.785, -122.443),
-      {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-      new google.maps.LatLng(37.785, -122.439),
-      {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
-      {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
-    ];
-
-    var heatmap = undefined
 
     // map marker coordinates
     vm.markerPos = []
+    vm.showMarkers = true
 
     // measurements are in meters
     // radius refers to canopy radius
@@ -41,23 +22,29 @@ app.controller("TreeMapController",
     // user coordinates
     vm.user_coords = []
 
+    /* open dialog for planting a new tree */
+    vm.newTree = function($event) {
+        console.log('Plant tree')
+    }
+
     /* map functions */
     NgMap.getMap().then(function(map) {
-      var heatmap = new google.maps.visualization.HeatmapLayer({
-        data: heatMapData
-      });
-      heatmap.setMap(map);
+        vm.map = map
+        heatmap = map.heatmapLayers.foo
+        console.log('HERE')
 
-      vm.map = map
-      if (map.markers) {
-        vm.marker = map.markers[0].getPosition()
-      }
+        if (map.markers) {
+            vm.marker = map.markers[0].getPosition()
+        }
     })
 
-    function toggleHeatmap() {
-        if (heatmap) {
-            heatmap.setMap(heatmap.getMap() ? null : map);
-        }
+    vm.toggleHeatmap= function(event) {
+        heatmap.setMap(heatmap.getMap() ? null : vm.map);
+    };
+
+    vm.toggleMarkers = function() {
+        console.log('Toggle markers')
+        vm.showMarkers = !vm.showMarkers
     }
 
     /* zoom to center when user clicked on a marker */
@@ -567,6 +554,7 @@ app.controller("TreeMapController",
 
     vm.init = function() {
         vm.initMarkers('WALKWAY')
+        vm.showMarkers = true
     }
 
 });
