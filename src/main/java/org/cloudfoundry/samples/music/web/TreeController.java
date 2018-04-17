@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping(value = "/tree")
 public class TreeController {
@@ -19,31 +21,27 @@ public class TreeController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
     public Iterable<Tree> trees() {
         return repository.findAll();
     }
-/*
-    @RequestMapping(method = RequestMethod.PUT)
-    public Tree add(@RequestBody @Valid Tree album) {
-        logger.info("Adding album " + album.getId());
-        return repository.save(album);
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public String insertTree() {
+        Tree t1 = new Tree("t1", "type1", 100.00, 200.00);
+        repository.save(t1);
+        return "Saved a tree = " + t1.getId();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public Tree update(@RequestBody @Valid Tree album) {
-        logger.info("Updating album " + album.getId());
-        return repository.save(album);
+    @RequestMapping(value = "/insertTreeClass", method = RequestMethod.POST)
+    public String insertTreeClass(@RequestBody Tree tree) {
+        repository.save(tree);
+        return "Saved a tree = " + tree.getId();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Tree getById(@PathVariable String id) {
-        logger.info("Getting album " + id);
-        return repository.findOne(id);
+    @RequestMapping(value = "/insertTreeClasses", method = RequestMethod.POST)
+    public String insertTreeClasses(@RequestBody ArrayList<Tree> trees) {
+        repository.save((Iterable<Tree>) trees);
+        return "Saved number of trees = " + trees.size();
     }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteById(@PathVariable String id) {
-        logger.info("Deleting album " + id);
-        repository.delete(id);
-    }*/
 }
