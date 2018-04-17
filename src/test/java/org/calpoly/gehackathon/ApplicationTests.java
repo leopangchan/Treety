@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music;
+package org.calpoly.gehackathon;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

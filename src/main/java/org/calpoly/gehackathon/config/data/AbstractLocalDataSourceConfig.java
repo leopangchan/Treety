@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.config.data;
+package org.calpoly.gehackathon.config.data;
 
 import org.apache.commons.dbcp.BasicDataSource;
 

@@ -1,7 +1,7 @@
-package org.cloudfoundry.samples.music.web;
+package org.calpoly.gehackathon.web;
 
-import org.cloudfoundry.samples.music.domain.Tree;
-import org.cloudfoundry.samples.music.repositories.jpa.JpaTreeRepository;
+import org.calpoly.gehackathon.domain.Tree;
+import org.calpoly.gehackathon.repositories.jpa.JpaTreeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
