@@ -1,6 +1,6 @@
-package org.cloudfoundry.samples.music;
+package org.calpoly.gehackathon;
 
-import org.cloudfoundry.samples.music.config.SpringApplicationContextInitializer;
+import org.calpoly.gehackathon.config.SpringApplicationContextInitializer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
@@ -9,8 +9,8 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(Application.class).
-                initializers(new SpringApplicationContextInitializer())
+        new SpringApplicationBuilder(Application.class)
+                .initializers(new SpringApplicationContextInitializer())
                 .application()
                 .run(args);
     }

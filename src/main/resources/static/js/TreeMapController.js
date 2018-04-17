@@ -155,6 +155,12 @@ app.controller("TreeMapController",
     };
 
     vm.init = function() {
-        vm.getLocations('TRAFFIC_LANE')
+        vm.getLocations('TRAFFIC_LANE');
+        console.log("init");
+        // Example for fetching data from the backend
+        $http({
+          method: 'GET',
+          url: "/tree"
+        }).then(function (value) { console.log(value.data) })
     }
 });

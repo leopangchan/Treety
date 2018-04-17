@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.domain;
+package org.calpoly.gehackathon.domain;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
