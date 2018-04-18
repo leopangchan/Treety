@@ -169,110 +169,78 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     console.log("Crime: I was clicked!")
   };
 
+  $ctrl.formatPedestrianChart = function(res, startts, endts) {
+    var data = new google.visualization.DataTable();
+
+    data.addColumn('date', 'Time');
+    data.addColumn('number', 'Number of Pedestrians');
+    data.addRows(res);
+
+    var options = {
+        hAxis: {
+          gridlines: {
+            count: -1,
+            units: {
+              days: {format: ['MMM dd']},
+              hours: {format: ['HH:mm', 'ha']},
+            }
+          },
+          minorGridlines: {
+            units: {
+              hours: {format: ['hh:mm:ss a', 'ha']},
+              minutes: {format: ['HH:mm a Z', ':mm']}
+            }
+          },
+          title: 'Time of Day (hours)'
+        },
+        vAxis: {
+          title: 'Number of Pedestrians'
+        },
+        title: 'Number of Pedestrians from ' +
+         (new Date(startts)).toDateString() +
+         ' to ' +
+         (new Date(endts)).toDateString()
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById(chartId));
+
+    chart.draw(data, options);
+  }
+
   $ctrl.drawPedestrianChart = function() {
-    var eventurl = "https://ic-event-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2"
-    var locationId = '9bbdcec9'
-    var zoneId = "SD-IE-PEDESTRIAN"
-    var res = []
+    ///pedestrian/timeRange?start=1523762377000&end=1524107977000&locId=a49a96ea
 
-    today = new Date()
-    endts = today.setDate(today.getDate()-1)
-    startts = (new Date(endts)).setDate((new Date(endts)).getDate() - 1)
+    // get dates for backend request
+    var today = new Date()
 
-    console.log('start ' + new Date(startts))
-    console.log('end ' + new Date(endts))
+    var endDate = new Date(today)
+    endDate.setDate(today.getDate() - 1)
+    var endts = Math.trunc(endDate.getTime())
 
-    // query url
-    var requestURL = eventurl + '/locations/' + locationId +
-        '/events?eventType=PEDEVT&startTime=' +
-        startts + '&' + 'endTime=' + endts
+    var startDate = new Date(today)
+    startDate.setDate(today.getDate() - 5)
+    var startts = Math.trunc(startDate.getTime())
 
-    var req = {
-      method: 'GET',
-      url: requestURL,
-      headers: {
-        "Authorization": "Bearer " + config.token,
-        "Predix-Zone-Id": zoneId,
-        /*"Access-Control-Allow-Origin": "https://localhost:8090",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-        "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
-        "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"*/
-      }
-    }
-
-    $http(req)
-        .then(function(data) {
-          var pedestrians = data.data
-          var sum = 0
-          var index = 0
-          var count = 0
-          var min = endts
-          var max = startts
-
-          if (pedestrians.hasOwnProperty('content')) {
-            pedestrians['content'].forEach(function(element) {
-
-              if (element.hasOwnProperty('measures') &&
-                  element['measures'].hasOwnProperty('pedestrianCount')) {
-
-                count = element["measures"]["counter_direction_pedestrianCount"] +
-                    element['measures']['pedestrianCount']
-
-                time = element['timestamp']
-                min = time < min ? time : min
-                max = time > max ? time : max
-
-                sum += count
-                res.push([new Date(time), count])
-
-                index += 1
-              }
-            });
-
-            console.log('Total number of pedestrians: ' + sum)
-            console.log('Total number of data points ' + res.length)
-
-            var data = new google.visualization.DataTable();
-            console.log(res)
-
-            data.addColumn('date', 'Time');
-            data.addColumn('number', 'Number of Pedestrians');
-            data.addRows(res);
-
-            var options = {
-              hAxis: {
-                viewWindow: {
-                  min: new Date(startts),
-                  max: new Date(endts)
-                },
-                gridlines: {
-                  count: -1,
-                  units: {
-                    days: {format: ['MMM dd']},
-                    hours: {format: ['HH:mm', 'ha']},
-                  }
-                },
-                minorGridlines: {
-                  units: {
-                    hours: {format: ['hh:mm:ss a', 'ha']},
-                    minutes: {format: ['HH:mm a Z', ':mm']}
-                  }
-                },
-                title: 'Time of Day (hours)'
-              },
-              vAxis: {
-                title: 'Number of Pedestrians',
-                minValue: 0, maxValue: 5
-              },
-              title: 'Number of Pedestrians from ' + (new Date(startts)).toDateString() + ' to ' + (new Date(endts)).toDateString()
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById(chartId));
-
-            chart.draw(data, options);
-          }
+    $http({
+        method: 'GET',
+        url: "/pedestrian/timeRange?start="+
+         startts +
+         "&end=" +
+         endts +
+         "&locId=a49a96ea"
+    })
+    .then(function (value) { // get the data
+        res = []
+        var data = value.data
+        data.forEach(function(element) {
+            res.push([new Date(element['time']), element['count']])
         })
+
+        return res
+    })
+    .then(function(res) { // draw the chart
+        $ctrl.formatPedestrianChart(res, startts, endts)
+    })
   };
 
   (function() {

@@ -1,11 +1,9 @@
 package org.calpoly.gehackathon.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
+@Entity(name="pedestrian")
+@Table(name="pedestrian")
 public class Pedestrian {
 
   public Integer getId() {
@@ -27,5 +25,8 @@ public class Pedestrian {
     this.localId = localId;
     this.time = time;
     this.count = count;
+  }
+
+  public Pedestrian() {
   }
 }
