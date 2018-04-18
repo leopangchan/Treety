@@ -1,13 +1,66 @@
-app.controller("ChartController", function ($chartType, $uibModalInstance, $http) {
+app.controller("ChartController", function ($chartType, $uibModalInstance, $http, $lglat) {
 
   var $ctrl = this;
   var chartId = "chart";
+  $ctrl.token = config.token
 
-  $ctrl.showMarkers = true
+  /**
+  *  write a function that takes in a coordinate [lat, long], calls the get locations function.
+  *
+  *  Note:
+  *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
+  *
+  *  @param type - a sensor type ex: TRAFFIC_LANE
+  *  @param coord - [32.708757321722075, -117.16414366466401]
+  *  @return the location id of the closest sensor
+  *
+  *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
+  */
+  $ctrl.getClosestSensor = function(locations, coord) {
+    var closestPos = undefined
+    var minDis = undefined
 
-  $ctrl.toggleMarkers = function() {
-    console.log('Toggle markers')
-    $ctrl.showMarkers = false
+    locations.forEach(function (pos) {
+        if (pos) {
+            let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2))
+            let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2))
+            let dis = Math.sqrt(Math.abs(xDis - yDis))
+
+            if ((minDis === undefined) || (minDis > dis)) {
+               minDis = dis
+               closestPos = pos
+            }
+        }
+    })
+
+    if (closestPos === undefined) {
+        return 'a49a96ea'
+    }
+
+    return closestPos[2]
+  }
+
+  $ctrl.make_api_request_header = function(type) {
+    // query url
+    var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
+    var requestURL = metadataurl + "/locations/search?q=locationType:" + type + "&page=0&size=50"
+    var zoneId = 'SD-IE-TRAFFIC'
+
+    var req = {
+        method: 'GET',
+        url: requestURL,
+        headers: {
+            "Authorization": "Bearer " + $ctrl.token,
+            "Predix-Zone-Id": zoneId
+            //"Access-Control-Allow-Origin": "http://localhost:8090"
+            //"Access-Control-Allow-Credentials": "true",
+            //"Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+            //"Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
+            //"Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+        }
+    }
+
+    return req
   }
 
   $ctrl.cancel = function () {
@@ -208,6 +261,8 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   }
 
   $ctrl.drawPedestrianChart = function() {
+    console.log('USER COORDS PED CHART')
+    console.log($lglat)
     ///pedestrian/timeRange?start=1523762377000&end=1524107977000&locId=a49a96ea
 
     // get dates for backend request
@@ -221,26 +276,49 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     startDate.setDate(today.getDate() - 5)
     var startts = Math.trunc(startDate.getTime())
 
-    $http({
-        method: 'GET',
-        url: "/pedestrian/timeRange?start="+
-         startts +
-         "&end=" +
-         endts +
-         "&locId=a49a96ea"
-    })
-    .then(function (value) { // get the data
-        res = []
-        var data = value.data
-        data.forEach(function(element) {
-            res.push([new Date(element['time']), element['count']])
+    var req = $ctrl.make_api_request_header('WALKWAY')
+
+    $http(req)
+     .then(function(data) {
+        var res = []
+        var locations = data.data['content']
+
+        locations.forEach(function(element) {
+            if (element.hasOwnProperty('coordinates')) {
+                var coord = element['coordinates'].split(":")
+                res.push( [parseFloat(coord[0]), parseFloat(coord[1]), element["locationUid"]] )
+            }
         })
 
-        return res
-    })
-    .then(function(res) { // draw the chart
-        $ctrl.formatPedestrianChart(res, startts, endts)
-    })
+        return $ctrl.getClosestSensor(res, $lglat)
+     })
+     .then(function(sensor) {
+        console.log('CLOSEST SENSOR')
+        console.log(sensor)
+        $http({
+            method: 'GET',
+            url: "/pedestrian/timeRange?start="+
+             startts +
+             "&end=" +
+             endts +
+             "&locId="+
+             sensor
+        })
+        .then(function (value) { // get the data
+            res = []
+            var data = value.data
+            data.forEach(function(element) {
+                res.push([new Date(element['time']), element['count']])
+            })
+
+            return res
+        })
+        .then(function(res) { // draw the chart
+            $ctrl.formatPedestrianChart(res, startts, endts)
+        })
+     })
+
+
   };
 
   (function() {
