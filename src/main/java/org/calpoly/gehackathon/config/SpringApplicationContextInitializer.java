@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.config;
+package org.calpoly.gehackathon.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

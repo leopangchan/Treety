@@ -1,7 +1,7 @@
-package org.cloudfoundry.samples.music.repositories.jpa;
+package org.calpoly.gehackathon.repositories.jpa;
 
-import org.cloudfoundry.samples.music.config.SpringApplicationContextInitializer;
-import org.cloudfoundry.samples.music.domain.Tree;
+import org.calpoly.gehackathon.config.SpringApplicationContextInitializer;
+import org.calpoly.gehackathon.domain.Tree;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
-package org.cloudfoundry.samples.music.config.data;
+package org.calpoly.gehackathon.config.data;
 
-import org.cloudfoundry.samples.music.config.SpringApplicationContextInitializer;
+import org.calpoly.gehackathon.config.SpringApplicationContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

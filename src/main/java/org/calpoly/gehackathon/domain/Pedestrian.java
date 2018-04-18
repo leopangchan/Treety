@@ -1,4 +1,4 @@
-package org.cloudfoundry.samples.music.domain;
+package org.calpoly.gehackathon.domain;
 
 import javax.persistence.*;
 

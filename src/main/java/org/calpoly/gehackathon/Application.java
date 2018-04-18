@@ -1,12 +1,9 @@
-package org.cloudfoundry.samples.music;
+package org.calpoly.gehackathon;
 
-import org.cloudfoundry.samples.music.config.SpringApplicationContextInitializer;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.calpoly.gehackathon.config.SpringApplicationContextInitializer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-
-import javax.sql.DataSource;
 
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
