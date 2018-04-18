@@ -67,24 +67,6 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     $uibModalInstance.dismiss('cancel');
   };
 
-  $ctrl.loadCrimeChart = function() {
-    console.log("Load Chart");
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback($ctrl.drawCrimeChart);
-  };
-
-  $ctrl.loadPieChart = function() {
-    console.log("Load Chart");
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback($ctrl.drawPieChart);
-  };
-
-  $ctrl.loadCarbonChart = function() {
-    console.log("Load Chart");
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback($ctrl.drawCarbonChart);
-  };
-
   $ctrl.loadTrafficChart = function() {
     console.log("Load Chart");
     google.charts.load('current', {'packages':['corechart']});
@@ -103,30 +85,6 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     google.charts.load('current', {'packages':['corechart']});
     google.charts.load('current', { 'packages': ['table'] });
     google.charts.setOnLoadCallback($ctrl.drawEnvTable);
-  };
-
-  $ctrl.loadWaterChart = function() {
-    console.log("Load Chart");
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback($ctrl.drawWaterChart);
-  };
-
-  $ctrl.drawWaterChart = function() {
-    var data = google.visualization.arrayToDataTable([
-      ['Year', 'Sales', 'Expenses'],
-      ['2004',  1000,      400],
-      ['2005',  1170,      460],
-      ['2006',  660,       1120],
-      ['2007',  1030,      540]
-    ]);
-
-    var options = {
-      title: 'Company Performance',
-      curveType: 'function',
-      legend: { position: 'bottom' }
-    };
-    var chart = new google.visualization.LineChart(document.getElementById(chartId));
-    chart.draw(data, options);
   };
 
   $ctrl.drawCarbonChart = function() {
@@ -157,26 +115,6 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     var chart = new google.visualization.BarChart(document.getElementById(chartId));
     chart.draw(view, options);
     console.log("I was clicked!")
-  };
-
-  $ctrl.drawCrimeChart = function() {
-    var data = google.visualization.arrayToDataTable([
-      ['Crime', 'Recent (Past Week)'],
-      ['Theft',     11],
-      ['Drugs',      2],
-      ['Hit-Run',  2],
-      ['Violence', 2],
-      ['Ticket',    7]
-    ]);
-
-    var options = {
-      title: 'Crime'
-    };
-
-    var chart = new google.visualization.PieChart(document.getElementById(chartId));
-
-    chart.draw(data, options);
-    console.log("Crime: I was clicked!")
   };
 
   $ctrl.drawEnvTable = function() {
@@ -326,17 +264,8 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
       case 'environmental':
         $ctrl.loadEnvTable();
         return;
-      case 'pesdestrain':
+      case 'pedestrian':
         $ctrl.loadPedestrianChart();
-        return;
-      case 'carbon':
-        $ctrl.loadCarbonChart();
-        return;
-      case 'crime':
-        $ctrl.loadCrimeChart();
-        return;
-      case 'water':
-        $ctrl.loadWaterChart();
         return;
       case 'traffic':
         $ctrl.loadTrafficChart();

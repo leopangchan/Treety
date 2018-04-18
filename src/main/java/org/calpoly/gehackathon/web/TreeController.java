@@ -1,7 +1,7 @@
 package org.calpoly.gehackathon.web;
 
 import org.calpoly.gehackathon.domain.Tree;
-import org.calpoly.gehackathon.repositories.jpa.JpaTreeRepository;
+import org.calpoly.gehackathon.repositories.JpaTreeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
