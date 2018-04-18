@@ -1,5 +1,6 @@
 package org.calpoly.gehackathon.web;
 
+import java.util.*;
 import org.calpoly.gehackathon.domain.Pedestrian;
 import org.calpoly.gehackathon.repositories.JpaPedestrianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,31 @@ public class PedestrianController {
     return "Created a pedestrian = " + p.getId();
   }
 
+  @PostMapping(value = "/pedestrians")
+  public String pedestrians(@RequestBody ArrayList<Pedestrian> pedestrians) {
+      jpaPedestrianRepository.save(pedestrians);
+
+      return "Created " + pedestrians.size() + " pedestrians";
+  }
+
+  /* returns all rows in the database with
+   * locId == locId and
+   * startts >= start and
+   * endts <= end
+   */
   @GetMapping(value = "/timeRange")
-  public Long getPedestrianTimeRangeCount(@RequestParam(value = "start") Long start,
-                                          @RequestParam(value = "end") Long end) {
-    return new Long(1000);
+  public List<Pedestrian> getPedestriansTimeRange(@RequestParam(value = "start") Long start,
+                                          @RequestParam(value = "end") Long end,
+                                          @RequestParam(value = "locId") String locId) {
+      return jpaPedestrianRepository.findAllByLocIdAndTimeRange(locId, start, end);
+      //return new Long(1000);
   }
 
   //Get Weekly
   @GetMapping(value = "/weekly")
   public Long getWeeklyPedestrianCount(@RequestParam(value = "start") Long start,
-                                       @RequestParam(value = "end") Long end) {
+                                       @RequestParam(value = "end") Long end,
+                                       @RequestParam(value = "locId") String locId) {
     return new Long(1000);
   }
 
