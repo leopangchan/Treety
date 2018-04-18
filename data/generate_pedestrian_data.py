@@ -143,11 +143,10 @@ def get_pedestrian_benefits(startts, endts, sensor, debug=True):
 
 def main():
     # get a year's worth of pedestrian data
-    i = DAYS_IN_WEEK
+    i = 1
     coords = get_sensor_coords('WALKWAY')
     res = []
     f = open('ped_data.json','w')
-    #f.write("[\n")
 
     while (i >= 0):
         endDate = datetime.datetime.now() - timedelta(i-1)
@@ -164,18 +163,14 @@ def main():
             print ('{0} pedestrians at sensor {1}'.format(total_peds, pos[2]))
 
             res.append({"localId":"{0}".format(pos[2]),
-             "time":"{0}".format(startts),
-             "count":"{0}".format(total_peds)})
-
-            #f.write("{{localId : \"{0}\", time: \"{1}\", count: \"{2}\"}},\n"\
-            # .format(pos[2],startts,total_peds))
+             "time":startts,
+             "count":total_peds})
 
         print()
 
-    #f.write("]\n")
     print ('Total jsons {0}'.format(len(res)))
     print ('Sample {0}'.format(res[0]))
-    json.dump(res, f)
+    json.dump(res, f, indent=4)
 
 if __name__ == "__main__":
     main()
