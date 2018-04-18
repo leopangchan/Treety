@@ -143,10 +143,10 @@ def get_pedestrian_benefits(startts, endts, sensor, debug=True):
 
 def main():
     # get a year's worth of pedestrian data
-    i = 1
+    i = DAYS_IN_YEAR
     coords = get_sensor_coords('WALKWAY')
     res = []
-    f = open('ped_data.json','w')
+    f = open('ped_data_yearly.json','w')
 
     while (i >= 0):
         endDate = datetime.datetime.now() - timedelta(i-1)
