@@ -1,4 +1,4 @@
-package org.calpoly.gehackathon.repositories.jpa;
+package org.calpoly.gehackathon.repositories;
 
 import org.calpoly.gehackathon.config.SpringApplicationContextInitializer;
 import org.calpoly.gehackathon.domain.Tree;

@@ -10,7 +10,7 @@ public class Tree {
     @Id
     @Column(length=40)
     @GeneratedValue
-    private String id;
+    private Integer id;
 
     public String name;
     public String type;
@@ -27,7 +27,7 @@ public class Tree {
         this.yCoord = yCoord;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 }
