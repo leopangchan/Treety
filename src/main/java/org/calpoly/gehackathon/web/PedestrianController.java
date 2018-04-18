@@ -1,11 +1,12 @@
 package org.calpoly.gehackathon.web;
 
 import org.calpoly.gehackathon.domain.Pedestrian;
-import org.calpoly.gehackathon.repositories.jpa.JpaPedestrianRepository;
+import org.calpoly.gehackathon.repositories.JpaPedestrianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController(value = "/pedestrian")
+@RestController
+@RequestMapping(value = "/pedestrian")
 public class PedestrianController {
 
   private JpaPedestrianRepository jpaPedestrianRepository;
