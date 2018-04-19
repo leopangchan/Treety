@@ -211,7 +211,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     var endts = Math.trunc(endDate.getTime())
 
     var startDate = new Date(today)
-    startDate.setDate(today.getDate() - 5)
+    startDate.setDate(today.getDate() - 7)
     var startts = Math.trunc(startDate.getTime())
 
     var req = $ctrl.make_api_request_header('WALKWAY')
