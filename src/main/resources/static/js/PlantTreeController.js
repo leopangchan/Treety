@@ -40,7 +40,7 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
         icon: "../img/small_tree.png"
       });
 
-      $parentScope.markers.push(newMarker)
+      $parentScope.vm.markers.push(newMarker)
 
       google.maps.event.addListener(newMarker,'click', function() {
 
