@@ -128,9 +128,9 @@ def main():
     endts = int(time.time()*1000)
     startts = int(time.mktime(yesterday.timetuple())*1000)
 
-    calculate_sample_score(startts, endts)
-    calculate_tree_benefit_grid(startts, endts, coords, '100_scores.p')
-    format_scores('100_scores.p','treeBenefitHeatmap_100.js',coords)
+    #calculate_sample_score(startts, endts)
+    #calculate_tree_benefit_grid(startts, endts, coords, '100_scores.p')
+    #format_scores('100_scores.p','treeBenefitHeatmap_100.js',coords)
     draw_heatmap(coords, '100_scores.p')
     
 

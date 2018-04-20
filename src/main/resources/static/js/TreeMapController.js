@@ -174,39 +174,6 @@ app.controller("TreeMapController",
          })
     }
 
-    // get coordinates for all city sensors
-    vm.getLocations = function(type) {
-        // query url
-        var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
-        var requestURL = metadataurl + "/locations/search?q=locationType:" + type + "&page=0&size=50"
-        var zoneId = 'SD-IE-TRAFFIC'
-
-        var req = {
-            method: 'GET',
-            url: requestURL,
-            headers: {
-                "Authorization": "Bearer " + vm.token,
-                "Predix-Zone-Id": zoneId
-                //"Access-Control-Allow-Origin": "http://localhost:8090"
-                //"Access-Control-Allow-Credentials": "true",
-                //"Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-                //"Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
-                //"Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
-            }
-        }
-
-        return $http(req)
-         .then(function(data) {
-            var locations = data.data['content']
-            locations.forEach(function(element) {
-                if (element.hasOwnProperty('coordinates')) {
-                    var coord = element['coordinates'].split(":")
-                    vm.locationPos.push([parseFloat(coord[0]), parseFloat(coord[1])])
-                }
-            })
-         })
-    }
-
     vm.loadChart = function (chartType) {
       var modalInstance = $uibModal.open({
         ariaLabelledBy: 'modal-title',
@@ -216,6 +183,7 @@ app.controller("TreeMapController",
         controller: "ChartController",
         controllerAs: '$ctrl',
         size: 'lg',
+        windowClass: 'my-modal-popup',
         resolve: {
           $chartType: function() {
             return chartType

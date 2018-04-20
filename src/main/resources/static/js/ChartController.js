@@ -133,66 +133,68 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   /* load a google pie chart */
   $ctrl.loadEnvTable = function() {
     console.log("Load Chart");
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.load('current', { 'packages': ['table'] });
+    google.charts.load('current', {'packages':['corechart', 'bar']});
     google.charts.setOnLoadCallback($ctrl.drawEnvTable);
   };
 
-  $ctrl.drawCarbonChart = function() {
-    var data = google.visualization.arrayToDataTable([
-      ['Year', 'Visitations', { role: 'style' } ],
-      ['2010', 10, 'color: gray'],
-      ['2020', 14, 'color: #76A7FA'],
-      ['2030', 16, 'opacity: 0.2'],
-      ['2040', 22, 'stroke-color: #703593; stroke-width: 4; fill-color: #C5A5CF'],
-      ['2050', 28, 'stroke-color: #871B47; stroke-opacity: 0.6; stroke-width: 8; fill-color: #BC5679; fill-opacity: 0.2']
-    ]);
-    var view = new google.visualization.DataView(data);
-    view.setColumns([0, 1,
-      { calc: "stringify",
-        sourceColumn: 1,
-        type: "string",
-        role: "annotation" },
-      2]);
-
-    var options = {
-      title: "Carbon Reduced, in metric-tons",
-      width: 600,
-      height: 400,
-      bar: {groupWidth: "95%"},
-      legend: { position: "none" },
-    };
-
-    var chart = new google.visualization.BarChart(document.getElementById(chartId));
-    chart.draw(view, options);
-    console.log("I was clicked!")
-  };
-
   $ctrl.drawEnvTable = function() {
-    var data = new google.visualization.DataTable();
-    data.addColumn("string", "Types");
-    data.addColumn('number', "Benefit");
-    data.addRows([
-      ['Energy Conserved (kw/h)', {v: 10000, f: '$10,000'}],
-      ['Stormwater Filtered (gal/year)', {v: 10000, f: '$10,000'}],
-      ['Air Quality Improved (gal/year)', {v: 10000, f: '$10,000'}],
-      ['Carbon Dioxide Removed (lbs/year)', {v: 10000, f: '$10,000'}]
-    ]);
+        var data = new google.visualization.arrayToDataTable([
+            ['Year', 'Current', 'After Planting Tree'],
+            ['2014', 200000, 180000],
+            ['2015', 140000, 120000],
+            ['2016', 130000, 100000],
+            ['2017', 100000, 95000]
+        ]);
 
-    var table = new google.visualization.Table(document.getElementById(chartId));
+        var options = {
+            chart: {
+                title: 'San Diego Carbon Emissions in Lbs/Year',
+                subtitle: 'current value on the left, value after planting tree on the right'
+            },
+            bars: 'horizontal', // Required for Material Bar Charts.
+            series: {
+                0: { axis: 'Carbon Emission' }, // Bind series 0 to an axis named 'distance'.
+                },
+            axes: {
+                x: {
+                  distance: {label: 'Carbon Emission (lbs/year)'}, // Bottom x-axis.
+                }
+            }
+        };
 
-    var options = {
-      allowHtml: true,
-      cssClassNames: {
-        tableCell: 'small-font'
-      }
-    };
-
-    table.draw(data, options);
+        var chart = new google.charts.Bar(document.getElementById('chart'));
+        chart.draw(data, options);
   };
 
   $ctrl.drawTrafficChart = function() {
-    ///traffic/timeRange?start=1523762377000&end=1524107977000&locId=a49a96ea
+    var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Year');
+      data.addColumn('number', "Avg Vehicles");
+
+      data.addRows([
+          [new Date(2012, 0),  83],
+          [new Date(2013, 0),  72],
+          [new Date(2014, 0),  69],
+          [new Date(2015, 0),  57],
+          [new Date(2016, 0),  50],
+          [new Date(2017, 0),  52]
+      ]);
+
+      var materialOptions = {
+          hAxis: {
+              title: 'Year',
+              format: 'yyyy'
+            },
+            vAxis: {
+              title: 'Average Number of Vehicles / Year'
+            },
+            title: 'Yearly Vehicle Data',
+            trendlines: { 0: {} }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById(chartId));
+      chart.draw(data, materialOptions);
+    /*
     console.log('USER COORDS TRAFFIC CHART')
     console.log($lglat)
 
@@ -252,36 +254,50 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
             console.log(res)
             $ctrl.formatChart(res, time["startts"], time["endts"], titles)
         })
-    })
+    })*/
 
-
-    /*var data = google.visualization.arrayToDataTable([
-      ['Crime', 'Recent (Past Week)'],
-      ['Theft',     11],
-      ['Drugs',      2],
-      ['Hit-Run',  2],
-      ['Violence', 2],
-      ['Ticket',    7]
-    ]);
-
-    var options = {
-      title: 'Traffic'
-    };
-
-    var chart = new google.visualization.PieChart(document.getElementById(chartId));
-
-    chart.draw(data, options);*/
     console.log("Traffic: I was clicked!")
   };
 
   $ctrl.drawPedestrianChart = function() {
-    console.log('USER COORDS PED CHART')
+    var data = new google.visualization.DataTable();
+    data.addColumn('date', 'Year');
+    data.addColumn('number', "Avg Pedestrians");
+
+    data.addRows([
+        [new Date(2012, 0),  80],
+        [new Date(2013, 0),  81],
+        [new Date(2014, 0),  85],
+        [new Date(2015, 0),  92],
+        [new Date(2016, 0),  97],
+        [new Date(2017, 0),  97]
+    ]);
+
+    var materialOptions = {
+        hAxis: {
+            title: 'Year',
+            format: 'yyyy',
+            range: {
+                max: new Date(2018,0),
+                min: new Date(2012,0)
+            }
+          },
+          vAxis: {
+            title: 'Average Number of Pedestrians / Year'
+          },
+          title: 'Yearly Pedestrian Data',
+          trendlines: { 0: {} }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById(chartId));
+    chart.draw(data, materialOptions);
+
+    /*console.log('USER COORDS PED CHART')
     console.log($lglat)
 
     if (!$lglat) {
         $lglat = [32.7157, -117.1611]
     }
-    ///pedestrian/timeRange?start=1523762377000&end=1524107977000&locId=a49a96ea
 
     var time = $ctrl.get_start_end_time()
     var req = $ctrl.make_api_request_header('WALKWAY')
@@ -335,7 +351,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
             console.log(res)
             $ctrl.formatChart(res, time["startts"], time["endts"], titles)
         })
-     })
+     })*/
 
 
   };

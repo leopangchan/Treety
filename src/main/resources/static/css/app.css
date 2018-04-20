@@ -161,3 +161,14 @@ html, body {
     width: 100%;
     height: 100%;
 }
+
+.my-modal-popup{
+
+    @media (min-width: 1400px){
+
+        .modal-lg {
+            width: 1308px;
+        }
+    }
+
+}
