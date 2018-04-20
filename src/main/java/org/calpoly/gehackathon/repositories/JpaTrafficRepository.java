@@ -1,6 +1,7 @@
 package org.calpoly.gehackathon.repositories;
 
 import org.calpoly.gehackathon.config.SpringApplicationContextInitializer;
+import org.calpoly.gehackathon.domain.Measurement;
 import org.calpoly.gehackathon.domain.Pedestrian;
 import org.calpoly.gehackathon.domain.Traffic;
 import org.springframework.context.annotation.Profile;
@@ -20,6 +21,6 @@ public interface JpaTrafficRepository extends JpaRepository<Traffic, Integer> {
 
     @Query("from traffic where local_id = :locId and time >= :start and time <= :end")
     List<Traffic> findAllByLocIdAndTimeRange(@Param("locId") String locId,
-                                                @Param("start") Long start,
-                                                @Param("end") Long end);
+                                                 @Param("start") Long start,
+                                                 @Param("end") Long end);
 }

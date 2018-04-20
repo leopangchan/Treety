@@ -19,9 +19,9 @@ public class Pedestrian {
 
   public Long time;
 
-  public Long count;
+  public Float count;
 
-  public Pedestrian(String localId, Long time, Long count) {
+  public Pedestrian(String localId, Long time, Float count) {
     this.localId = localId;
     this.time = time;
     this.count = count;

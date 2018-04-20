@@ -16,15 +16,17 @@ public class Tree {
     public String type;
     public Double xCoord;
     public Double yCoord;
+    public String local_id;
 
     public Tree() {
     }
 
-    public Tree(String name, String type, Double xCoord, Double yCoord) {
+    public Tree(String name, String type, Double xCoord, Double yCoord, String local_id) {
         this.name = name;
         this.type = type;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
+        this.local_id = local_id;
     }
 
     public Integer getId() {

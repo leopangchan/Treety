@@ -38,6 +38,9 @@ app.controller("TreeMapController",
       vm.map = map
       heatmap = map.heatmapLayers.foo
       heatmap.setMap(null)
+      //heatmap.set('radius', 10)
+      //heatmap.set('maxIntensity', 0)
+      heatmap.set('dissipate', true)
 
       if (map.markers) {
         vm.marker = map.markers[0].getPosition()
@@ -47,6 +50,8 @@ app.controller("TreeMapController",
     vm.toggleHeatmap= function(event) {
         console.log('Toggle heatmap')
         heatmap.setMap(heatmap.getMap() ? null : vm.map);
+        //heatmap.set('maxIntensity', 0)
+        heatmap.set('dissipate', true)
     };
 
     vm.toggleMarkers = function() {

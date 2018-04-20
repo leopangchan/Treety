@@ -58,7 +58,7 @@ def average_pedestrian_count(data):
             if 'measures' in element and 'pedestrianCount' in element['measures']:
                 total += element['measures']['pedestrianCount']
     
-        return float(total) / len(data)
+        return float(total) / 24
 
     return total
 
@@ -93,7 +93,7 @@ def average_vehicle_count(data):
                 if 'counter_direction_vehicleCount' in element['measures']:
                     total += element['measures']['counter_direction_vehicleCount']
 
-        return float(total) / len(data)
+        return float(total) / 24
 
     return total
 

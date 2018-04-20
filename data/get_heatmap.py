@@ -61,7 +61,7 @@ def read_lat_long_points(filename):
 
     return coords
 
-# var heatMapData = [
+# var heatMapData = 
 # {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
 # ];
 def format_scores(scores_file, formatted, coords):

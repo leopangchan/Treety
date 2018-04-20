@@ -23,7 +23,7 @@ public class PedestrianController {
     return "Created a pedestrian = " + p.getId();
   }
 
-  @PostMapping(value = "/pedestrians")
+  @PostMapping(value = "/insertList")
   public String pedestrians(@RequestBody ArrayList<Pedestrian> pedestrians) {
       jpaPedestrianRepository.save(pedestrians);
 

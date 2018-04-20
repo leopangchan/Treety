@@ -63,6 +63,56 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     return req
   }
 
+  $ctrl.get_start_end_time = function() {
+    // get dates for backend request
+    var today = new Date()
+
+    var endDate = new Date(today)
+    endDate.setDate(today.getDate() - 1)
+    var endts = Math.trunc(endDate.getTime())
+
+    var startDate = new Date(today)
+    startDate.setDate(today.getDate() - 7)
+    var startts = Math.trunc(startDate.getTime())
+
+    return {"startts":startts, "endts":endts}
+  }
+
+  $ctrl.formatChart = function(res, startts, endts, titles) {
+      var data = new google.visualization.DataTable();
+
+      data.addColumn('date', titles['x_axis']);
+      data.addColumn('number', titles['y_axis']);
+      data.addRows(res);
+
+      var options = {
+          hAxis: {
+            gridlines: {
+              count: -1,
+              units: {
+                days: {format: ['MMM dd']},
+                hours: {format: ['HH:mm', 'ha']},
+              }
+            },
+            minorGridlines: {
+              units: {
+                hours: {format: ['hh:mm:ss a', 'ha']},
+                minutes: {format: ['HH:mm a Z', ':mm']}
+              }
+            },
+            title: titles['x_axis']
+          },
+          vAxis: {
+            title: titles['y_axis']
+          },
+          title: titles['title']
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById(chartId));
+
+      chart.draw(data, options);
+    }
+
   $ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
@@ -141,7 +191,70 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   };
 
   $ctrl.drawTrafficChart = function() {
-    var data = google.visualization.arrayToDataTable([
+    ///traffic/timeRange?start=1523762377000&end=1524107977000&locId=a49a96ea
+    console.log('USER COORDS TRAFFIC CHART')
+    console.log($lglat)
+
+    if (!$lglat) {
+        $lglat = [32.7157, -117.1611]
+    }
+
+    var time = $ctrl.get_start_end_time()
+    var req = $ctrl.make_api_request_header('TRAFFIC_LANE')
+    var titles = {
+        'title': 'Average Number of Vehicles from ' +
+         (new Date(time["startts"])).toDateString() +
+         ' to ' +
+         (new Date(time["endts"])).toDateString(),
+
+         'x_axis': 'Date',
+         'y_axis': 'Average Number of Vehicles'
+    }
+
+    $http(req)
+    .then(function(data) {
+        var res = []
+        var locations = data.data['content']
+
+        locations.forEach(function(element) {
+            if (element.hasOwnProperty('coordinates')) {
+                var coord = element['coordinates'].split(":")
+                res.push( [parseFloat(coord[0]), parseFloat(coord[1]), element["locationUid"]] )
+            }
+        })
+
+        return $ctrl.getClosestSensor(res, $lglat)
+    })
+    .then(function(sensor) {
+        console.log('CLOSEST SENSOR')
+        console.log(sensor)
+        $http({
+            method: 'GET',
+            url: "/traffic/timeRange?start="+
+            time["startts"] +
+            "&end=" +
+            time["endts"] +
+            "&locId="+
+            sensor
+        })
+        .then(function (value) { // get the data
+            res = []
+            var data = value.data
+            data.forEach(function(element) {
+                res.push([new Date(element['time']), element['avgSpeed']])
+            })
+
+            return res
+        })
+        .then(function(res) { // draw the chart
+            console.log('DATA')
+            console.log(res)
+            $ctrl.formatChart(res, time["startts"], time["endts"], titles)
+        })
+    })
+
+
+    /*var data = google.visualization.arrayToDataTable([
       ['Crime', 'Recent (Past Week)'],
       ['Theft',     11],
       ['Drugs',      2],
@@ -156,65 +269,30 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
 
     var chart = new google.visualization.PieChart(document.getElementById(chartId));
 
-    chart.draw(data, options);
-    console.log("Crime: I was clicked!")
+    chart.draw(data, options);*/
+    console.log("Traffic: I was clicked!")
   };
-
-  $ctrl.formatPedestrianChart = function(res, startts, endts) {
-    var data = new google.visualization.DataTable();
-
-    data.addColumn('date', 'Time');
-    data.addColumn('number', 'Number of Pedestrians');
-    data.addRows(res);
-
-    var options = {
-        hAxis: {
-          gridlines: {
-            count: -1,
-            units: {
-              days: {format: ['MMM dd']},
-              hours: {format: ['HH:mm', 'ha']},
-            }
-          },
-          minorGridlines: {
-            units: {
-              hours: {format: ['hh:mm:ss a', 'ha']},
-              minutes: {format: ['HH:mm a Z', ':mm']}
-            }
-          },
-          title: 'Time of Day (hours)'
-        },
-        vAxis: {
-          title: 'Number of Pedestrians'
-        },
-        title: 'Number of Pedestrians from ' +
-         (new Date(startts)).toDateString() +
-         ' to ' +
-         (new Date(endts)).toDateString()
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById(chartId));
-
-    chart.draw(data, options);
-  }
 
   $ctrl.drawPedestrianChart = function() {
     console.log('USER COORDS PED CHART')
     console.log($lglat)
+
+    if (!$lglat) {
+        $lglat = [32.7157, -117.1611]
+    }
     ///pedestrian/timeRange?start=1523762377000&end=1524107977000&locId=a49a96ea
 
-    // get dates for backend request
-    var today = new Date()
-
-    var endDate = new Date(today)
-    endDate.setDate(today.getDate() - 1)
-    var endts = Math.trunc(endDate.getTime())
-
-    var startDate = new Date(today)
-    startDate.setDate(today.getDate() - 7)
-    var startts = Math.trunc(startDate.getTime())
-
+    var time = $ctrl.get_start_end_time()
     var req = $ctrl.make_api_request_header('WALKWAY')
+    var titles = {
+        'title': 'Average Number of Pedestrians from ' +
+         (new Date(time["startts"])).toDateString() +
+         ' to ' +
+         (new Date(time["endts"])).toDateString(),
+
+         'x_axis': 'Date',
+         'y_axis': 'Average Number of Pedestrians'
+    }
 
     $http(req)
      .then(function(data) {
@@ -236,9 +314,9 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
         $http({
             method: 'GET',
             url: "/pedestrian/timeRange?start="+
-             startts +
+             time["startts"] +
              "&end=" +
-             endts +
+             time["endts"] +
              "&locId="+
              sensor
         })
@@ -252,7 +330,9 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
             return res
         })
         .then(function(res) { // draw the chart
-            $ctrl.formatPedestrianChart(res, startts, endts)
+            console.log('DATA')
+            console.log(res)
+            $ctrl.formatChart(res, time["startts"], time["endts"], titles)
         })
      })
 

@@ -75,7 +75,8 @@ def get_sensor_coords(type):
 
 # makes the api request for the data
 def request_sensor_data(url, zoneId, cb):
-    total = 0
+    total = None
+    
     try:
         data = requests.get(url, headers={
          "Authorization":"Bearer {0}".format(token), 
