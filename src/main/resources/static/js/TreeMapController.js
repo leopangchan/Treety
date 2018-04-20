@@ -1,36 +1,12 @@
 app.controller("TreeMapController",
  function($scope, $http, $timeout, NgMap, $mdDialog, $uibModal, $log, $document){
 	
-        var vm = this;
-        var heatmap = null
-        vm.token = config.token;
-        vm.locationPos = [];
-        vm.showMarkers = true
-
-    /* open dialog for planting a new tree */
-    vm.newTree = function($event) {
-      var modalInstance = $uibModal.open({
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: '../templates/plant.tree.dialog.html',
-        backdrop: false,
-        controller: "PlantTreeController",
-        controllerAs: '$ctrl',
-        size: 'md',
-        resolve: {
-          items: function () {
-            return undefined
-          }
-        }
-      });
-
-      modalInstance.result.then(function (selectedItem) {
-        //$ctrl.selected = selectedItem;
-      }, function (error) {
-        $log.info('Modal dismissed at: ' + new Date());
-        $log.info(error);
-      });
-    }
+    var vm = this;
+    var heatmap = null
+    vm.token = config.token;
+    vm.locationPos = [];
+    vm.showMarkers = true;
+    vm.isPlantingTree = false;
 
     /* map functions */
     NgMap.getMap().then(function(map) {
@@ -41,9 +17,9 @@ app.controller("TreeMapController",
       if (map.markers) {
         vm.marker = map.markers[0].getPosition()
       }
-    })
+    });
 
-    vm.toggleHeatmap= function(event) {
+    vm.toggleHeatmap = function(event) {
         console.log('Toggle heatmap')
         heatmap.setMap(heatmap.getMap() ? null : vm.map);
     };
@@ -157,6 +133,48 @@ app.controller("TreeMapController",
       });
 
       return closestPos[2]
+    };
+
+    vm.googleMapClickListener = undefined;
+    /**
+     * Hide the putting maker button, and show the planting tree button.
+     * Unregister the click event listener from the google map api.
+     * */
+    vm.stopPlantingTree = function(){
+      vm.isPlantingTree = false;
+      console.log("stop listener = " + vm.googleMapClickListener);
+      google.maps.removeListener(vm.googleMapClickListener);
+    };
+
+    /* open dialog for planting a new tree */
+    vm.newTree = function($event) {
+      var modalInstance = $uibModal.open({
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: '../templates/plant.tree.dialog.html',
+        backdrop: false,
+        controller: "PlantTreeController",
+        controllerAs: '$ctrl',
+        size: 'md',
+        resolve: {
+         $map: function () {
+           return vm.map;
+         },
+         $parentScope: function () {
+           return $scope;
+         }
+        }
+      });
+
+      modalInstance.result.then(function (googleMapClickListener) {
+        vm.googleMapClickListener = googleMapClickListener;
+        console.log("googleMapClickListener = " + googleMapClickListener);
+      }, function (error) {
+        $log.info('Modal dismissed at: ' + new Date());
+        $log.info(error);
+      });
+
+      vm.isPlantingTree = true;
     };
 
     vm.init = function() {

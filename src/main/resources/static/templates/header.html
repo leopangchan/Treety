@@ -5,7 +5,8 @@
             <div style="padding-left: 5px">
                 <h2 style="margin-top: 5px"><b>Treety!</b></h2>
                 <div class="btn-group-vertical btn-group-md">
-                    <button class="btn success" ng-click="vm.newTree($event)" >Plant A Tree</button>
+                    <button class="btn success" ng-if="!vm.isPlantingTree" ng-click="vm.newTree($event)" >Plant A Tree</button>
+                    <button class="btn warning" ng-if="vm.isPlantingTree" ng-click="vm.stopPlantingTree()">Stop Planting</button>
                     <button class="btn danger" ng-click="vm.toggleHeatmap()">Toggle Heatmap</button>
                     <button class="btn warning" ng-click = "vm.toggleMarkers()">Toggle markers</button>
                 </div>
