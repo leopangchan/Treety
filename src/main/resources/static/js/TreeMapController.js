@@ -1,37 +1,14 @@
 app.controller("TreeMapController",
  function($scope, $http, $timeout, NgMap, $mdDialog, $uibModal, $log, $document){
 	
-        var vm = this
-        var heatmap = null
-        vm.token = config.token
-        vm.user_coords = null
-        vm.showMarkers = true
-        vm.locationPos = []
-
-    /* open dialog for planting a new tree */
-    vm.newTree = function($event) {
-      var modalInstance = $uibModal.open({
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: '../templates/plant.tree.dialog.html',
-        backdrop: false,
-        controller: "PlantTreeController",
-        controllerAs: '$ctrl',
-        size: 'md',
-        resolve: {
-          items: function () {
-            return undefined
-          }
-        }
-      });
-
-      modalInstance.result.then(function (selectedItem) {
-        //$ctrl.selected = selectedItem;
-      }, function (error) {
-        $log.info('Modal dismissed at: ' + new Date());
-        $log.info(error);
-      });
-    }
+    var vm = this
+    var heatmap = null
+    vm.token = config.token
+    vm.user_coords = [32.7157, -117.1611]
+    vm.locationPos = []
+    vm.showMarkers = true
+    vm.isPlantingTree = false
+    vm.googleMapClickListener = undefined
 
     /* map functions */
     NgMap.getMap().then(function(map) {
@@ -47,7 +24,7 @@ app.controller("TreeMapController",
       }
     })
 
-    vm.toggleHeatmap= function(event) {
+    vm.toggleHeatmap = function(event) {
         console.log('Toggle heatmap')
         heatmap.setMap(heatmap.getMap() ? null : vm.map);
         //heatmap.set('maxIntensity', 0)
@@ -63,9 +40,9 @@ app.controller("TreeMapController",
     vm.centerChanged = function(event) {
       $timeout(function() {
         if (vm.marker) {
-            vm.map.panTo(vm.marker);
+            vm.map.panTo(vm.marker)
         }
-      }, 3000);
+      }, 3000)
     }
 
     /* change center when user clicks on marker */
@@ -73,10 +50,12 @@ app.controller("TreeMapController",
         var marker = vm.map.markers[vm.locationPos.indexOf(pos)]
 
         if (pos) {
-            vm.map.setCenter(marker.getPosition());
+            vm.map.setCenter(marker.getPosition())
             vm.marker = marker.getPosition()
-            vm.map.setZoom(16);
+            vm.map.setZoom(16)
         }
+
+        vm.get_tree_benefit()
     }
 
     /* zoom into user coordinates */
@@ -90,6 +69,104 @@ app.controller("TreeMapController",
         vm.marker = event.latLng
         vm.map.setZoom(16);
     };
+
+    // return tree benefit score from the backend
+    vm.get_tree_benefit = function() {
+        var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
+
+         // find the closest ped sensor
+         $http({method: 'GET',
+            url: metadataurl + "/locations/search?q=locationType:WALKWAY",
+            headers: {
+                "Authorization": "Bearer " + vm.token,
+                "Predix-Zone-Id": 'SD-IE-PEDESTRIAN'
+            }
+         })
+         .then(function(data) {
+            var locations = data.data['content']
+            res = []
+
+            locations.forEach(function(element) {
+                if (element.hasOwnProperty('coordinates')) {
+                    var coord = element['coordinates'].split(":")
+                    res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
+                }
+            })
+
+            return vm.closestPos(res, vm.user_coords)
+         })
+         .then(function(ped_sensor) {
+            // find closest traffic sensor
+            $http({method: 'GET',
+                url: metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE",
+                headers: {
+                    "Authorization": "Bearer " + vm.token,
+                    "Predix-Zone-Id": 'SD-IE-TRAFFIC'
+                }
+            })
+            .then(function(data) {
+                var locations = data.data['content']
+                res = []
+
+                locations.forEach(function(element) {
+                   if (element.hasOwnProperty('coordinates')) {
+                       var coord = element['coordinates'].split(":")
+                       res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
+                   }
+                })
+
+                return vm.closestPos(res, vm.user_coords)
+            })
+            .then(function(tffc_sensor) {
+                // find closest environment sensor
+                $http({method: 'GET',
+                    url: metadataurl + "/assets/search?q=assetType:ENV_SENSOR",
+                    headers: {
+                        "Authorization": "Bearer " + vm.token,
+                        "Predix-Zone-Id": 'SD-IE-TRAFFIC'
+                    }
+                })
+                .then(function(data) {
+                    var locations = data.data['content']
+                    res = []
+
+                    locations.forEach(function(element) {
+                       if (element.hasOwnProperty('coordinates')) {
+                           var coord = element['coordinates'].split(":")
+                           res.push([parseFloat(coord[0]), parseFloat(coord[1]), element["assetUid"]])
+                       }
+                    })
+
+                    return vm.closestPos(res, vm.user_coords)
+                })
+                .then(function(env_sensor) {
+                    console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor)
+                    console.log('PED SENSOR LOCATION ' + ped_sensor)
+                    console.log('ENV SENSOR LOCATION ' + env_sensor)
+
+                    var url = "/tree/benefit?pedId="+
+                        ped_sensor +
+                        "&envId=" +
+                        env_sensor +
+                        "&tffcId="+
+                        tffc_sensor
+
+                    console.log(url)
+
+                    // request tree benefit measurements from the backend
+                    $http({
+                        method: 'GET',
+                        url: url
+                    })
+                    .then(function (value) { // get the data
+                        console.log('TREE BENEFITS')
+                        console.log(value)
+                    })
+                })
+
+            })
+         })
+    }
 
     // get coordinates for all city sensors
     vm.getLocations = function(type) {
@@ -124,29 +201,6 @@ app.controller("TreeMapController",
          })
     }
 
-    /**
-    *  write a function that takes in a coordinate [lat, long], calls the get locations function.
-    *
-    *  Note:
-    *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
-    *
-    *  @param type - a sensor type ex: TRAFFIC_LANE
-    *  @param coord - [32.708757321722075, -117.16414366466401]
-    *  @return the location id of the closest sensor
-    *
-    *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
-    */
-    vm.getClosestSensor = function(locations, coord) {
-      var closestPos = undefined;
-      locations.forEach(function (pos) {
-        let xDis = Math.abs(Math.pow(pos[0], 2) - Math.pow(coord[0], 2))
-        let yDis = Math.abs(Math.pow(pos[1], 2) - Math.pow(coord[1], 2))
-        closestPos = closestPos === undefined || closestPos > Math.sqrt(Math.abs(xDis - yDis)) ? pos : closestPos
-      });
-
-      return closestPos[2]
-    };
-
     vm.loadChart = function (chartType) {
       var modalInstance = $uibModal.open({
         ariaLabelledBy: 'modal-title',
@@ -171,6 +225,83 @@ app.controller("TreeMapController",
         $log.info('Modal dismissed at: ' + new Date());
         $log.info(error);
       });
+    };
+
+    /**
+    *  write a function that takes in a coordinate [lat, long], calls the get locations function.
+    *
+    *  Note:
+    *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
+    *
+    *  @param type - a sensor type ex: TRAFFIC_LANE
+    *  @param coord - [32.708757321722075, -117.16414366466401]
+    *  @return the location id of the closest sensor
+    *
+    *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
+    */
+    vm.closestPos = function(locations, coord) {
+      var closestPos = undefined
+      var minDis = undefined
+
+      locations.forEach(function (pos) {
+          if (pos) {
+              let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2))
+              let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2))
+              let dis = Math.sqrt(Math.abs(xDis - yDis))
+
+              if ((minDis === undefined) || (minDis > dis)) {
+                 minDis = dis
+                 closestPos = pos
+              }
+          }
+      })
+
+      if (closestPos === undefined) {
+          return 'a49a96ea'
+      }
+
+      return closestPos[2]
+    }
+
+    /**
+     * Hide the putting maker button, and show the planting tree button.
+     * Unregister the click event listener from the google map api.
+     * */
+    vm.stopPlantingTree = function(){
+      vm.isPlantingTree = false;
+      console.log("stop listener = " + vm.googleMapClickListener);
+      google.maps.removeListener(vm.googleMapClickListener);
+    };
+
+    /* open dialog for planting a new tree */
+    vm.newTree = function($event) {
+      var modalInstance = $uibModal.open({
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: '../templates/plant.tree.dialog.html',
+        backdrop: false,
+        controller: "PlantTreeController",
+        controllerAs: '$ctrl',
+        size: 'md',
+        resolve: {
+         $map: function () {
+           return vm.map;
+         },
+         $parentScope: function () {
+           return $scope;
+         }
+        }
+      });
+
+      modalInstance.result.then(function (googleMapClickListener) {
+        vm.googleMapClickListener = googleMapClickListener;
+        console.log("googleMapClickListener = " + googleMapClickListener);
+      }, function (error) {
+        $log.info('Modal dismissed at: ' + new Date());
+        $log.info(error);
+      });
+
+      vm.isPlantingTree = true;
     };
 
     vm.init = function() {

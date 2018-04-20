@@ -1,3 +1,9 @@
+//"Access-Control-Allow-Origin": "http://localhost:8090"
+//"Access-Control-Allow-Credentials": "true",
+//"Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+//"Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
+//"Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+
 app.controller("ChartController", function ($chartType, $uibModalInstance, $http, $lglat) {
 
   var $ctrl = this;
@@ -52,11 +58,6 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
         headers: {
             "Authorization": "Bearer " + $ctrl.token,
             "Predix-Zone-Id": zoneId
-            //"Access-Control-Allow-Origin": "http://localhost:8090"
-            //"Access-Control-Allow-Credentials": "true",
-            //"Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-            //"Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
-            //"Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
         }
     }
 

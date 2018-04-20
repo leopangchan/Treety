@@ -60,6 +60,5 @@ public class TreeController {
                                                  @RequestParam(value="envId") String envId) {
 
         return measurementRepository.getTreeBenefitScore(pedId, tffcId, envId);
-        //return new ArrayList<Measurement>();
     }
 }
