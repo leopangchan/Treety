@@ -94,7 +94,7 @@ def main():
     print ('Reading coordinates')
     coords = read_lat_long_points('random_points_sd_1000.csv')
     print (len(coords))
-    print ('{0}\n'.format(coords[0]))
+    print ('{0}\n'.format(coords[:20]))
 
     # API parameters
     yesterday = datetime.datetime.now() - timedelta(365)

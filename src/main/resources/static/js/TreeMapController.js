@@ -9,26 +9,11 @@ app.controller("TreeMapController",
     vm.showMarkers = true
     vm.isPlantingTree = false
     vm.googleMapClickListener = undefined
-
-    /* map functions */
-    NgMap.getMap().then(function(map) {
-      vm.map = map
-      heatmap = map.heatmapLayers.foo
-      heatmap.setMap(null)
-      //heatmap.set('radius', 10)
-      //heatmap.set('maxIntensity', 0)
-      heatmap.set('dissipate', true)
-
-      if (map.markers) {
-        vm.marker = map.markers[0].getPosition()
-      }
-    })
+    vm.treeBenefit = undefined
 
     vm.toggleHeatmap = function(event) {
         console.log('Toggle heatmap')
         heatmap.setMap(heatmap.getMap() ? null : vm.map);
-        //heatmap.set('maxIntensity', 0)
-        heatmap.set('dissipate', true)
     };
 
     vm.toggleMarkers = function() {
@@ -46,16 +31,15 @@ app.controller("TreeMapController",
     }
 
     /* change center when user clicks on marker */
-    vm.markerClicked = function(event, pos) {
-        var marker = vm.map.markers[vm.locationPos.indexOf(pos)]
+    vm.markerClicked = function(marker) {
 
-        if (pos) {
+        if (marker) {
             vm.map.setCenter(marker.getPosition())
             vm.marker = marker.getPosition()
             vm.map.setZoom(16)
         }
 
-        vm.get_tree_benefit()
+        vm.get_tree_benefit(marker)
     }
 
     /* zoom into user coordinates */
@@ -71,7 +55,7 @@ app.controller("TreeMapController",
     };
 
     // return tree benefit score from the backend
-    vm.get_tree_benefit = function() {
+    vm.get_tree_benefit = function(newMarker) {
         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
 
          // find the closest ped sensor
@@ -158,9 +142,22 @@ app.controller("TreeMapController",
                         method: 'GET',
                         url: url
                     })
-                    .then(function (value) { // get the data
+                    .then(function (benefits) { // get the data
                         console.log('TREE BENEFITS')
-                        console.log(value)
+                        console.log(benefits.data[0])
+                        vm.treeBenefit = benefits.data[0]
+
+                        var score = 0
+
+                        for (var key in benefits.data[0]) {
+                            if (benefits.data[0].hasOwnProperty(key)) {
+                                score += benefits.data[0][key]
+                            }
+                        }
+
+                        new google.maps.InfoWindow({
+                          content: "Tree benefit = " + score.toFixed(2)
+                        }).open(vm.map, newMarker)
                     })
                 })
 
@@ -305,6 +302,37 @@ app.controller("TreeMapController",
     };
 
     vm.init = function() {
-        vm.getLocations('TRAFFIC_LANE');
+        vm.locationPos = [[32.71375594, -117.16810915], [32.71497082, -117.15003429],
+        [32.71307246, -117.15189225], [32.72552396, -117.16240669], [32.71167202, -117.15030701],
+        [32.71823226, -117.15079255], [32.71193698, -117.15568149], [32.71752808, -117.15159649],
+        [32.71383252, -117.16592375], [32.72208209, -117.15390776], [32.70876973, -117.16058296],
+        [32.71692875, -117.17196371], [32.70601003, -117.1564232], [32.70816054, -117.16380988],
+        [32.72042531, -117.16675222], [32.70505725, -117.16215597],
+        [32.71994916, -117.15757904], [32.70983255, -117.16118476],
+        [32.72036971, -117.16434272], [32.72281502, -117.16821282]]
+
+        /* map functions */
+        NgMap.getMap().then(function(map) {
+              vm.map = map
+              heatmap = map.heatmapLayers.foo
+              heatmap.setMap(null)
+
+              if (map.markers) {
+                vm.marker = map.markers[0].getPosition()
+              }
+
+              vm.locationPos.forEach(function(point) {
+                  console.log(point)
+                  var newMarker = new google.maps.Marker({
+                      position: {lat: point[0], lng: point[1]},
+                      map: vm.map,
+                      icon: "../img/small_tree.png"
+                  });
+
+                  google.maps.event.addListener(newMarker,'click', function() {
+                      vm.markerClicked(newMarker)
+                  })
+              })
+        })
     }
 });
