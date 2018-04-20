@@ -143,7 +143,7 @@ app.controller("TreeMapController",
     vm.stopPlantingTree = function(){
       vm.isPlantingTree = false;
       console.log("stop listener = " + vm.googleMapClickListener);
-      google.maps.removeListener(vm.googleMapClickListener);
+      google.maps.event.removeListener(vm.googleMapClickListener);
     };
 
     /* open dialog for planting a new tree */
