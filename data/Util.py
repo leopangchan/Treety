@@ -1,3 +1,4 @@
+
 import math
 
 trees = {
@@ -58,7 +59,7 @@ def average_pedestrian_count(data):
             if 'measures' in element and 'pedestrianCount' in element['measures']:
                 total += element['measures']['pedestrianCount']
     
-        return float(total) / 24
+        return float(total) / len(data)
 
     return total
 
@@ -93,7 +94,7 @@ def average_vehicle_count(data):
                 if 'counter_direction_vehicleCount' in element['measures']:
                     total += element['measures']['counter_direction_vehicleCount']
 
-        return float(total) / 24
+        return float(total) / len(data)
 
     return total
 
@@ -143,13 +144,14 @@ def calc_evapotranspiration(humidity, temperature):
 
 # calculate % of water retained by the tree
 def calc_water_retention(humidity, temperature):
-    temperature = temperature - 273.15 # convert temperature to C
-    humidity = int(humidity) # convert percentage to decimal
-    evapotranspiration = calc_evapotranspiration(humidity, temperature)
-    avg_rainfall = 300 # mm
-    retention = math.fabs(1 - (evapotranspiration / avg_rainfall))
+    if (humidity != None and temperature != None):
+        temperature = temperature - 273.15 # convert temperature to C
+        humidity = int(humidity) # convert percentage to decimal
+        evapotranspiration = calc_evapotranspiration(humidity, temperature)
+        avg_rainfall = 300 # mm
+        retention = math.fabs(1 - (evapotranspiration / avg_rainfall))
 
-    return evapotranspiration
+        return evapotranspiration
 
 def calc_carbon_reduction(tree_type):
     if tree_type.lower() in trees:
@@ -162,7 +164,7 @@ def calc_carbon_reduction(tree_type):
         carbon_weight = green_weight * 0.5
 
         carbon_reduction = carbon_weight * 3.6663
-        return carbon_reduction / 10
+        return (carbon_reduction / 10) / 365
 
     else:
         print('{0} is not supported'.format(tree_type))

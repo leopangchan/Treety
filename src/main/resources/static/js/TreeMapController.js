@@ -3,22 +3,31 @@ app.controller("TreeMapController",
 	
     var vm = this
     var heatmap = null
+    vm.map = null
     vm.token = config.token
     vm.user_coords = [32.7157, -117.1611]
     vm.locationPos = []
+    vm.markers = []
     vm.showMarkers = true
+    vm.showHeatmap = false
     vm.isPlantingTree = false
     vm.googleMapClickListener = undefined
     vm.treeBenefit = undefined
 
     vm.toggleHeatmap = function(event) {
         console.log('Toggle heatmap')
-        heatmap.setMap(heatmap.getMap() ? null : vm.map);
+        //heatmap.setMap(heatmap.getMap() ? null : vm.map);
+        vm.showHeatmap = !vm.showHeatmap
     };
 
     vm.toggleMarkers = function() {
         console.log('Toggle markers')
         vm.showMarkers = !vm.showMarkers
+        mapValue = vm.showMarkers ? vm.map : null
+
+        for (var i = 0; i < vm.markers.length; i++) {
+          vm.markers[i].setMap(mapValue);
+        }
     }
 
     /* zoom to center when user clicked on a marker */
@@ -314,20 +323,21 @@ app.controller("TreeMapController",
         /* map functions */
         NgMap.getMap().then(function(map) {
               vm.map = map
-              heatmap = map.heatmapLayers.foo
-              heatmap.setMap(null)
 
-              if (map.markers) {
-                vm.marker = map.markers[0].getPosition()
+              if (map.heatmapLayers) {
+                heatmap = map.heatmapLayers.foo
+                heatmap.setMap(null)
               }
 
               vm.locationPos.forEach(function(point) {
-                  console.log(point)
+
                   var newMarker = new google.maps.Marker({
                       position: {lat: point[0], lng: point[1]},
                       map: vm.map,
                       icon: "../img/small_tree.png"
                   });
+
+                  vm.markers.push(newMarker)
 
                   google.maps.event.addListener(newMarker,'click', function() {
                       vm.markerClicked(newMarker)
