@@ -1,18 +1,14 @@
-<div class="container-fluid">
-    <div id="header" class="on-top row max-width justify-content-between">
-        <div class="col-4">
-            <img src="../img/treety-logo.png" width="180" height="200" alt="Tree Logo">
-            <div style="padding-left: 5px">
-                <div class="btn-group-vertical btn-group-md">
-                    <button class="btn success" ng-if="!vm.isPlantingTree" ng-click="vm.newTree($event)" >Plant A Tree</button>
-                    <button class="btn warning" ng-if="vm.isPlantingTree" ng-click="vm.stopPlantingTree()">Stop Planting</button>
-                    <button class="btn danger" ng-click="vm.toggleHeatmap()">Toggle Heatmap</button>
-                    <button class="btn warning" ng-click = "vm.toggleMarkers()">Toggle markers</button>
-                </div>
-            </div>
-        </div>
-        <div class="form-group col-4">
-            <input type="text" placeholder="Location: e.g. city/zip" class="form-control">
+<div id="tree-button-group" class="top-bar">
+    <img src="../img/treety-logo.png" width="180" height="200" alt="Tree Logo">
+    <div style="padding-left: 5px">
+        <div class="btn-group-vertical btn-group-md">
+            <button class="btn success" ng-if="!vm.isPlantingTree" ng-click="vm.newTree($event)" >Plant A Tree</button>
+            <button class="btn warning" ng-if="vm.isPlantingTree" ng-click="vm.stopPlantingTree()">Stop Planting</button>
+            <button class="btn danger" ng-click="vm.toggleHeatmap()">Toggle Heatmap</button>
+            <button class="btn warning" ng-click = "vm.toggleMarkers()">Toggle markers</button>
         </div>
     </div>
+</div>
+<div id="searchBar" class="top-bar form-group" style="right: 0">
+    <input type="text" placeholder="Location: e.g. city/zip" class="form-control">
 </div>
