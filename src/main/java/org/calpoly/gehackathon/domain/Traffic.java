@@ -2,9 +2,9 @@ package org.calpoly.gehackathon.domain;
 
 import javax.persistence.*;
 
-@Entity(name="pedestrian")
-@Table(name="pedestrian")
-public class Pedestrian {
+@Entity(name="traffic")
+@Table(name="traffic")
+public class Traffic {
 
   public Integer getId() {
     return id;
@@ -19,14 +19,17 @@ public class Pedestrian {
 
   public Long time;
 
-  public Float count;
+  public Double avgCount;
 
-  public Pedestrian(String localId, Long time, Float count) {
+  public Double avgSpeed;
+
+  public Traffic(String localId, Long time, Double avgCount, Double avgSpeed) {
     this.localId = localId;
     this.time = time;
-    this.count = count;
+    this.avgCount = avgCount;
+    this.avgSpeed = avgSpeed;
   }
 
-  public Pedestrian() {
+  public Traffic() {
   }
 }
