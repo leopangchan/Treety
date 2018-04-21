@@ -1,5 +1,7 @@
 #body {
     padding-bottom: 100px;
+    height: 100%;
+    width: 100%;
 }
 
 .navbar {
@@ -107,10 +109,6 @@ html, body {
     width: 100%;
 }
 
-.on-top {
-    z-index:1000;
-}
-
 .overlay {
     position:fixed;
     width:100%;
@@ -129,12 +127,9 @@ html, body {
 }
 
 #footer{
-    bottom: 0;
-    height: 100px;
+    bottom: 15px;
     left: 0;
     position: absolute;
-    right: 0;
-    opacity: 0.8;
 }
 
 .modal {
@@ -160,6 +155,23 @@ html, body {
 .modal-content {
     width: 100%;
     height: 100%;
+}
+
+#searchBar {
+    position: absolute;
+    width: 400px;
+    right: 30px;
+    padding-right: 10px;
+}
+
+#tree-button-group {
+    position: absolute;
+    left: 20px;
+}
+
+.top-bar {
+    z-index:1000;
+    top: 40px;
 }
 
 .my-modal-popup{

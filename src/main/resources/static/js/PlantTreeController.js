@@ -32,7 +32,7 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
   $ctrl.ok = function () {
     //console.log($scope.type + ", " + $scope.age + ", " + $scope.email);
     $parentScope.vm.googleMapClickListener = $map.addListener('click', function(point) {
-        console.log("treeBenefit = " + $parentScope.vm.treeBenefit);
+      console.log("treeBenefit = " + $parentScope.vm.treeBenefit);
 
       var newMarker = new google.maps.Marker({
         position: point.latLng,
@@ -40,7 +40,7 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
         icon: "../img/small_tree.png"
       });
 
-      $parentScope.vm.markers.push(newMarker)
+      $parentScope.vm.markers.push(newMarker);
 
       google.maps.event.addListener(newMarker,'click', function() {
 
@@ -154,12 +154,13 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
 
       });
 
+      $parentScope.vm.isPlantingTree = true;
+
       /**
+       * TODO:
        * Store the marker in the database
        * */
     });
-
-
 
     $uibModalInstance.dismiss('cancel');
   };
