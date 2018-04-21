@@ -35,10 +35,12 @@ public class TreeController {
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public String insertTree() {
+        Tree t1 = new Tree("t1", "type1", new Long(100), 200.00, 123.00, "efwef");
+        repository.save(t1);
+        return "Saved a tree = " + t1.getId();
         //Tree t1 = new Tree("t1", "type1", 100.00, 200.00);
         //repository.save(t1);
         //return "Saved a tree = " + t1.getId();
-        return "";
     }
 
     @RequestMapping(value = "/insertTreeClass", method = RequestMethod.POST)

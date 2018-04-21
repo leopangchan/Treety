@@ -14,6 +14,7 @@ public class Tree {
 
     public String name;
     public String type;
+    public Long age;
     public Double xCoord;
     public Double yCoord;
     public String local_id;
@@ -21,9 +22,10 @@ public class Tree {
     public Tree() {
     }
 
-    public Tree(String name, String type, Double xCoord, Double yCoord, String local_id) {
+    public Tree(String name, String type, Long age, Double xCoord, Double yCoord, String local_id) {
         this.name = name;
         this.type = type;
+        this.age = age;
         this.xCoord = xCoord;
         this.yCoord = yCoord;
         this.local_id = local_id;
