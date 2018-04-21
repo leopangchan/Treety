@@ -276,11 +276,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     var materialOptions = {
         hAxis: {
             title: 'Year',
-            format: 'yyyy',
-            range: {
-                max: new Date(2018,0),
-                min: new Date(2012,0)
-            }
+            format: 'yyyy'
           },
           vAxis: {
             title: 'Average Number of Pedestrians / Year'
