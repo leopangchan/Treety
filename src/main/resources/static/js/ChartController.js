@@ -152,17 +152,10 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
                 subtitle: 'current value on the left, value after planting tree on the right'
             },
             bars: 'horizontal', // Required for Material Bar Charts.
-            series: {
-                0: { axis: 'Carbon Emission' }, // Bind series 0 to an axis named 'distance'.
-                },
-            axes: {
-                x: {
-                  distance: {label: 'Carbon Emission (lbs/year)'}, // Bottom x-axis.
-                }
-            }
+            hAxis: { title: 'San Diego Total Carbon Emission (lbs/year)' }
         };
 
-        var chart = new google.charts.Bar(document.getElementById('chart'));
+        var chart = new google.visualization.BarChart(document.getElementById('chart'));
         chart.draw(data, options);
   };
 
