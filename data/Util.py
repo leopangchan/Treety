@@ -164,7 +164,7 @@ def calc_carbon_reduction(tree_type):
         carbon_weight = green_weight * 0.5
 
         carbon_reduction = carbon_weight * 3.6663
-        return (carbon_reduction / 10) / 365
+        return (carbon_reduction / 10)
 
     else:
         print('{0} is not supported'.format(tree_type))

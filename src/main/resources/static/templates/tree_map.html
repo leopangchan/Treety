@@ -2,14 +2,13 @@
     <ng-map class="overlay" center="32.7157, -117.1611" zoom = "13" on-center-changed="vm.centerChanged()" on-click="vm.getpos($event)">
         <!--<heatmap-layer id="foo" data="treeBenefitHeatmap_1000"></heatmap-layer>-->
         <shape name="image"
-               url="img/static_heatmap.png"
-               bounds="[[32.699391, -117.171969],
+               url="img/heatmap_no_background.png"
+               bounds="[[32.704790, -117.170530],
                [32.727947,-117.145543]]"
-               opacity="0.4"
-               ng-if="vm.showHeatmap">
+               opacity="0.5"
+               ng-if="vm.showHeatmap"
+               style="background-color: transparent">
         </shape>
         <marker ng-if="vm.showMarkers"></marker>
     </ng-map>
 </div>
-
-<!--[32.709539, -117.112563][32.721943,-117.172234],-->
