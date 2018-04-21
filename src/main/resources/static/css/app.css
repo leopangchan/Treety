@@ -86,19 +86,6 @@ html, body {
     float: left;
 }
 
-/*
-.background_image {
-    min-height: 100%;
-    min-width: 1024px;
-
-    width: 100%;
-    height: auto;
-
-    background-repeat: round;
-}
-*/
-
-
 .spanning {
     display: inline-block;
 }
