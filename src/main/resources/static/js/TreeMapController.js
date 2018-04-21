@@ -274,8 +274,6 @@ app.controller("TreeMapController",
         $log.info('Modal dismissed at: ' + new Date());
         $log.info(error);
       });
-
-      vm.isPlantingTree = true;
     };
 
     vm.init = function() {

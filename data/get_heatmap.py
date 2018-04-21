@@ -105,7 +105,7 @@ def draw_heatmap(coords, scores_file):
 
     max_amount = float(np.max(scores))
 
-    hmap = folium.Map(location=[32.7157, -117.1611], zoom_start=13, )
+    hmap = folium.Map(location=[32.7157, -117.1611], zoom_start=13, tiles=None)
 
     hm_wide = HeatMap( list(zip(lats, lons, scores)), 
         min_opacity=0.2,
@@ -115,11 +115,11 @@ def draw_heatmap(coords, scores_file):
 
     #folium.GeoJson(district23).add_to(hmap)
     hmap.add_child(hm_wide)
-    hmap.save('heatmap.html')
+    hmap.save('heatmap2.html')
 
 def main():
     print ('Reading coordinates')
-    coords = read_lat_long_points('random_points_sd.csv')
+    coords = read_lat_long_points('coordinates/random_points_sd.csv')
     print (len(coords))
     print ('{0}\n'.format(coords[0]))
 
@@ -129,7 +129,7 @@ def main():
     startts = int(time.mktime(yesterday.timetuple())*1000)
 
     #calculate_sample_score(startts, endts)
-    #calculate_tree_benefit_grid(startts, endts, coords, '100_scores.p')
+    #alculate_tree_benefit_grid(startts, endts, coords, '100_scores.p')
     #format_scores('100_scores.p','treeBenefitHeatmap_100.js',coords)
     draw_heatmap(coords, '100_scores.p')
     
