@@ -4,10 +4,11 @@
 //"Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
 //"Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
 
-app.controller("ChartController", function ($chartType, $uibModalInstance, $http, $lglat) {
+app.controller("ChartController", function ($scope, $chartType, $uibModalInstance, $http, $lglat) {
 
   var $ctrl = this;
   var chartId = "chart";
+  $scope.chartType = $chartType;
   $ctrl.token = config.token
 
   /**
@@ -127,7 +128,13 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   $ctrl.loadPedestrianChart = function(data) {
     console.log('Loading line chart');
     google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback($ctrl.drawPedestrianChart);
+    google.charts.setOnLoadCallback($ctrl.drawPedestrianChart.bind(null, chartId));
+
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback($ctrl.drawPedestrianChart.bind(null, "chart2"));
+
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback($ctrl.drawPedestrianChart.bind(null, "chart3"));
   };
 
   /* load a google pie chart */
@@ -159,7 +166,9 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
                 x: {
                   distance: {label: 'Carbon Emission (lbs/year)'}, // Bottom x-axis.
                 }
-            }
+            },
+            width: 1024,
+            height: 500
         };
 
         var chart = new google.charts.Bar(document.getElementById('chart'));
@@ -259,7 +268,7 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     console.log("Traffic: I was clicked!")
   };
 
-  $ctrl.drawPedestrianChart = function() {
+  $ctrl.drawPedestrianChart = function(chartId) {
     var data = new google.visualization.DataTable();
     data.addColumn('date', 'Year');
     data.addColumn('number', "Avg Pedestrians");
