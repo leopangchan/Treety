@@ -154,18 +154,27 @@ app.controller("TreeMapController",
                     .then(function (benefits) { // get the data
                         console.log('TREE BENEFITS')
                         console.log(benefits.data[0])
-                        vm.treeBenefit = benefits.data[0]
 
+                        var i = 0
+                        var num_benefits = 5
+                        var label = ""
                         var score = 0
 
                         for (var key in benefits.data[0]) {
-                            if (benefits.data[0].hasOwnProperty(key)) {
-                                score += benefits.data[0][key]
+                            if (benefits.data[0].hasOwnProperty(key) && i < (num_benefits-1)) {
+                                label += "   ("+key+") "+benefits.data[0][key].toFixed(2)+" +<br/>"
                             }
+
+                            else {
+                                label += "   ("+key+") "+benefits.data[0][key].toFixed(2)
+                            }
+
+                            score += benefits.data[0][key]
+                            i += 1
                         }
 
                         new google.maps.InfoWindow({
-                          content: "Tree benefit = " + score.toFixed(2)
+                          content: "Tree benefit = " + score.toFixed(2) + "<br/>" + label
                         }).open(vm.map, newMarker)
                     })
                 })

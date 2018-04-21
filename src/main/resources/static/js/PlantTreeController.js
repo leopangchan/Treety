@@ -135,17 +135,28 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                         console.log('TREE BENEFITS')
                         console.log(benefits.data[0])
 
+                        var label = ""
                         var score = 0
+                        var i = 0
+                        var num_benefits = 5
 
                         for (var key in benefits.data[0]) {
-                            if (benefits.data[0].hasOwnProperty(key)) {
-                                score += benefits.data[0][key]
+                            if (benefits.data[0].hasOwnProperty(key) && i < (num_benefits-1)) {
+                                label += "   ("+key+") "+benefits.data[0][key].toFixed(2)+" +<br/>"
                             }
+
+                            else {
+                                label += "   ("+key+") "+benefits.data[0][key].toFixed(2)
+                            }
+
+                            score += benefits.data[0][key]
+                            i += 1
                         }
 
+                        console.log(label)
                         new google.maps.InfoWindow({
-                          content: "Tree benefit = " + score.toFixed(2)
-                        }).open($map, newMarker);
+                          content: "Tree benefit = " + score.toFixed(2) + "<br/>" + label
+                        }).open($map, newMarker)
                     })
                 })
 
