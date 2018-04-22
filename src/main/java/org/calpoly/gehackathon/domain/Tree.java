@@ -1,9 +1,6 @@
 package org.calpoly.gehackathon.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Tree {
@@ -12,23 +9,25 @@ public class Tree {
     @GeneratedValue
     private Integer id;
 
-    public String name;
     public String type;
     public Long age;
-    public Double xCoord;
-    public Double yCoord;
+    public Double lng;
+    public Double lat;
+    public Double score;
     public String local_id;
+    public String email;
 
     public Tree() {
     }
 
-    public Tree(String name, String type, Long age, Double xCoord, Double yCoord, String local_id) {
-        this.name = name;
+    public Tree(String type, Long age, Double lng, Double lat, Double score, String local_id, String email) {
         this.type = type;
         this.age = age;
-        this.xCoord = xCoord;
-        this.yCoord = yCoord;
+        this.lng = lng;
+        this.lat = lat;
+        this.score = score;
         this.local_id = local_id;
+        this.email = email;
     }
 
     public Integer getId() {

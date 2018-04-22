@@ -1,7 +1,6 @@
 package org.calpoly.gehackathon.web;
 
 import org.calpoly.gehackathon.domain.Measurement;
-import org.calpoly.gehackathon.domain.Traffic;
 import org.calpoly.gehackathon.domain.Tree;
 import org.calpoly.gehackathon.repositories.JpaMeasurementRepository;
 import org.calpoly.gehackathon.repositories.JpaTreeRepository;
@@ -9,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,41 +19,35 @@ import java.util.List;
 @RequestMapping(value = "/tree")
 public class TreeController {
     private static final Logger logger = LoggerFactory.getLogger(TreeController.class);
-    private JpaTreeRepository repository;
+    private JpaTreeRepository treeRepository;
     private JpaMeasurementRepository measurementRepository;
 
     @Autowired
-    public TreeController(JpaTreeRepository repository, JpaMeasurementRepository measurementRepository) {
+    public TreeController(JpaTreeRepository treeRepository, JpaMeasurementRepository measurementRepository) {
         this.measurementRepository = measurementRepository;
-        this.repository = repository;
+        this.treeRepository = treeRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Iterable<Tree> trees() {
-        return repository.findAll();
+        return treeRepository.findAll();
     }
 
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public String insertTree() {
-        Tree t1 = new Tree("t1", "type1", new Long(100), 200.00, 123.00, "efwef");
-        repository.save(t1);
-        return "Saved a tree = " + t1.getId();
-        //Tree t1 = new Tree("t1", "type1", 100.00, 200.00);
-        //repository.save(t1);
-        //return "Saved a tree = " + t1.getId();
+
+    @PostMapping(value = "/insert")
+    public ResponseEntity<String> insertTreeClasses(@RequestBody ArrayList<Tree> trees) {
+        treeRepository.save(trees);
+        return new ResponseEntity<String>(trees.size() + " trees have created.", HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/insertTreeClass", method = RequestMethod.POST)
-    public String insertTreeClass(@RequestBody Tree tree) {
-        repository.save(tree);
-        return "Saved a tree = " + tree.getId();
-    }
-
-    @RequestMapping(value = "/insertTreeClasses", method = RequestMethod.POST)
-    public String insertTreeClasses(@RequestBody ArrayList<Tree> trees) {
-        repository.save((Iterable<Tree>) trees);
-        return "Saved number of trees = " + trees.size();
+    @PutMapping(value = "/updateScore")
+    public ResponseEntity<String> insertTreeClasses(@Param("treeId") Integer treeId,
+                                                    @Param("score") Double score) {
+        Tree tree = treeRepository.findOne(treeId);
+        tree.score = score;
+        treeRepository.save(tree);
+        return new ResponseEntity<String>("TreeId " + treeId + " have been created.", HttpStatus.ACCEPTED);
     }
 
     /* returns tree benefit score for one tree */
