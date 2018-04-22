@@ -21,28 +21,38 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
     [new Date(2020, 8),  null, 1.27]];
 
   $ctrl.trafficYearlyData =
-    [[new Date(2012, 0),  83],
-    [new Date(2013, 0),  72],
-    [new Date(2014, 0),  69],
-    [new Date(2015, 0),  57],
-    [new Date(2016, 0),  50],
-    [new Date(2017, 0),  52]];
+    [[new Date(2012, 0),  83, null],
+    [new Date(2013, 0),  72, null],
+    [new Date(2014, 0),  69, null],
+    [new Date(2015, 0),  57, null],
+    [new Date(2016, 0),  50, null],
+    [new Date(2017, 0),  52, 52],
+    [new Date(2018, 0),  null, 55],
+    [new Date(2019, 0),  null, 60],
+    [new Date(2019, 0),  null, 62]];
 
   $ctrl.pedestrianMonthlyData =
-      [[new Date(2017, 0),  10],
-      [new Date(2017, 1),  12],
-      [new Date(2017, 2),  13.5],
-      [new Date(2017, 3),  14],
-      [new Date(2017, 4),  16],
-      [new Date(2017, 5),  20]];
+      [[new Date(2017, 10),  10, null],
+      [new Date(2017, 11),  12, null],
+      [new Date(2017, 12),  13.5, null],
+      [new Date(2018, 0),  14, null],
+      [new Date(2018, 1),  16, null],
+      [new Date(2018, 2),  20, null],
+      [new Date(2018, 3),  20, 20],
+      [new Date(2018, 4),  null, 21],
+      [new Date(2018, 5),  null, 23],
+      [new Date(2018, 6),  null, 24]];
 
   $ctrl.pedestrianYearlyData =
-    [[new Date(2012, 0),  80],
-    [new Date(2013, 0),  81],
-    [new Date(2014, 0),  85],
-    [new Date(2015, 0),  92],
-    [new Date(2016, 0),  97],
-    [new Date(2017, 0),  97]];
+    [[new Date(2012, 0),  80, null],
+    [new Date(2013, 0),  81, null],
+    [new Date(2014, 0),  85, null],
+    [new Date(2015, 0),  92, null],
+    [new Date(2016, 0),  97, null],
+    [new Date(2017, 0),  97, 97],
+    [new Date(2018, 0),  null, 100],
+    [new Date(2019, 0),  null, 103],
+    [new Date(2020, 0),  null, 104]];
 
   $ctrl.pedestrianYearlyOptions = {
     hAxis: {
@@ -53,7 +63,11 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         title: 'Average Number of Pedestrians / Year'
     },
     title: 'Yearly Pedestrian Data',
-    trendlines: { 0: {} }
+    series: {
+        // Gives each series an axis name that matches the Y-axis below.
+        0: {axis: 'Current Average Number of Pedestrians'},
+        1: {axis: 'Predicted Average Number of Pedestrians', lineDashStyle: [4, 4]}
+    }
   };
 
   $ctrl.trafficYearlyOptions = {
@@ -65,7 +79,11 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         title: 'Average Number of Vehicles / Year'
     },
     title: 'Yearly Vehicle Data',
-    trendlines: { 0: {} }
+    series: {
+        // Gives each series an axis name that matches the Y-axis below.
+        0: {axis: 'Current Average Number of Vehicles'},
+        1: {axis: 'Predicted Average Number of Vehicles', lineDashStyle: [4, 4]}
+    }
   };
 
   $ctrl.pedestrianMonthlyOptions = {
@@ -77,7 +95,11 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
       title: 'Average Number of Pedestrians / Month'
     },
     title: 'Monthly Pedestrian Data',
-    trendlines: { 0: {} }
+    series: {
+        // Gives each series an axis name that matches the Y-axis below.
+        0: {axis: 'Current Average Number of Pedestrians'},
+        1: {axis: 'Predicted Average Number of Pedestrians', lineDashStyle: [4, 4]}
+    }
   };
 
   $ctrl.economicOptions = {
@@ -209,18 +231,19 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
   $ctrl.loadTrafficChart = function() {
     console.log("Load Chart");
     google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback($ctrl.drawLineChart.bind(null, chartId,
+    google.charts.setOnLoadCallback($ctrl.drawDualLineChart.bind(null, chartId,
      $ctrl.trafficYearlyData, $ctrl.trafficYearlyOptions));
   };
 
   $ctrl.loadPedestrianChart = function(data) {
-    console.log('Loading line chart');
+    console.log('Loading Pedestrian line chart');
+
     google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback($ctrl.drawLineChart.bind(null, chartId,
+    google.charts.setOnLoadCallback($ctrl.drawDualLineChart.bind(null, chartId,
      $ctrl.pedestrianYearlyData, $ctrl.pedestrianYearlyOptions));
 
     google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback($ctrl.drawLineChart.bind(null, "chart2",
+    google.charts.setOnLoadCallback($ctrl.drawDualLineChart.bind(null, "chart2",
      $ctrl.pedestrianMonthlyData, $ctrl.pedestrianMonthlyOptions));
 
     google.charts.load('current', {packages: ['corechart', 'line']});
@@ -254,8 +277,8 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
   $ctrl.drawDualLineChart = function(chartId, chartData, chartOptions) {
     var data = new google.visualization.DataTable();
     data.addColumn('date', 'Date');
-    data.addColumn('number', "Current Average Home Price");
-    data.addColumn('number', "Predicted Average Home Price");
+    data.addColumn('number', "Current");
+    data.addColumn('number', "Predicted");
 
     data.addRows(chartData)
 
