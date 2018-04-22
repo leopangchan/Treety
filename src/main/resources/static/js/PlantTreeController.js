@@ -1,40 +1,38 @@
 app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, $parentScope, $http) {
-  var $ctrl = this;
+  let $ctrl = this;
 
   $scope.type = "";
   $scope.age = "";
   $scope.email = "";
 
   $ctrl.closestPos = function(locations, coord) {
-    var closestPos = undefined
-    var minDis = undefined
+    let closestPos = undefined;
+    let minDis = undefined;
 
     locations.forEach(function (pos) {
         if (pos) {
-            let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2))
-            let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2))
-            let dis = Math.sqrt(Math.abs(xDis - yDis))
+            let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2));
+            let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2));
+            let dis = Math.sqrt(Math.abs(xDis - yDis));
 
             if ((minDis === undefined) || (minDis > dis)) {
-               minDis = dis
-               closestPos = pos
+               minDis = dis;
+               closestPos = pos;
             }
         }
-    })
+    });
 
     if (closestPos === undefined) {
-        return 'a49a96ea'
+        return 'a49a96ea';
     }
 
-    return closestPos[2]
-  }
+    return closestPos[2];
+  };
 
   $ctrl.ok = function () {
-    //console.log($scope.type + ", " + $scope.age + ", " + $scope.email);
     $parentScope.vm.googleMapClickListener = $map.addListener('click', function(point) {
       console.log("treeBenefit = " + $parentScope.vm.treeBenefit);
-
-      var newMarker = new google.maps.Marker({
+      let newMarker = new google.maps.Marker({
         position: point.latLng,
         map: $map,
         icon: "../img/small_tree.png"
@@ -43,9 +41,8 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
       $parentScope.vm.markers.push(newMarker);
 
       google.maps.event.addListener(newMarker,'click', function() {
-
-         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
-         var user_coords = [point.latLng.lat(),point.latLng.lng()]
+         let metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata';
+         let user_coords = [point.latLng.lat(),point.latLng.lng()];
 
          // find the closest ped sensor
          $http({method: 'GET',
@@ -56,15 +53,15 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
             }
          })
          .then(function(data) {
-            var locations = data.data['content']
-            res = []
+            let locations = data.data['content'];
+            res = [];
 
             locations.forEach(function(element) {
                 if (element.hasOwnProperty('coordinates')) {
-                    var coord = element['coordinates'].split(":")
+                    let coord = element['coordinates'].split(":");
                     res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
                 }
-            })
+            });
 
             return $ctrl.closestPos(res, user_coords)
          })
@@ -78,15 +75,15 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                 }
             })
             .then(function(data) {
-                var locations = data.data['content']
-                res = []
+                let locations = data.data['content'];
+                res = [];
 
                 locations.forEach(function(element) {
                    if (element.hasOwnProperty('coordinates')) {
-                       var coord = element['coordinates'].split(":")
+                       let coord = element['coordinates'].split(":");
                        res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
                    }
-                })
+                });
 
                 return $ctrl.closestPos(res, user_coords)
             })
