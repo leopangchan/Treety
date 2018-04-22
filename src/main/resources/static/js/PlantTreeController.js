@@ -136,17 +136,25 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                         var score = 0
                         var i = 0
                         var num_benefits = 5
+                        var negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
+                         'evapotranspiration']
 
                         for (var key in benefits.data[0]) {
+
+                            label += key+": "+benefits.data[0][key].toFixed(2)
+
                             if (benefits.data[0].hasOwnProperty(key) && i < (num_benefits-1)) {
-                                label += "   ("+key+") "+benefits.data[0][key].toFixed(2)+" +<br/>"
+                                label += "<br/>"
+                            }
+
+                            if (negative_benefits.indexOf(key) < 0) {
+                                score += benefits.data[0][key]
                             }
 
                             else {
-                                label += "   ("+key+") "+benefits.data[0][key].toFixed(2)
+                                score -= benefits.data[0][key]
                             }
 
-                            score += benefits.data[0][key]
                             i += 1
                         }
 
