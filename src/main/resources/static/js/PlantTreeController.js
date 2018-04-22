@@ -1,9 +1,47 @@
 app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, $parentScope, $http) {
   let $ctrl = this;
 
-  $scope.type = "";
+  $scope.selectedTreeType = "";
   $scope.age = "";
   $scope.email = "";
+  $scope.treeTypes = ["Shoestring Acacia",
+                      "Deodar Cedar",
+                      "Western Redbud",
+                      "Crape Myrtle",
+                      "Angel’s Trumpet Tree",
+                      "Lemon Bottlebrush"];
+
+  let insertTree = function (name, type, age, score, lat, lng, email, local_id) {
+    $http({
+      method: "POST",
+      url: "/tree/insert",
+      headers: {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": -1
+      },
+      data: [{"name": name,
+              "type": type,
+              "age": age,
+              "score": score,
+              "lat": lat,
+              "lng": lng,
+              "email": email,
+              "local_id": local_id}]
+    });
+  };
+  
+  let updateTreeScore = function (treeId, score) {
+    $http({
+      method: "PUT",
+      url: "/tree/updateScore?score=" + score + "&treeId=" + treeId,
+      headers: {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": -1
+      }
+    });
+  };
 
   $ctrl.closestPos = function(locations, coord) {
     let closestPos = undefined;
@@ -32,6 +70,7 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
   $ctrl.ok = function () {
     $parentScope.vm.googleMapClickListener = $map.addListener('click', function(point) {
       console.log("treeBenefit = " + $parentScope.vm.treeBenefit);
+
       let newMarker = new google.maps.Marker({
         position: point.latLng,
         map: $map,
@@ -39,8 +78,11 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
       });
 
       $parentScope.vm.markers.push(newMarker);
+      //TODO: Update score
+      insertTree($scope.name, $scope.selectedTreeType, $scope.age, null, point.latLng.lat(),
+          point.latLng.lng(), $scope.email, "null");
 
-      google.maps.event.addListener(newMarker,'click', function() {
+      google.maps.event.addListener(newMarker, 'click', function() {
          let metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata';
          let user_coords = [point.latLng.lat(),point.latLng.lng()];
 
@@ -110,18 +152,18 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                     return $ctrl.closestPos(res, user_coords)
                 })
                 .then(function(env_sensor) {
-                    console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor)
-                    console.log('PED SENSOR LOCATION ' + ped_sensor)
-                    console.log('ENV SENSOR LOCATION ' + env_sensor)
+                    console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor);
+                    console.log('PED SENSOR LOCATION ' + ped_sensor);
+                    console.log('ENV SENSOR LOCATION ' + env_sensor);
 
-                    var url = "/tree/benefit?pedId="+
+                    let url = "/tree/benefit?pedId="+
                         ped_sensor +
                         "&envId=" +
                         env_sensor +
                         "&tffcId="+
-                        tffc_sensor
+                        tffc_sensor;
 
-                    console.log(url)
+                    console.log(url);
 
                     // request tree benefit measurements from the backend
                     $http({
@@ -129,19 +171,19 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                         url: url
                     })
                     .then(function (benefits) { // get the data
-                        console.log('TREE BENEFITS')
-                        console.log(benefits.data[0])
+                        console.log('TREE BENEFITS');
+                        console.log(benefits.data[0]);
 
-                        var label = ""
-                        var score = 0
-                        var i = 0
-                        var num_benefits = 5
-                        var negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
-                         'evapotranspiration']
+                        let label = "";
+                        let score = 0;
+                        let i = 0;
+                        let num_benefits = 5;
+                        let negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
+                         'evapotranspiration'];
 
-                        for (var key in benefits.data[0]) {
+                        for (let key in benefits.data[0]) {
 
-                            label += key+": "+benefits.data[0][key].toFixed(2)
+                            label += key+": "+benefits.data[0][key].toFixed(2);
 
                             if (benefits.data[0].hasOwnProperty(key) && i < (num_benefits-1)) {
                                 label += "<br/>"
@@ -162,20 +204,16 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                         new google.maps.InfoWindow({
                           content: "Tree benefit = " + score.toFixed(2) + "<br/>" + label
                         }).open($map, newMarker)
-                    })
-                })
 
+                        return score;
+                    });
+                })
             })
          })
-
       });
 
       $parentScope.vm.isPlantingTree = true;
 
-      /**
-       * TODO:
-       * Store the marker in the database
-       * */
     });
 
     $uibModalInstance.dismiss('cancel');

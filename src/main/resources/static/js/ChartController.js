@@ -248,13 +248,14 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
     data.addColumn('number', "Avg Vehicles");
 
     data.addRows([
-        [new Date(2012, 0),  83],
-        [new Date(2013, 0),  72],
-        [new Date(2014, 0),  69],
-        [new Date(2015, 0),  57],
-        [new Date(2016, 0),  50],
-        [new Date(2017, 0),  52]
+      [new Date(2012, 0), 83],
+      [new Date(2013, 0), 72],
+      [new Date(2014, 0), 69],
+      [new Date(2015, 0), 57],
+      [new Date(2016, 0), 50],
+      [new Date(2017, 0), 52]
     ]);
+  };
 
   $ctrl.drawTrafficWeekly = function() {
     console.log('USER COORDS TRAFFIC CHART')
