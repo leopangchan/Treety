@@ -63,8 +63,95 @@ app.controller("TreeMapController",
         vm.map.setZoom(16);
     };
 
-    // return tree benefit score from the backend
+    /* calculates the tree benefit score and formats a marker label */
+    vm.format_benefit_score = function(benefits) {
+        var i = 0
+        var num_benefits = 5
+        var label = ""
+        var score = 0
+
+        var negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
+         'evapotranspiration']
+
+
+        for (var key in benefits) {
+            if (benefits.hasOwnProperty(key)) {
+                label += key+": "+benefits[key].toFixed(2)
+
+                if (i < (num_benefits-1)) {
+                    label += "<br/>"
+                }
+
+
+                if (negative_benefits.indexOf(key) < 0) {
+                    score += benefits[key]
+                }
+
+                else {
+                    score -= benefits[key]
+                }
+
+                i += 1
+            }
+        }
+
+        return {'score':score, 'label':label}
+    }
+
+    /* extracts sensor coordinates from a json */
+    vm.get_coordinates = function(data, key) {
+        var locations = data.data['content'];
+        res = [];
+
+        locations.forEach(function(element) {
+            if (element.hasOwnProperty('coordinates')) {
+                var coord = element['coordinates'].split(":");
+                res.push([parseFloat(coord[0]), parseFloat(coord[1]), element[key]]);
+            }
+        });
+
+        return res;
+    }
+
+    /**
+    *  write a function that takes in a coordinate [lat, long], calls the get locations function.
+    *
+    *  Note:
+    *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
+    *
+    *  @param type - a sensor type ex: TRAFFIC_LANE
+    *  @param coord - [32.708757321722075, -117.16414366466401]
+    *  @return the location id of the closest sensor
+    *
+    *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
+    */
+    vm.closestPos = function(locations, coord) {
+      var closestPos = undefined
+      var minDis = undefined
+
+      locations.forEach(function (pos) {
+          if (pos) {
+              let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2))
+              let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2))
+              let dis = Math.sqrt(Math.abs(xDis - yDis))
+
+              if ((minDis === undefined) || (minDis > dis)) {
+                 minDis = dis
+                 closestPos = pos
+              }
+          }
+      })
+
+      return closestPos[2]
+    }
+
+    /* return tree benefit score from the backend */
     vm.get_tree_benefit = function(newMarker) {
+        var lat = newMarker.getPosition().lat()
+        var long = newMarker.getPosition().lng()
+        var coords = [lat, long]
+
+        console.log ('MARKER CLICKED AT ' + coords)
         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
 
          // find the closest ped sensor
@@ -76,19 +163,14 @@ app.controller("TreeMapController",
             }
          })
          .then(function(data) {
-            var locations = data.data['content']
-            res = []
-
-            locations.forEach(function(element) {
-                if (element.hasOwnProperty('coordinates')) {
-                    var coord = element['coordinates'].split(":")
-                    res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
-                }
-            })
-
-            return vm.closestPos(res, vm.user_coords)
+            return vm.closestPos(vm.get_coordinates(data,'locationUid'), coords)
          })
          .then(function(ped_sensor) {
+            // if no closest sensor could be found use this default
+            if (!ped_sensor) {
+                ped_sensor = 'a49a96ea';
+            }
+
             // find closest traffic sensor
             $http({method: 'GET',
                 url: metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE",
@@ -98,17 +180,7 @@ app.controller("TreeMapController",
                 }
             })
             .then(function(data) {
-                var locations = data.data['content']
-                res = []
-
-                locations.forEach(function(element) {
-                   if (element.hasOwnProperty('coordinates')) {
-                       var coord = element['coordinates'].split(":")
-                       res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
-                   }
-                })
-
-                return vm.closestPos(res, vm.user_coords)
+                return vm.closestPos(vm.get_coordinates(data,'locationUid'), coords)
             })
             .then(function(tffc_sensor) {
                 // find closest environment sensor
@@ -120,75 +192,31 @@ app.controller("TreeMapController",
                     }
                 })
                 .then(function(data) {
-                    var locations = data.data['content']
-                    res = []
-
-                    locations.forEach(function(element) {
-                       if (element.hasOwnProperty('coordinates')) {
-                           var coord = element['coordinates'].split(":")
-                           res.push([parseFloat(coord[0]), parseFloat(coord[1]), element["assetUid"]])
-                       }
-                    })
-
-                    return vm.closestPos(res, vm.user_coords)
+                    return vm.closestPos(vm.get_coordinates(data,'assetUid'), coords)
                 })
                 .then(function(env_sensor) {
                     console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor)
                     console.log('PED SENSOR LOCATION ' + ped_sensor)
                     console.log('ENV SENSOR LOCATION ' + env_sensor)
 
-                    var url = "/tree/benefit?pedId="+
-                        ped_sensor +
-                        "&envId=" +
-                        env_sensor +
-                        "&tffcId="+
-                        tffc_sensor
-
-                    console.log(url)
-
                     // request tree benefit measurements from the backend
                     $http({
                         method: 'GET',
-                        url: url
+                        url: "/tree/benefit?pedId="+
+                         ped_sensor +
+                         "&envId=" +
+                         env_sensor +
+                         "&tffcId="+
+                         tffc_sensor
                     })
                     .then(function (benefits) { // get the data
                         console.log('TREE BENEFITS')
                         console.log(benefits.data[0])
 
-                        var i = 0
-                        var num_benefits = 5
-                        var label = ""
-                        var score = 0
-
-                        var negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
-                         'evapotranspiration']
-
-
-                        for (var key in benefits.data[0]) {
-
-                            //label += '<p class="indent"></p>'
-                            //label += "&ensp&ensp&ensp"
-                            label += key+": "+benefits.data[0][key].toFixed(2)
-                            //label += "</p>"
-
-                            if (benefits.data[0].hasOwnProperty(key) && i < (num_benefits-1)) {
-                                label += "<br/>"
-                            }
-
-
-                            if (negative_benefits.indexOf(key) < 0) {
-                                score += benefits.data[0][key]
-                            }
-
-                            else {
-                                score -= benefits.data[0][key]
-                            }
-
-                            i += 1
-                        }
+                        res = vm.format_benefit_score(benefits.data[0])
 
                         new google.maps.InfoWindow({
-                          content: "Tree benefit = " + score.toFixed(2) + "<br/>" + label
+                          content: "Tree benefit = " + res['score'].toFixed(2) + "<br/>" + res['label']
                         }).open(vm.map, newMarker)
                     })
                 })
@@ -222,42 +250,6 @@ app.controller("TreeMapController",
         $log.info(error);
       });
     };
-
-    /**
-    *  write a function that takes in a coordinate [lat, long], calls the get locations function.
-    *
-    *  Note:
-    *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
-    *
-    *  @param type - a sensor type ex: TRAFFIC_LANE
-    *  @param coord - [32.708757321722075, -117.16414366466401]
-    *  @return the location id of the closest sensor
-    *
-    *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
-    */
-    vm.closestPos = function(locations, coord) {
-      var closestPos = undefined
-      var minDis = undefined
-
-      locations.forEach(function (pos) {
-          if (pos) {
-              let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2))
-              let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2))
-              let dis = Math.sqrt(Math.abs(xDis - yDis))
-
-              if ((minDis === undefined) || (minDis > dis)) {
-                 minDis = dis
-                 closestPos = pos
-              }
-          }
-      })
-
-      if (closestPos === undefined) {
-          return 'a49a96ea'
-      }
-
-      return closestPos[2]
-    }
 
     /**
      * Hide the putting maker button, and show the planting tree button.
