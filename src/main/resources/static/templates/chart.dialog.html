@@ -1,2 +1,8 @@
-<div style="height: 100%" id="chart"></div>
-<button style="bottom: 0;" class="btn btn-warning" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+<div class="modal-body" id="modal-body">
+    <div style="height: 100%" id="chart"></div>
+    <div ng-if="chartType === 'pedestrian'" id="chart2"></div>
+    <div ng-if="chartType === 'pedestrian'" id="chart3"></div>
+</div>
+<div class="modal-footer">
+    <button style="bottom: 0;" class="btn btn-warning" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+</div>
