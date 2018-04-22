@@ -4,11 +4,73 @@
 //"Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, " +
 //"Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
 
-app.controller("ChartController", function ($chartType, $uibModalInstance, $http, $lglat) {
+app.controller("ChartController", function ($scope, $chartType, $uibModalInstance, $http, $lglat) {
 
   var $ctrl = this;
   var chartId = "chart";
-  $ctrl.token = config.token
+
+  $ctrl.trafficYearlyData =
+    [[new Date(2012, 0),  83],
+    [new Date(2013, 0),  72],
+    [new Date(2014, 0),  69],
+    [new Date(2015, 0),  57],
+    [new Date(2016, 0),  50],
+    [new Date(2017, 0),  52]];
+
+  $ctrl.PedestrianMonthlyData =
+      [[new Date(2017, 0),  10],
+      [new Date(2017, 1),  12],
+      [new Date(2017, 2),  13.5],
+      [new Date(2017, 3),  14],
+      [new Date(2017, 4),  16],
+      [new Date(2017, 5),  20]];
+
+  $ctrl.pedestrianYearlyData =
+    [[new Date(2012, 0),  80],
+    [new Date(2013, 0),  81],
+    [new Date(2014, 0),  85],
+    [new Date(2015, 0),  92],
+    [new Date(2016, 0),  97],
+    [new Date(2017, 0),  97]];
+
+  $ctrl.pedestrianYearlyOptions = {
+    hAxis: {
+        title: 'Year',
+        format: 'yyyy'
+    },
+    vAxis: {
+        title: 'Average Number of Pedestrians / Year'
+    },
+    title: 'Yearly Pedestrian Data',
+    trendlines: { 0: {} }
+  };
+
+  $ctrl.trafficYearlyOptions = {
+    hAxis: {
+        title: 'Year',
+        format: 'yyyy'
+    },
+    vAxis: {
+        title: 'Average Number of Vehicles / Year'
+    },
+    title: 'Yearly Vehicle Data',
+    trendlines: { 0: {} }
+  };
+
+  $ctrl.PedestrianMonthlyOptions = {
+    hAxis: {
+      title: 'Month',
+      format: 'M/yy'
+    },
+    vAxis: {
+      title: 'Average Number of Pedestrians / Month'
+    },
+    title: 'Monthly Pedestrian Data',
+    trendlines: { 0: {} }
+  };
+
+  $scope.chartType = $chartType;
+  $ctrl.token = config.token;
 
   /**
   *  write a function that takes in a coordinate [lat, long], calls the get locations function.
@@ -16,77 +78,75 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   *  Note:
   *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
   *
-  *  @param type - a sensor type ex: TRAFFIC_LANE
+  *  @param locations - locations of all CityIQ sensors
   *  @param coord - [32.708757321722075, -117.16414366466401]
   *  @return the location id of the closest sensor
   *
   *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
   */
   $ctrl.getClosestSensor = function(locations, coord) {
-    var closestPos = undefined
-    var minDis = undefined
+    let closestPos = undefined;
+    let minDis = undefined;
 
     locations.forEach(function (pos) {
         if (pos) {
-            let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2))
-            let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2))
-            let dis = Math.sqrt(Math.abs(xDis - yDis))
+            let xDis = Math.abs(Math.pow(parseFloat(pos[0]), 2) - Math.pow(parseFloat(coord[0]), 2));
+            let yDis = Math.abs(Math.pow(parseFloat(pos[1]), 2) - Math.pow(parseFloat(coord[1]), 2));
+            let dis = Math.sqrt(Math.abs(xDis - yDis));
 
             if ((minDis === undefined) || (minDis > dis)) {
-               minDis = dis
+               minDis = dis;
                closestPos = pos
             }
         }
-    })
+    });
 
     if (closestPos === undefined) {
         return 'a49a96ea'
     }
 
     return closestPos[2]
-  }
+  };
 
   $ctrl.make_api_request_header = function(type) {
     // query url
-    var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
-    var requestURL = metadataurl + "/locations/search?q=locationType:" + type + "&page=0&size=50"
-    var zoneId = 'SD-IE-TRAFFIC'
+    let metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata';
+    let requestURL = metadataurl + "/locations/search?q=locationType:" + type + "&page=0&size=50";
+    let zoneId = 'SD-IE-TRAFFIC';
 
-    var req = {
-        method: 'GET',
-        url: requestURL,
-        headers: {
-            "Authorization": "Bearer " + $ctrl.token,
-            "Predix-Zone-Id": zoneId
-        }
-    }
-
-    return req
-  }
+    return {
+      method: 'GET',
+      url: requestURL,
+      headers: {
+        "Authorization": "Bearer " + $ctrl.token,
+        "Predix-Zone-Id": zoneId
+      }
+    };
+  };
 
   $ctrl.get_start_end_time = function() {
     // get dates for backend request
-    var today = new Date()
+    let today = new Date();
 
-    var endDate = new Date(today)
-    endDate.setDate(today.getDate() - 1)
-    var endts = Math.trunc(endDate.getTime())
+    let endDate = new Date(today);
+    endDate.setDate(today.getDate() - 1);
+    let endts = Math.trunc(endDate.getTime());
 
-    var startDate = new Date(today)
-    startDate.setDate(today.getDate() - 7)
-    var startts = Math.trunc(startDate.getTime())
+    let startDate = new Date(today);
+    startDate.setDate(today.getDate() - 7);
+    let startts = Math.trunc(startDate.getTime());
 
     return {"startts":startts, "endts":endts}
-  }
+  };
 
   $ctrl.formatChart = function(res, startts, endts, titles) {
-      var data = new google.visualization.DataTable();
+      let data = new google.visualization.DataTable();
 
       data.addColumn('date', titles['x_axis']);
       data.addColumn('number', titles['y_axis']);
       data.addRows(res);
 
-      var options = {
+      let options = {
           hAxis: {
             gridlines: {
               count: -1,
@@ -109,10 +169,10 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
           title: titles['title']
       };
 
-      var chart = new google.visualization.LineChart(document.getElementById(chartId));
+      let chart = new google.visualization.LineChart(document.getElementById(chartId));
 
       chart.draw(data, options);
-    }
+    };
 
   $ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
@@ -121,13 +181,22 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
   $ctrl.loadTrafficChart = function() {
     console.log("Load Chart");
     google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback($ctrl.drawTrafficChart);
+    google.charts.setOnLoadCallback($ctrl.drawLineChart.bind(null, chartId,
+     $ctrl.trafficYearlyData, $ctrl.trafficYearlyOptions));
   };
 
   $ctrl.loadPedestrianChart = function(data) {
     console.log('Loading line chart');
     google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback($ctrl.drawPedestrianChart);
+    google.charts.setOnLoadCallback($ctrl.drawLineChart.bind(null, chartId,
+     $ctrl.pedestrianYearlyData, $ctrl.pedestrianYearlyOptions));
+
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback($ctrl.drawLineChart.bind(null, "chart2",
+     $ctrl.pedestrianMonthlyData, $ctrl.pedestrianMonthlyOptions));
+
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback($ctrl.drawPedestrianChartWeekly.bind(null, "chart3"));
   };
 
   /* load a google pie chart */
@@ -137,8 +206,19 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
     google.charts.setOnLoadCallback($ctrl.drawEnvTable);
   };
 
+  $ctrl.drawLineChart = function(chartId, chartData, chartOptions) {
+    var data = new google.visualization.DataTable();
+    data.addColumn('date', 'Date');
+    data.addColumn('number', "Average");
+
+    data.addRows(chartData)
+
+    var chart = new google.visualization.LineChart(document.getElementById(chartId))
+    chart.draw(data, chartOptions)
+  };
+
   $ctrl.drawEnvTable = function() {
-        var data = new google.visualization.arrayToDataTable([
+        let data = new google.visualization.arrayToDataTable([
             ['Year', 'Current', 'After Planting Tree'],
             ['2014', 200000, 180000],
             ['2015', 140000, 120000],
@@ -146,55 +226,38 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
             ['2017', 100000, 95000]
         ]);
 
-        var options = {
-            chart: {
-                title: 'San Diego Carbon Emissions in Lbs/Year',
-                subtitle: 'current value on the left, value after planting tree on the right'
-            },
-            bars: 'horizontal', // Required for Material Bar Charts.
-            series: {
-                0: { axis: 'Carbon Emission' }, // Bind series 0 to an axis named 'distance'.
-                },
-            axes: {
-                x: {
-                  distance: {label: 'Carbon Emission (lbs/year)'}, // Bottom x-axis.
-                }
-            }
-        };
+    var options = {
+        chart: {
+            title: 'San Diego Carbon Emissions in Lbs/Year',
+            subtitle: 'current value on the left, value after planting tree on the right'
+        },
+        bars: 'horizontal',
+        width: 1024,
+        height: 500,
+        hAxis: { title: 'San Diego Total Carbon Emission (lbs/year)' }
 
-        var chart = new google.charts.Bar(document.getElementById('chart'));
-        chart.draw(data, options);
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('chart'));
+    chart.draw(data, options);
   };
 
   $ctrl.drawTrafficChart = function() {
-    var data = new google.visualization.DataTable();
-      data.addColumn('date', 'Year');
-      data.addColumn('number', "Avg Vehicles");
+    let data = new google.visualization.DataTable();
+    data.addColumn('date', 'Year');
+    data.addColumn('number', "Avg Vehicles");
 
-      data.addRows([
-          [new Date(2012, 0),  83],
-          [new Date(2013, 0),  72],
-          [new Date(2014, 0),  69],
-          [new Date(2015, 0),  57],
-          [new Date(2016, 0),  50],
-          [new Date(2017, 0),  52]
-      ]);
+    data.addRows([
+      [new Date(2012, 0), 83],
+      [new Date(2013, 0), 72],
+      [new Date(2014, 0), 69],
+      [new Date(2015, 0), 57],
+      [new Date(2016, 0), 50],
+      [new Date(2017, 0), 52]
+    ]);
+  };
 
-      var materialOptions = {
-          hAxis: {
-              title: 'Year',
-              format: 'yyyy'
-            },
-            vAxis: {
-              title: 'Average Number of Vehicles / Year'
-            },
-            title: 'Yearly Vehicle Data',
-            trendlines: { 0: {} }
-      };
-
-      var chart = new google.visualization.LineChart(document.getElementById(chartId));
-      chart.draw(data, materialOptions);
-    /*
+  $ctrl.drawTrafficWeekly = function() {
     console.log('USER COORDS TRAFFIC CHART')
     console.log($lglat)
 
@@ -254,45 +317,11 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
             console.log(res)
             $ctrl.formatChart(res, time["startts"], time["endts"], titles)
         })
-    })*/
+    })
+  }
 
-    console.log("Traffic: I was clicked!")
-  };
-
-  $ctrl.drawPedestrianChart = function() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('date', 'Year');
-    data.addColumn('number', "Avg Pedestrians");
-
-    data.addRows([
-        [new Date(2012, 0),  80],
-        [new Date(2013, 0),  81],
-        [new Date(2014, 0),  85],
-        [new Date(2015, 0),  92],
-        [new Date(2016, 0),  97],
-        [new Date(2017, 0),  97]
-    ]);
-
-    var materialOptions = {
-        hAxis: {
-            title: 'Year',
-            format: 'yyyy',
-            range: {
-                max: new Date(2018,0),
-                min: new Date(2012,0)
-            }
-          },
-          vAxis: {
-            title: 'Average Number of Pedestrians / Year'
-          },
-          title: 'Yearly Pedestrian Data',
-          trendlines: { 0: {} }
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById(chartId));
-    chart.draw(data, materialOptions);
-
-    /*console.log('USER COORDS PED CHART')
+  $ctrl.drawPedestrianChartWeekly = function(chartId) {
+    console.log('USER COORDS PED CHART')
     console.log($lglat)
 
     if (!$lglat) {
@@ -349,25 +378,25 @@ app.controller("ChartController", function ($chartType, $uibModalInstance, $http
         .then(function(res) { // draw the chart
             console.log('DATA')
             console.log(res)
-            $ctrl.formatChart(res, time["startts"], time["endts"], titles)
+            $ctrl.formatChart(res, time["startts"], time["endts"], titles, chartId)
         })
-     })*/
+     })
+  }
 
-
+  $ctrl.main = function() {
+    switch ($chartType) {
+        case 'environmental':
+          $ctrl.loadEnvTable();
+          return;
+        case 'pedestrian':
+          $ctrl.loadPedestrianChart();
+          return;
+        case 'traffic':
+          $ctrl.loadTrafficChart();
+          return;
+    }
   };
 
-  (function() {
-    switch ($chartType) {
-      case 'environmental':
-        $ctrl.loadEnvTable();
-        return;
-      case 'pedestrian':
-        $ctrl.loadPedestrianChart();
-        return;
-      case 'traffic':
-        $ctrl.loadTrafficChart();
-        return;
-    }
-  })();
+  $ctrl.main()
 
 });

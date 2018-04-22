@@ -16,5 +16,5 @@ import java.util.List;
           SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
           SpringApplicationContextInitializer.CLOUD_PROFILE})
 
-public interface JpaTreeRepository extends JpaRepository<Tree, String> {
+public interface JpaTreeRepository extends JpaRepository<Tree, Integer> {
 }
