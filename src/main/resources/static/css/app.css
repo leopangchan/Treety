@@ -129,8 +129,8 @@ html, body {
     display: inline-block;
     vertical-align: middle;
     max-width: 1200px !important;
-    width: 1500px;
-    height: 600px;
+    width: 70%;
+    height: 50%;
 }
 
 .modal-body {

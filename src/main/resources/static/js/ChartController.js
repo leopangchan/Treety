@@ -7,9 +7,9 @@
 app.controller("ChartController", function ($scope, $chartType, $uibModalInstance, $http, $lglat) {
 
   var $ctrl = this;
-  var chartId = "chart";
+  let chartId = "chart";
   $ctrl.chartAreaWidth = "50%";
-  $ctrl.chartAreaHeight = "70%";
+  $ctrl.chartAreaHeight = "50%";
 
   $ctrl.economicData =
     [[new Date(2011, 0),  0.7,  null],
@@ -31,7 +31,7 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
     [new Date(2017, 0),  52, 52],
     [new Date(2018, 0),  null, 55],
     [new Date(2019, 0),  null, 60],
-    [new Date(2019, 0),  null, 62]];
+    [new Date(2020, 0),  null, 62]];
 
   $ctrl.pedestrianMonthlyData =
       [[new Date(2017, 10),  10, null],
@@ -200,7 +200,7 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
     return {"startts":startts, "endts":endts}
   };
 
-  $ctrl.formatChart = function(res, startts, endts, titles) {
+  $ctrl.formatChart = function(res, startts, endts, titles, chartId) {
       let data = new google.visualization.DataTable();
 
       data.addColumn('date', titles['x_axis']);
@@ -292,9 +292,8 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
     data.addColumn('number', "Current");
     data.addColumn('number', "Predicted");
 
-    data.addRows(chartData)
+    data.addRows(chartData);
 
-    console.log(chartId)
     var chart = new google.visualization.LineChart(document.getElementById(chartId));
     chart.draw(data, chartOptions);
   }
@@ -386,9 +385,6 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
   }
 
   $ctrl.drawPedestrianChartWeekly = function(chartId) {
-    console.log('USER COORDS PED CHART')
-    console.log($lglat)
-
     if (!$lglat) {
         $lglat = [32.7157, -117.1611]
     }
@@ -419,9 +415,7 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
 
         return $ctrl.getClosestSensor(res, $lglat)
      })
-     .then(function(sensor) {
-        console.log('CLOSEST SENSOR')
-        console.log(sensor)
+     .then(function(sensor) { // find the closest sensor
         $http({
             method: 'GET',
             url: "/pedestrian/timeRange?start="+
@@ -435,14 +429,12 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
             res = []
             var data = value.data
             data.forEach(function(element) {
-                res.push([new Date(element['time']), element['count']])
+                res.push([new Date(element['time']), element['count']*24])
             })
 
             return res
         })
         .then(function(res) { // draw the chart
-            console.log('DATA')
-            console.log(res)
             $ctrl.formatChart(res, time["startts"], time["endts"], titles, chartId)
         })
      })
