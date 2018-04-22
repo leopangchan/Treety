@@ -131,11 +131,15 @@ html, body {
     margin-right: -4px;
 }
 
+.left-text {
+    text-align: left;
+}
+
 .modal-dialog {
     display: inline-block;
     vertical-align: middle;
     max-width: 1200px !important;
-    width: 1024px;
+    width: 1500px;
     height: 600px;
 }
 
