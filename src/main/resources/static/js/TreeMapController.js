@@ -206,7 +206,6 @@ app.controller("TreeMapController",
         controller: "ChartController",
         controllerAs: '$ctrl',
         size: 'lg',
-        windowClass: 'my-modal-popup',
         resolve: {
           $chartType: function() {
             return chartType

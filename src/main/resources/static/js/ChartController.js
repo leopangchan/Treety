@@ -8,6 +8,8 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
 
   var $ctrl = this;
   var chartId = "chart";
+  $ctrl.chartAreaWidth = "50%";
+  $ctrl.chartAreaHeight = "70%";
 
   $ctrl.economicData =
     [[new Date(2011, 0),  0.7,  null],
@@ -67,7 +69,8 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         // Gives each series an axis name that matches the Y-axis below.
         0: {axis: 'Current Average Number of Pedestrians'},
         1: {axis: 'Predicted Average Number of Pedestrians', lineDashStyle: [4, 4]}
-    }
+    },
+    chartArea: {  width: $ctrl.chartAreaWidth, height: $ctrl.chartAreaHeight }
   };
 
   $ctrl.trafficYearlyOptions = {
@@ -83,7 +86,8 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         // Gives each series an axis name that matches the Y-axis below.
         0: {axis: 'Current Average Number of Vehicles'},
         1: {axis: 'Predicted Average Number of Vehicles', lineDashStyle: [4, 4]}
-    }
+    },
+    chartArea: {  width: $ctrl.chartAreaWidth, height: $ctrl.chartAreaHeight }
   };
 
   $ctrl.pedestrianMonthlyOptions = {
@@ -99,13 +103,12 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         // Gives each series an axis name that matches the Y-axis below.
         0: {axis: 'Current Average Number of Pedestrians'},
         1: {axis: 'Predicted Average Number of Pedestrians', lineDashStyle: [4, 4]}
-    }
+    },
+    chartArea: {  width: $ctrl.chartAreaWidth, height: $ctrl.chartAreaHeight }
   };
 
   $ctrl.economicOptions = {
-    chart: {
-        title: 'Average and Predicted Home Price 2011-2020'
-    },
+    title: 'Yearly Housing Prices',
     series: {
         // Gives each series an axis name that matches the Y-axis below.
         0: {axis: 'Current Average Home Price'},
@@ -116,7 +119,15 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         y: {
           Average: {label: 'Average Price (millions)'}
         }
-    }
+    },
+    hAxis: {
+      title: 'Year',
+      format: 'yyyy'
+    },
+    vAxis: {
+      title: 'Average Housing Price (millions of dollars)'
+    },
+    chartArea: {  width: $ctrl.chartAreaWidth, height: $ctrl.chartAreaHeight }
   };
 
   $scope.chartType = $chartType;
@@ -216,7 +227,8 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
           vAxis: {
             title: titles['y_axis']
           },
-          title: titles['title']
+          title: titles['title'],
+          chartArea: {  width: $ctrl.chartAreaWidth, height: $ctrl.chartAreaHeight }
       };
 
       let chart = new google.visualization.LineChart(document.getElementById(chartId));
@@ -239,15 +251,15 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
     console.log('Loading Pedestrian line chart');
 
     google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback($ctrl.drawDualLineChart.bind(null, chartId,
+    google.charts.setOnLoadCallback($ctrl.drawDualLineChart.bind(null, "chart",
      $ctrl.pedestrianYearlyData, $ctrl.pedestrianYearlyOptions));
 
     google.charts.load('current', {packages: ['corechart', 'line']});
     google.charts.setOnLoadCallback($ctrl.drawDualLineChart.bind(null, "chart2",
      $ctrl.pedestrianMonthlyData, $ctrl.pedestrianMonthlyOptions));
 
-    google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback($ctrl.drawPedestrianChartWeekly.bind(null, "chart3"));
+    //google.charts.load('current', {packages: ['corechart', 'line']});
+    //google.charts.setOnLoadCallback($ctrl.drawPedestrianChartWeekly.bind(null, "chart3"));
   };
 
   $ctrl.loadEnvTable = function() {
@@ -302,10 +314,8 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
             subtitle: 'current value on the left, value after planting tree on the right'
         },
         bars: 'horizontal',
-        width: 1024,
-        height: 500,
-        hAxis: { title: 'San Diego Total Carbon Emission (lbs/year)' }
-
+        hAxis: { title: 'San Diego Total Carbon Emission (lbs/year)' },
+        chartArea: {  width: $ctrl.chartAreaWidth, height: $ctrl.chartAreaHeight }
     };
 
     var chart = new google.charts.Bar(document.getElementById('chart'));
