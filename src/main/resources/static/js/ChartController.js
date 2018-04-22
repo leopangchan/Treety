@@ -244,7 +244,7 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
     chart.draw(data, options);
   };
 
-    /*
+
   $ctrl.drawTrafficWeekly = function() {
     console.log('USER COORDS TRAFFIC CHART')
     console.log($lglat)
@@ -306,7 +306,7 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
             $ctrl.formatChart(res, time["startts"], time["endts"], titles)
         })
     })
-  } */
+  }
 
   $ctrl.drawPedestrianChartWeekly = function(chartId) {
     console.log('USER COORDS PED CHART')
@@ -370,22 +370,6 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         })
      })
   }
-
-  /*
-  (function() {
-    switch ($chartType) {
-      case 'environmental':
-        $ctrl.loadEnvTable();
-        return;
-      case 'pedestrian':
-        $ctrl.loadPedestrianChart();
-        return;
-      case 'traffic':
-        $ctrl.loadTrafficChart();
-        return;
-    }
-  })();
-  */
 
   $ctrl.main = function() {
     switch ($chartType) {
