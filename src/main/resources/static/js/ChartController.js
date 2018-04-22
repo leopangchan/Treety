@@ -195,7 +195,7 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
 
     google.charts.load('current', {packages: ['corechart', 'line']});
     google.charts.setOnLoadCallback($ctrl.drawLineChart.bind(null, "chart2",
-     $ctrl.pedestrianMonthlyData, $ctrl.pedestrianMonthlyOptions));
+     $ctrl.PedestrianMonthlyData, $ctrl.PedestrianMonthlyOptions));
 
     google.charts.load('current', {packages: ['corechart', 'line']});
     google.charts.setOnLoadCallback($ctrl.drawPedestrianChartWeekly.bind(null, "chart3"));
