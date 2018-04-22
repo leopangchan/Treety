@@ -211,11 +211,9 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
             })
          })
       });
-
-      $parentScope.vm.isPlantingTree = true;
-
     });
 
+    $parentScope.vm.isPlantingTree = true;
     $uibModalInstance.dismiss('cancel');
   };
 
