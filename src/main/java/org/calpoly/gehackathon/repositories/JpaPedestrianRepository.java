@@ -12,8 +12,8 @@ import java.util.List;
 
 @Repository
 @Profile({SpringApplicationContextInitializer.LOCAL_PROFILE,
-          SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
-          SpringApplicationContextInitializer.CLOUD_PROFILE})
+        SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
+        SpringApplicationContextInitializer.CLOUD_PROFILE})
 public interface JpaPedestrianRepository extends JpaRepository<Pedestrian, Integer> {
     @Query("from pedestrian where local_id = :locId and time >= :start and time <= :end")
     List<Pedestrian> findAllByLocIdAndTimeRange(@Param("locId") String locId,

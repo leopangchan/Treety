@@ -13,13 +13,13 @@ import java.util.List;
 
 @Repository
 @Profile({SpringApplicationContextInitializer.LOCAL_PROFILE,
-          SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
-          SpringApplicationContextInitializer.CLOUD_PROFILE})
+        SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
+        SpringApplicationContextInitializer.CLOUD_PROFILE})
 
 public interface JpaEnvironmentRepository extends JpaRepository<Environmental, Integer> {
 
     @Query("from environment where local_id = :locId and time >= :start and time <= :end")
     List<Environmental> findAllByLocIdAndTimeRange(@Param("locId") String locId,
-                                             @Param("start") Long start,
-                                             @Param("end") Long end);
+                                                   @Param("start") Long start,
+                                                   @Param("end") Long end);
 }

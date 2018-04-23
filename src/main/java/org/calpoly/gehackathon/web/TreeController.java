@@ -36,9 +36,9 @@ public class TreeController {
 
 
     @PostMapping(value = "/insert")
-    public ResponseEntity<String> insertTreeClasses(@RequestBody ArrayList<Tree> trees) {
+    public ResponseEntity<Integer> insertTreeClasses(@RequestBody ArrayList<Tree> trees) {
         treeRepository.save(trees);
-        return new ResponseEntity<String>(trees.size() + " trees have created.", HttpStatus.CREATED);
+        return new ResponseEntity<Integer>(trees.size(), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/updateScore")
@@ -52,9 +52,9 @@ public class TreeController {
 
     /* returns tree benefit score for one tree */
     @GetMapping(value = "/benefit")
-    public List<Measurement> getTreeBenefitScore(@RequestParam(value="pedId") String pedId,
-                                                 @RequestParam(value="tffcId") String tffcId,
-                                                 @RequestParam(value="envId") String envId) {
+    public List<Measurement> getTreeBenefitScore(@RequestParam(value = "pedId") String pedId,
+                                                 @RequestParam(value = "tffcId") String tffcId,
+                                                 @RequestParam(value = "envId") String envId) {
 
         return measurementRepository.getTreeBenefitScore(pedId, tffcId, envId);
     }

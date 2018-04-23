@@ -52,21 +52,51 @@ html, body {
     cursor: pointer;
 }
 
-.success {background-color: #4CAF50;} /* Green */
-.success:hover {background-color: #46a049;}
+.success {
+    background-color: #4CAF50;
+}
 
-.info {background-color: #2196F3;} /* Blue */
-.info:hover {background: #0b7dda;}
+/* Green */
+.success:hover {
+    background-color: #46a049;
+}
 
-.warning {background-color: #ff9800;} /* Orange */
-.warning:hover {background: #e68a00;}
+.info {
+    background-color: #2196F3;
+}
 
-.danger {background-color: #f44336;} /* Red */
-.danger:hover {background: #da190b;}
+/* Blue */
+.info:hover {
+    background: #0b7dda;
+}
 
-.default {background-color: #e7e7e7; color: black;} /* Gray */
-.default:hover {background: #ddd;}
+.warning {
+    background-color: #ff9800;
+}
 
+/* Orange */
+.warning:hover {
+    background: #e68a00;
+}
+
+.danger {
+    background-color: #f44336;
+}
+
+/* Red */
+.danger:hover {
+    background: #da190b;
+}
+
+.default {
+    background-color: #e7e7e7;
+    color: black;
+}
+
+/* Gray */
+.default:hover {
+    background: #ddd;
+}
 
 .form {
     position: fixed;
@@ -87,11 +117,11 @@ html, body {
 }
 
 .overlay {
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0px;
-    left:0px;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
 }
 
 .fade {
@@ -102,7 +132,7 @@ html, body {
     position: relative;
 }
 
-#footer{
+#footer {
     bottom: 15px;
     left: 0;
     position: absolute;
@@ -110,7 +140,7 @@ html, body {
 
 .modal {
     text-align: center;
-    padding: 0!important;
+    padding: 0 !important;
 }
 
 .modal::before {
@@ -155,6 +185,6 @@ html, body {
 }
 
 .top-bar {
-    z-index:1000;
+    z-index: 1000;
     top: 40px;
 }

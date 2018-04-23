@@ -12,19 +12,19 @@ import java.util.List;
 
 @Repository
 @Profile({SpringApplicationContextInitializer.LOCAL_PROFILE,
-          SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
-          SpringApplicationContextInitializer.CLOUD_PROFILE})
+        SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
+        SpringApplicationContextInitializer.CLOUD_PROFILE})
 
 public interface JpaMeasurementRepository extends JpaRepository<Measurement, String> {
-    @Query(value = "SELECT tffc.avg_speed AS avg_vehicle_speed, tffc.avg_count AS avg_vehicle_count, ped.count "+
-                    "AS avg_pedestrian_count, env.evapotranspiration AS evapotranspiration, env.carbon_reduction AS carbon_reduction " +
-                    "FROM (select avg_speed, avg_count from traffic where traffic.local_id = :tffcId and traffic.avg_count > 0 " +
-                    " and traffic.avg_speed > 0 order by time desc limit 1) as tffc, " +
-                    "(select count from pedestrian where pedestrian.local_id = :pedId and pedestrian.count > 0 order " +
-                    "by time desc limit 1) as ped," +
-                    "(select evapotranspiration,carbon_reduction from environment where environment.local_id = " +
-                    ":envId order by time desc limit 1) as env " +
-                    ";", nativeQuery = true)
+    @Query(value = "SELECT tffc.avg_speed AS avg_vehicle_speed, tffc.avg_count AS avg_vehicle_count, ped.count " +
+            "AS avg_pedestrian_count, env.evapotranspiration AS evapotranspiration, env.carbon_reduction AS carbon_reduction " +
+            "FROM (SELECT avg_speed, avg_count FROM traffic WHERE traffic.local_id = :tffcId AND traffic.avg_count > 0 " +
+            " AND traffic.avg_speed > 0 ORDER BY time DESC LIMIT 1) AS tffc, " +
+            "(SELECT count FROM pedestrian WHERE pedestrian.local_id = :pedId AND pedestrian.count > 0 ORDER " +
+            "BY time DESC LIMIT 1) AS ped," +
+            "(SELECT evapotranspiration,carbon_reduction FROM environment WHERE environment.local_id = " +
+            ":envId ORDER BY time DESC LIMIT 1) AS env " +
+            ";", nativeQuery = true)
     List<Measurement> getTreeBenefitScore(@Param("pedId") String pedId,
                                           @Param("tffcId") String tffcId,
                                           @Param("envId") String envId);

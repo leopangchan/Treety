@@ -13,8 +13,8 @@ import java.util.List;
 
 @Repository
 @Profile({SpringApplicationContextInitializer.LOCAL_PROFILE,
-          SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
-          SpringApplicationContextInitializer.CLOUD_PROFILE})
+        SpringApplicationContextInitializer.IN_MEMORY_PROFILE,
+        SpringApplicationContextInitializer.CLOUD_PROFILE})
 
 public interface JpaTreeRepository extends JpaRepository<Tree, Integer> {
 }
