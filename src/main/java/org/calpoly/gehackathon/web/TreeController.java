@@ -36,9 +36,9 @@ public class TreeController {
 
 
     @PostMapping(value = "/insert")
-    public ResponseEntity<String> insertTreeClasses(@RequestBody ArrayList<Tree> trees) {
+    public ResponseEntity<Integer> insertTreeClasses(@RequestBody ArrayList<Tree> trees) {
         treeRepository.save(trees);
-        return new ResponseEntity<String>(trees.size() + " trees have created.", HttpStatus.CREATED);
+        return new ResponseEntity<Integer>(trees.size(), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/updateScore")
