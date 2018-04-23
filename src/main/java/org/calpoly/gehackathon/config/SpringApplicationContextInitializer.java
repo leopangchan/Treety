@@ -26,15 +26,9 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
     public static final String CLOUD_PROFILE = "cloud";
 
     static {
-        serviceTypeToProfileName.put(PostgresqlServiceInfo.class, "postgres");;
+        serviceTypeToProfileName.put(PostgresqlServiceInfo.class, "postgres");
     }
 
-    /**
-     * Attempts to get profile of the environments in the following order:
-     * 1. Cloud Foundry
-     * 2. Local database
-     * 3. in-memory database H2
-     * */
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         Cloud cloud = getCloud();
@@ -46,7 +40,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
             persistenceProfiles = getActiveProfile(appEnvironment);
         }
         if (persistenceProfiles == null) {
-            persistenceProfiles = new String[] { LOCAL_PROFILE };
+            persistenceProfiles = new String[]{LOCAL_PROFILE};
         }
 
         //logger.info("out persistenceProfile: " + persistenceProfiles);
@@ -55,10 +49,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
             appEnvironment.addActiveProfile(persistenceProfile);
         }
     }
-
-    /**
-     * @return 'cloud' if the application runs on a cloud service
-     * */
+    
     private String[] getCloudProfile(Cloud cloud) {
         if (cloud == null) {
             return null;

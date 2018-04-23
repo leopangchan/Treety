@@ -2,31 +2,30 @@ package org.calpoly.gehackathon.domain;
 
 import javax.persistence.*;
 
-@Entity(name="pedestrian")
-@Table(name="pedestrian")
+@Entity(name = "pedestrian")
+@Table(name = "pedestrian")
 public class Pedestrian {
+    @Id
+    @Column(length = 40)
+    @GeneratedValue
+    private Integer id;
 
-  public Integer getId() {
-    return id;
-  }
+    public String localId;
 
-  @Id
-  @Column(length = 40)
-  @GeneratedValue
-  private Integer id;
+    public Long time;
 
-  public String localId;
+    public Float count;
 
-  public Long time;
+    public Pedestrian(String localId, Long time, Float count) {
+        this.localId = localId;
+        this.time = time;
+        this.count = count;
+    }
 
-  public Float count;
+    public Pedestrian() {
+    }
 
-  public Pedestrian(String localId, Long time, Float count) {
-    this.localId = localId;
-    this.time = time;
-    this.count = count;
-  }
-
-  public Pedestrian() {
-  }
+    public Integer getId() {
+        return id;
+    }
 }

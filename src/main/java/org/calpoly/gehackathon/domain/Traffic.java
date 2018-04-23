@@ -2,34 +2,33 @@ package org.calpoly.gehackathon.domain;
 
 import javax.persistence.*;
 
-@Entity(name="traffic")
-@Table(name="traffic")
+@Entity(name = "traffic")
+@Table(name = "traffic")
 public class Traffic {
+    @Id
+    @Column(length = 40)
+    @GeneratedValue
+    private Integer id;
 
-  public Integer getId() {
-    return id;
-  }
+    public String localId;
 
-  @Id
-  @Column(length = 40)
-  @GeneratedValue
-  private Integer id;
+    public Long time;
 
-  public String localId;
+    public Double avgCount;
 
-  public Long time;
+    public Double avgSpeed;
 
-  public Double avgCount;
+    public Traffic(String localId, Long time, Double avgCount, Double avgSpeed) {
+        this.localId = localId;
+        this.time = time;
+        this.avgCount = avgCount;
+        this.avgSpeed = avgSpeed;
+    }
 
-  public Double avgSpeed;
+    public Traffic() {
+    }
 
-  public Traffic(String localId, Long time, Double avgCount, Double avgSpeed) {
-    this.localId = localId;
-    this.time = time;
-    this.avgCount = avgCount;
-    this.avgSpeed = avgSpeed;
-  }
-
-  public Traffic() {
-  }
+    public Integer getId() {
+        return id;
+    }
 }

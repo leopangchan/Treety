@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Tree {
     @Id
-    @Column(length=40)
+    @Column(length = 40)
     @GeneratedValue
     private Integer id;
 

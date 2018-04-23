@@ -52,9 +52,9 @@ public class TreeController {
 
     /* returns tree benefit score for one tree */
     @GetMapping(value = "/benefit")
-    public List<Measurement> getTreeBenefitScore(@RequestParam(value="pedId") String pedId,
-                                                 @RequestParam(value="tffcId") String tffcId,
-                                                 @RequestParam(value="envId") String envId) {
+    public List<Measurement> getTreeBenefitScore(@RequestParam(value = "pedId") String pedId,
+                                                 @RequestParam(value = "tffcId") String tffcId,
+                                                 @RequestParam(value = "envId") String envId) {
 
         return measurementRepository.getTreeBenefitScore(pedId, tffcId, envId);
     }

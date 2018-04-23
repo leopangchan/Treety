@@ -2,20 +2,19 @@ package org.calpoly.gehackathon.domain;
 
 import javax.persistence.*;
 
-@Entity(name="measurement")
-@Table(name="measurement")
+@Entity(name = "measurement")
+@Table(name = "measurement")
 public class Measurement {
     @Id
     @Column(length = 40)
     @GeneratedValue
+    public Integer id;
 
     public Double avg_vehicle_speed;
     public Double avg_vehicle_count;
     public Double avg_pedestrian_count;
     public Double evapotranspiration;
     public Double carbon_reduction;
-
-    //public String local_id;
 
     public Measurement(Double avg_vehicle_speed, Double avg_vehicle_count,
                        Double avg_pedestrian_count, Double evapotranspiration,
