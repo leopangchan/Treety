@@ -1,60 +1,61 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html" class="en" ng-app="TreeMap">
-<head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="TreeMapSD">
+        <meta name="title" content="TreeMap">
+        <title>Treety</title>
+
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.0.0/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css"
+              href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="css/app.css">
+    </head>
+
+    <body ng-controller="TreeMapController as vm" ng-init="vm.init()">
+
+        <!-- Toggles -->
+        <div class="max-width" ng-include="'templates/header.html'"></div>
+
+        <!-- Map -->
+        <div id="body" class="row">
+            <ng-view></ng-view>
+
+        </div>
+
+        <!-- Buttons -->
+        <div id="footer" class="row on-top">
+            <div ng-include="'templates/footer.html'"></div>
+        </div>
 
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description" content="TreeMapSD">
-    <meta name="title" content="TreeMap">
-    <title>Treety</title>
+        <script type="text/javascript" src="webjars/jquery/2.1.0/jquery.min.js"></script>
+        <script type="text/javascript" src="webjars/bootstrap/4.0.0/js/bootstrap.js"></script>
+        <script type="text/javascript" src="webjars/angularjs/1.6.9/angular.js"></script>
+        <script type="text/javascript" src="webjars/angularjs/1.6.9/angular-resource.js"></script>
+        <script type="text/javascript" src="webjars/angularjs/1.6.9/angular-route.js"></script>
+        <script type="text/javascript" src="webjars/angular-ui/0.4.0/angular-ui.js"></script>
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script type="text/javascript"
+                src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+        <script type="text/javascript"
+                src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-animate.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-aria.min.js"></script>
+        <script type="text/javascript" src="webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap.js"></script>
+        <script type="text/javascript" src="webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.0.0/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="css/app.css">
-</head>
+        <!-- Map and Visualization Libraries -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI521MzgnZqoLyt8gJp6ds4XCAQcFYuoo&language=en&region=US&libraries=visualization"></script>
+        <script type="text/javascript" src="vendor/ng-map-min.js"></script>
 
-<body ng-controller="TreeMapController as vm" ng-init="vm.init()">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <!-- Toggles -->
-    <div class="max-width" ng-include="'templates/header.html'"></div>
-
-    <!-- Map -->
-    <div id="body" class="row">
-        <ng-view></ng-view>
-
-    </div>
-
-    <!-- Buttons -->
-    <div id="footer" class="row on-top">
-        <div ng-include="'templates/footer.html'"></div>
-    </div>
-
-
-    <script type="text/javascript" src="webjars/jquery/2.1.0/jquery.min.js"></script>
-    <script type="text/javascript" src="webjars/bootstrap/4.0.0/js/bootstrap.js"></script>
-    <script type="text/javascript" src="webjars/angularjs/1.6.9/angular.js"></script>
-    <script type="text/javascript" src="webjars/angularjs/1.6.9/angular-resource.js"></script>
-    <script type="text/javascript" src="webjars/angularjs/1.6.9/angular-route.js"></script>
-    <script type="text/javascript" src="webjars/angular-ui/0.4.0/angular-ui.js"></script>
-    <!-- Angular Material requires Angular.js Libraries -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-animate.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-aria.min.js"></script>
-    <script type="text/javascript" src="webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap.js"></script>
-    <script type="text/javascript" src="webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
-
-    <!-- Map and Visualization Libraries -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI521MzgnZqoLyt8gJp6ds4XCAQcFYuoo&language=en&region=US&libraries=visualization"></script>
-    <script type="text/javascript" src="vendor/ng-map-min.js"></script>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-    <script type="text/javascript" src="js/config.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript" src="js/ChartController.js"></script>
-    <script type="text/javascript" src="js/PlantTreeController.js"></script>
-    <script type="text/javascript" src="js/TreeMapController.js"></script>
-    <script type="text/javascript" src="js/treeBenefitHeatmap_1000.js"></script>
-    <script type="text/javascript" src="js/treeBenefitHeatmap.js"></script>
-</body>
+        <script type="text/javascript" src="js/config.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/ChartController.js"></script>
+        <script type="text/javascript" src="js/PlantTreeController.js"></script>
+        <script type="text/javascript" src="js/TreeMapController.js"></script>
+        <script type="text/javascript" src="js/treeBenefitHeatmap_1000.js"></script>
+        <script type="text/javascript" src="js/treeBenefitHeatmap.js"></script>
+    </body>
 </html>

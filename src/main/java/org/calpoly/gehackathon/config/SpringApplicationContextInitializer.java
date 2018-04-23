@@ -49,7 +49,7 @@ public class SpringApplicationContextInitializer implements ApplicationContextIn
             appEnvironment.addActiveProfile(persistenceProfile);
         }
     }
-    
+
     private String[] getCloudProfile(Cloud cloud) {
         if (cloud == null) {
             return null;
