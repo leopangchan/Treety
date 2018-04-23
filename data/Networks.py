@@ -130,7 +130,7 @@ def get_pedestrian_benefits(startts, endts, loc=None, sensor=None, debug=True):
         sensor = get_closest_sensor(coords, loc)
 
     average_peds = get_sensor_data(sensor, 'PEDEVT', \
-    "SD-IE-PEDESTRIAN", startts, endts, average_pedestrian_count)
+    "SD-IE-PEDESTRIAN", startts, endts, sum_pedestrians)
 
     if (debug):
         print('Closest pedestrian sensor {0}'.format(sensor))
@@ -145,7 +145,7 @@ def get_vehicle_benefits(startts, endts, loc=None, sensor=None, debug=True):
         sensor = get_closest_sensor(coords, loc)
 
     avg_vehicles = get_sensor_data(sensor, 'TFEVT', \
-     "SD-IE-TRAFFIC", startts, endts, average_vehicle_count)
+     "SD-IE-TRAFFIC", startts, endts, sum_vehicles)
 
     avg_speed = get_sensor_data(sensor, 'TFEVT', \
      "SD-IE-TRAFFIC", startts, endts, average_vehicle_speed)

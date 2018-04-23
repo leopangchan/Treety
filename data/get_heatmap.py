@@ -105,7 +105,7 @@ def draw_heatmap(coords, scores_file):
 
     max_amount = float(np.max(scores))
 
-    hmap = folium.Map(location=[32.7157, -117.1611], zoom_start=13, tiles=None)
+    hmap = folium.Map(location=[32.7157, -117.1611], zoom_start=13,) # tiles=None)
 
     hm_wide = HeatMap( list(zip(lats, lons, scores)), 
         min_opacity=0.2,
@@ -115,7 +115,7 @@ def draw_heatmap(coords, scores_file):
 
     #folium.GeoJson(district23).add_to(hmap)
     hmap.add_child(hm_wide)
-    hmap.save('heatmap2.html')
+    hmap.save('visuals/heatmap_100.html')
 
 def main():
     print ('Reading coordinates')
