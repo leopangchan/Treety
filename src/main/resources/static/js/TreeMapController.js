@@ -175,9 +175,13 @@ app.controller("TreeMapController",
                 }
             })
             .then(function(data) {
-                return vm.closestPos(vm.get_coordinates(data,'locationUid'), coords)
+                return vm.closestPos(vm.get_coordinates(data,'locationUid'), coords);
             })
             .then(function(tffc_sensor) {
+                if (!tffc_sensor) {
+                    tffc_sensor = '9703ebfa';
+                }
+
                 // find closest environment sensor
                 $http({method: 'GET',
                     url: metadataurl + asseturl + "ENV_SENSOR" + params,
@@ -187,12 +191,12 @@ app.controller("TreeMapController",
                     }
                 })
                 .then(function(data) {
-                    return vm.closestPos(vm.get_coordinates(data,'assetUid'), coords)
+                    return vm.closestPos(vm.get_coordinates(data,'assetUid'), coords);
                 })
                 .then(function(env_sensor) {
-                    console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor)
-                    console.log('PED SENSOR LOCATION ' + ped_sensor)
-                    console.log('ENV SENSOR LOCATION ' + env_sensor)
+                    if (!env_sensor) {
+                        env_sensor = '178ae263-6989-4a2a-8061-0bee0831e9ae';
+                    }
 
                     // request tree benefit measurements from the backend
                     $http({
@@ -200,15 +204,23 @@ app.controller("TreeMapController",
                         url: "/tree/benefit?pedId="+ped_sensor+"&envId="+env_sensor+"&tffcId="+tffc_sensor
                     })
                     .then(function (benefits) { // get the data
-                        console.log('TREE BENEFITS')
-                        console.log(benefits.data[0])
+                        // default benefit value
+                        if (benefits.data.length <= 0) {
+                            benefits.data = [{
+                                "avg_vehicle_speed": 9.531113641699987,
+                                "avg_vehicle_count": 0.865,
+                                "avg_pedestrian_count": 0.331,
+                                "evapotranspiration": 9.187324184517111,
+                                "carbon_reduction": 91.58621146017899
+                            }]
+                        }
 
-                        res = vm.format_benefit_score(benefits.data[0])
+                        res = vm.format_benefit_score(benefits.data[0]);
 
                         new google.maps.InfoWindow({
                           content: "Tree benefit = " + res['score'].toFixed(2) + "<br/>" + res['label']
-                        }).open(vm.map, newMarker)
-                    })
+                        }).open(vm.map, newMarker);
+                    });
                 })
 
             })

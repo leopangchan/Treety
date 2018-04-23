@@ -162,11 +162,7 @@ app.controller("ChartController", function ($scope, $chartType, $uibModalInstanc
         }
     });
 
-    if (closestPos === undefined) {
-        return 'a49a96ea'
-    }
-
-    return closestPos[2]
+    return closestPos[2];
   };
 
   $ctrl.make_api_request_header = function(type) {

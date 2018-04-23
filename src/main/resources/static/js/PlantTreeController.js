@@ -60,12 +60,58 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
         }
     });
 
-    if (closestPos === undefined) {
-        return 'a49a96ea';
-    }
-
     return closestPos[2];
   };
+
+  /* calculates the tree benefit score and formats a marker label */
+  $ctrl.format_benefit_score = function(benefits) {
+      var i = 0
+      var num_benefits = 5
+      var label = ""
+      var score = 0
+
+      var negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
+       'evapotranspiration']
+
+
+      for (var key in benefits) {
+          if (benefits.hasOwnProperty(key)) {
+              label += key+": "+benefits[key].toFixed(2)
+
+              if (i < (num_benefits-1)) {
+                  label += "<br/>"
+              }
+
+
+              if (negative_benefits.indexOf(key) < 0) {
+                  score += benefits[key]
+              }
+
+              else {
+                  score -= benefits[key]
+              }
+
+              i += 1
+          }
+      }
+
+      return {'score':score, 'label':label}
+  }
+
+  /* extracts sensor coordinates from a json */
+  $ctrl.get_coordinates = function(data, key) {
+      var locations = data.data['content'];
+      res = [];
+
+      locations.forEach(function(element) {
+          if (element.hasOwnProperty('coordinates')) {
+              var coord = element['coordinates'].split(":");
+              res.push([parseFloat(coord[0]), parseFloat(coord[1]), element[key]]);
+          }
+      });
+
+      return res;
+  }
 
   $ctrl.ok = function () {
     $parentScope.vm.googleMapClickListener = $map.addListener('click', function(point) {
@@ -84,7 +130,7 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
 
       google.maps.event.addListener(newMarker, 'click', function() {
          let metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata';
-         let user_coords = [point.latLng.lat(),point.latLng.lng()];
+         let coords = [point.latLng.lat(),point.latLng.lng()];
 
          // find the closest ped sensor
          $http({method: 'GET',
@@ -95,19 +141,13 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
             }
          })
          .then(function(data) {
-            let locations = data.data['content'];
-            res = [];
-
-            locations.forEach(function(element) {
-                if (element.hasOwnProperty('coordinates')) {
-                    let coord = element['coordinates'].split(":");
-                    res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
-                }
-            });
-
-            return $ctrl.closestPos(res, user_coords)
+            return $ctrl.closestPos($ctrl.get_coordinates(data,'locationUid'), coords)
          })
          .then(function(ped_sensor) {
+            if (!ped_sensor) {
+                ped_sensor = 'a49a96ea';
+            }
+
             // find closest traffic sensor
             $http({method: 'GET',
                 url: metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE",
@@ -117,19 +157,13 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                 }
             })
             .then(function(data) {
-                let locations = data.data['content'];
-                res = [];
-
-                locations.forEach(function(element) {
-                   if (element.hasOwnProperty('coordinates')) {
-                       let coord = element['coordinates'].split(":");
-                       res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
-                   }
-                });
-
-                return $ctrl.closestPos(res, user_coords)
+                return $ctrl.closestPos($ctrl.get_coordinates(data,'locationUid'), coords)
             })
             .then(function(tffc_sensor) {
+                if (!tffc_sensor) {
+                    tffc_sensor = '9703ebfa';
+                }
+
                 // find closest environment sensor
                 $http({method: 'GET',
                     url: metadataurl + "/assets/search?q=assetType:ENV_SENSOR",
@@ -139,22 +173,12 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                     }
                 })
                 .then(function(data) {
-                    var locations = data.data['content']
-                    res = []
-
-                    locations.forEach(function(element) {
-                       if (element.hasOwnProperty('coordinates')) {
-                           var coord = element['coordinates'].split(":")
-                           res.push([parseFloat(coord[0]), parseFloat(coord[1]), element["assetUid"]])
-                       }
-                    })
-
-                    return $ctrl.closestPos(res, user_coords)
+                    return $ctrl.closestPos($ctrl.get_coordinates(data,'locationUid'), coords)
                 })
                 .then(function(env_sensor) {
-                    console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor);
-                    console.log('PED SENSOR LOCATION ' + ped_sensor);
-                    console.log('ENV SENSOR LOCATION ' + env_sensor);
+                    if (!env_sensor) {
+                        env_sensor = '178ae263-6989-4a2a-8061-0bee0831e9ae';
+                    }
 
                     let url = "/tree/benefit?pedId="+
                         ped_sensor +
@@ -163,49 +187,29 @@ app.controller("PlantTreeController", function($scope, $uibModalInstance, $map, 
                         "&tffcId="+
                         tffc_sensor;
 
-                    console.log(url);
-
                     // request tree benefit measurements from the backend
                     $http({
                         method: 'GET',
                         url: url
                     })
                     .then(function (benefits) { // get the data
-                        console.log('TREE BENEFITS');
-                        console.log(benefits.data[0]);
-
-                        let label = "";
-                        let score = 0;
-                        let i = 0;
-                        let num_benefits = 5;
-                        let negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
-                         'evapotranspiration'];
-
-                        for (let key in benefits.data[0]) {
-
-                            label += key+": "+benefits.data[0][key].toFixed(2);
-
-                            if (benefits.data[0].hasOwnProperty(key) && i < (num_benefits-1)) {
-                                label += "<br/>"
-                            }
-
-                            if (negative_benefits.indexOf(key) < 0) {
-                                score += benefits.data[0][key]
-                            }
-
-                            else {
-                                score -= benefits.data[0][key]
-                            }
-
-                            i += 1
+                        // default benefit value
+                        if (benefits.data.length <= 0) {
+                            benefits.data = [{
+                                "avg_vehicle_speed": 9.531113641699987,
+                                "avg_vehicle_count": 0.865,
+                                "avg_pedestrian_count": 0.331,
+                                "evapotranspiration": 9.187324184517111,
+                                "carbon_reduction": 91.58621146017899
+                            }]
                         }
 
-                        console.log(label)
-                        new google.maps.InfoWindow({
-                          content: "Tree benefit = " + score.toFixed(2) + "<br/>" + label
-                        }).open($map, newMarker)
+                        console.log(benefits.data[0])
+                        res = $ctrl.format_benefit_score(benefits.data[0]);
 
-                        return score;
+                        new google.maps.InfoWindow({
+                          content: "Tree benefit = " + res['score'].toFixed(2) + "<br/>" + res['label']
+                        }).open($map, newMarker);
                     });
                 })
             })
