@@ -1,6 +1,7 @@
 app.controller("TreeMapController",
- function($scope, $http, $timeout, NgMap, $mdDialog, $uibModal, $log, $document){
-	
+ function($scope, $http, $timeout, NgMap, $mdDialog, $uibModal, $log, tokenService, $document){
+    tokenService.checkAndUpdateToken();
+
     var vm = this
     var heatmap = null
     vm.map = null
