@@ -44,16 +44,6 @@ html, body {
     top: 0px !important;
 }
 
-/*.footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    color: white;
-    align: center;
-    float: left;
-}*/
-
 .btn {
     border: none;
     color: white !important;
@@ -131,12 +121,16 @@ html, body {
     margin-right: -4px;
 }
 
+.left-text {
+    text-align: left;
+}
+
 .modal-dialog {
     display: inline-block;
     vertical-align: middle;
     max-width: 1200px !important;
-    width: 1024px;
-    height: 600px;
+    width: 70%;
+    height: 65%;
 }
 
 .modal-body {
@@ -147,7 +141,6 @@ html, body {
     width: 100%;
     height: 100%;
 }
-
 
 #searchBar {
     position: absolute;
@@ -165,16 +158,3 @@ html, body {
     z-index:1000;
     top: 40px;
 }
-
-.my-modal-popup{
-
-    @media (min-width: 1400px){
-
-        .modal-lg {
-            width: 1308px;
-        }
-    }
-
-}
-
-p.indent{ padding-left: 1.8em }

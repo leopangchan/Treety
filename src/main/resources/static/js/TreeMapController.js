@@ -63,166 +63,55 @@ app.controller("TreeMapController",
         vm.map.setZoom(16);
     };
 
-    // return tree benefit score from the backend
-    vm.get_tree_benefit = function(newMarker) {
-        var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
+    /* calculates the tree benefit score and formats a marker label */
+    vm.format_benefit_score = function(benefits) {
+        var i = 0
+        var num_benefits = 5
+        var label = ""
+        var score = 0
 
-         // find the closest ped sensor
-         $http({method: 'GET',
-            url: metadataurl + "/locations/search?q=locationType:WALKWAY",
-            headers: {
-                "Authorization": "Bearer " + vm.token,
-                "Predix-Zone-Id": 'SD-IE-PEDESTRIAN'
+        var negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
+         'evapotranspiration']
+
+
+        for (var key in benefits) {
+            if (benefits.hasOwnProperty(key)) {
+                label += key+": "+benefits[key].toFixed(2)
+
+                if (i < (num_benefits-1)) {
+                    label += "<br/>"
+                }
+
+
+                if (negative_benefits.indexOf(key) < 0) {
+                    score += benefits[key]
+                }
+
+                else {
+                    score -= benefits[key]
+                }
+
+                i += 1
             }
-         })
-         .then(function(data) {
-            var locations = data.data['content']
-            res = []
+        }
 
-            locations.forEach(function(element) {
-                if (element.hasOwnProperty('coordinates')) {
-                    var coord = element['coordinates'].split(":")
-                    res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
-                }
-            })
-
-            return vm.closestPos(res, vm.user_coords)
-         })
-         .then(function(ped_sensor) {
-            // find closest traffic sensor
-            $http({method: 'GET',
-                url: metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE",
-                headers: {
-                    "Authorization": "Bearer " + vm.token,
-                    "Predix-Zone-Id": 'SD-IE-TRAFFIC'
-                }
-            })
-            .then(function(data) {
-                var locations = data.data['content']
-                res = []
-
-                locations.forEach(function(element) {
-                   if (element.hasOwnProperty('coordinates')) {
-                       var coord = element['coordinates'].split(":")
-                       res.push([parseFloat(coord[0]), parseFloat(coord[1]), element['locationUid']])
-                   }
-                })
-
-                return vm.closestPos(res, vm.user_coords)
-            })
-            .then(function(tffc_sensor) {
-                // find closest environment sensor
-                $http({method: 'GET',
-                    url: metadataurl + "/assets/search?q=assetType:ENV_SENSOR",
-                    headers: {
-                        "Authorization": "Bearer " + vm.token,
-                        "Predix-Zone-Id": 'SD-IE-TRAFFIC'
-                    }
-                })
-                .then(function(data) {
-                    var locations = data.data['content']
-                    res = []
-
-                    locations.forEach(function(element) {
-                       if (element.hasOwnProperty('coordinates')) {
-                           var coord = element['coordinates'].split(":")
-                           res.push([parseFloat(coord[0]), parseFloat(coord[1]), element["assetUid"]])
-                       }
-                    })
-
-                    return vm.closestPos(res, vm.user_coords)
-                })
-                .then(function(env_sensor) {
-                    console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor)
-                    console.log('PED SENSOR LOCATION ' + ped_sensor)
-                    console.log('ENV SENSOR LOCATION ' + env_sensor)
-
-                    var url = "/tree/benefit?pedId="+
-                        ped_sensor +
-                        "&envId=" +
-                        env_sensor +
-                        "&tffcId="+
-                        tffc_sensor
-
-                    console.log(url)
-
-                    // request tree benefit measurements from the backend
-                    $http({
-                        method: 'GET',
-                        url: url
-                    })
-                    .then(function (benefits) { // get the data
-                        console.log('TREE BENEFITS')
-                        console.log(benefits.data[0])
-
-                        var i = 0
-                        var num_benefits = 5
-                        var label = ""
-                        var score = 0
-
-                        var negative_benefits = ['avg_vehicle_speed','avg_vehicle_count',
-                         'evapotranspiration']
-
-
-                        for (var key in benefits.data[0]) {
-
-                            //label += '<p class="indent"></p>'
-                            //label += "&ensp&ensp&ensp"
-                            label += key+": "+benefits.data[0][key].toFixed(2)
-                            //label += "</p>"
-
-                            if (benefits.data[0].hasOwnProperty(key) && i < (num_benefits-1)) {
-                                label += "<br/>"
-                            }
-
-
-                            if (negative_benefits.indexOf(key) < 0) {
-                                score += benefits.data[0][key]
-                            }
-
-                            else {
-                                score -= benefits.data[0][key]
-                            }
-
-                            i += 1
-                        }
-
-                        new google.maps.InfoWindow({
-                          content: "Tree benefit = " + score.toFixed(2) + "<br/>" + label
-                        }).open(vm.map, newMarker)
-                    })
-                })
-
-            })
-         })
+        return {'score':score, 'label':label}
     }
 
-    vm.loadChart = function (chartType) {
-      var modalInstance = $uibModal.open({
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: '../templates/chart.dialog.html',
-        backdrop: false,
-        controller: "ChartController",
-        controllerAs: '$ctrl',
-        size: 'lg',
-        windowClass: 'my-modal-popup',
-        resolve: {
-          $chartType: function() {
-            return chartType
-          },
-          $lglat: function() {
-            return vm.user_coords
-          }
-        }
-      });
+    /* extracts sensor coordinates from a json */
+    vm.get_coordinates = function(data, key) {
+        var locations = data.data['content'];
+        res = [];
 
-      modalInstance.result.then(function (selectedItem) {
-      }, function (error) {
-        $log.info('Modal dismissed at: ' + new Date());
-        $log.info(error);
-      });
-    };
+        locations.forEach(function(element) {
+            if (element.hasOwnProperty('coordinates')) {
+                var coord = element['coordinates'].split(":");
+                res.push([parseFloat(coord[0]), parseFloat(coord[1]), element[key]]);
+            }
+        });
+
+        return res;
+    }
 
     /**
     *  write a function that takes in a coordinate [lat, long], calls the get locations function.
@@ -253,12 +142,114 @@ app.controller("TreeMapController",
           }
       })
 
-      if (closestPos === undefined) {
-          return 'a49a96ea'
-      }
-
       return closestPos[2]
     }
+
+    /* return tree benefit score from the backend */
+    vm.get_tree_benefit = function(newMarker) {
+        var lat = newMarker.getPosition().lat()
+        var long = newMarker.getPosition().lng()
+        var coords = [lat, long]
+
+        console.log ('MARKER CLICKED AT ' + coords)
+        var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
+
+         // find the closest ped sensor
+         $http({method: 'GET',
+            url: metadataurl + "/locations/search?q=locationType:WALKWAY",
+            headers: {
+                "Authorization": "Bearer " + vm.token,
+                "Predix-Zone-Id": 'SD-IE-PEDESTRIAN'
+            }
+         })
+         .then(function(data) {
+            return vm.closestPos(vm.get_coordinates(data,'locationUid'), coords)
+         })
+         .then(function(ped_sensor) {
+            // if no closest sensor could be found use this default
+            if (!ped_sensor) {
+                ped_sensor = 'a49a96ea';
+            }
+
+            // find closest traffic sensor
+            $http({method: 'GET',
+                url: metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE",
+                headers: {
+                    "Authorization": "Bearer " + vm.token,
+                    "Predix-Zone-Id": 'SD-IE-TRAFFIC'
+                }
+            })
+            .then(function(data) {
+                return vm.closestPos(vm.get_coordinates(data,'locationUid'), coords)
+            })
+            .then(function(tffc_sensor) {
+                // find closest environment sensor
+                $http({method: 'GET',
+                    url: metadataurl + "/assets/search?q=assetType:ENV_SENSOR",
+                    headers: {
+                        "Authorization": "Bearer " + vm.token,
+                        "Predix-Zone-Id": 'SD-IE-TRAFFIC'
+                    }
+                })
+                .then(function(data) {
+                    return vm.closestPos(vm.get_coordinates(data,'assetUid'), coords)
+                })
+                .then(function(env_sensor) {
+                    console.log('CLOSEST TRAFFIC SENSOR ' + tffc_sensor)
+                    console.log('PED SENSOR LOCATION ' + ped_sensor)
+                    console.log('ENV SENSOR LOCATION ' + env_sensor)
+
+                    // request tree benefit measurements from the backend
+                    $http({
+                        method: 'GET',
+                        url: "/tree/benefit?pedId="+
+                         ped_sensor +
+                         "&envId=" +
+                         env_sensor +
+                         "&tffcId="+
+                         tffc_sensor
+                    })
+                    .then(function (benefits) { // get the data
+                        console.log('TREE BENEFITS')
+                        console.log(benefits.data[0])
+
+                        res = vm.format_benefit_score(benefits.data[0])
+
+                        new google.maps.InfoWindow({
+                          content: "Tree benefit = " + res['score'].toFixed(2) + "<br/>" + res['label']
+                        }).open(vm.map, newMarker)
+                    })
+                })
+
+            })
+         })
+    }
+
+    vm.loadChart = function (chartType) {
+      var modalInstance = $uibModal.open({
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: '../templates/chart.dialog.html',
+        backdrop: false,
+        controller: "ChartController",
+        controllerAs: '$ctrl',
+        size: 'lg',
+        resolve: {
+          $chartType: function() {
+            return chartType
+          },
+          $lglat: function() {
+            return vm.user_coords
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+      }, function (error) {
+        $log.info('Modal dismissed at: ' + new Date());
+        $log.info(error);
+      });
+    };
 
     /**
      * Hide the putting maker button, and show the planting tree button.

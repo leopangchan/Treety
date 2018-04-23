@@ -4,6 +4,7 @@ src/main/resources/static/bower_componenets
 
 src/main/resources/static/js/config.js
 data/jsons/
+data/__pycache__
 
 # Compiled class file
 *.class
