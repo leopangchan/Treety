@@ -15,8 +15,6 @@ app.controller("TreeMapController",
     vm.treeBenefit = undefined
 
     vm.toggleHeatmap = function(event) {
-        console.log('Toggle heatmap')
-        //heatmap.setMap(heatmap.getMap() ? null : vm.map);
         vm.showHeatmap = !vm.showHeatmap
     };
 
@@ -114,14 +112,12 @@ app.controller("TreeMapController",
     }
 
     /**
-    *  write a function that takes in a coordinate [lat, long], calls the get locations function.
+    *  write a function that takes in a coordinate [lat, long]
+    * and list of coordinates to return the closest sensor in the list.
     *
-    *  Note:
-    *  vm.locationPos = [[32.708757321722075, -117.16414366466401, $$hashKey: "object:10"], ...]
-    *
-    *  @param type - a sensor type ex: TRAFFIC_LANE
     *  @param coord - [32.708757321722075, -117.16414366466401]
-    *  @return the location id of the closest sensor
+    *  @param locations = [[32.708757321722075, -117.16414366466401, sensorId]]
+    *  @return the sensor id of the closest sensor
     *
     *  sqrt((x1^2 - x2^2)^2 + (y1^2 - y2^2)^2)
     */
@@ -147,16 +143,15 @@ app.controller("TreeMapController",
 
     /* return tree benefit score from the backend */
     vm.get_tree_benefit = function(newMarker) {
-        var lat = newMarker.getPosition().lat()
-        var long = newMarker.getPosition().lng()
-        var coords = [lat, long]
+        var coords = [newMarker.getPosition().lat(), newMarker.getPosition().lng()]
 
-        console.log ('MARKER CLICKED AT ' + coords)
         var metadataurl = 'https://ic-metadata-service-sdhack.run.aws-usw02-pr.ice.predix.io/v2/metadata'
+        var asseturl = "/assets/search?q=assetType:"
+        var params = "&page=0&size=200"
 
          // find the closest ped sensor
          $http({method: 'GET',
-            url: metadataurl + "/locations/search?q=locationType:WALKWAY",
+            url: metadataurl + "/locations/search?q=locationType:WALKWAY" + params,
             headers: {
                 "Authorization": "Bearer " + vm.token,
                 "Predix-Zone-Id": 'SD-IE-PEDESTRIAN'
@@ -173,7 +168,7 @@ app.controller("TreeMapController",
 
             // find closest traffic sensor
             $http({method: 'GET',
-                url: metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE",
+                url: metadataurl + "/locations/search?q=locationType:TRAFFIC_LANE" + params,
                 headers: {
                     "Authorization": "Bearer " + vm.token,
                     "Predix-Zone-Id": 'SD-IE-TRAFFIC'
@@ -185,7 +180,7 @@ app.controller("TreeMapController",
             .then(function(tffc_sensor) {
                 // find closest environment sensor
                 $http({method: 'GET',
-                    url: metadataurl + "/assets/search?q=assetType:ENV_SENSOR",
+                    url: metadataurl + asseturl + "ENV_SENSOR" + params,
                     headers: {
                         "Authorization": "Bearer " + vm.token,
                         "Predix-Zone-Id": 'SD-IE-TRAFFIC'
@@ -202,12 +197,7 @@ app.controller("TreeMapController",
                     // request tree benefit measurements from the backend
                     $http({
                         method: 'GET',
-                        url: "/tree/benefit?pedId="+
-                         ped_sensor +
-                         "&envId=" +
-                         env_sensor +
-                         "&tffcId="+
-                         tffc_sensor
+                        url: "/tree/benefit?pedId="+ped_sensor+"&envId="+env_sensor+"&tffcId="+tffc_sensor
                     })
                     .then(function (benefits) { // get the data
                         console.log('TREE BENEFITS')
